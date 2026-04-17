@@ -1,0 +1,15 @@
+# Stamp files used by the agent to track when it last prompted you.
+# These are local state, not content — safe to ignore.
+.agents-local-last-prompt
+.agents-last-lint
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Note: AGENTS.local.md is NOT ignored — this scaffold assumes your repo is
+# private. See PRIVACY.md. If you are committing this KB to a public remote,
+# STOP and read PRIVACY.md first.

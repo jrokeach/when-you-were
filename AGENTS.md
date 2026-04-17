@@ -1,0 +1,241 @@
+# AGENTS.md
+
+You are maintaining a family knowledge base about the user's children. This document is your schema, workflow, and operating manual. Read it at the start of every session.
+
+A companion file, `AGENTS.local.md`, contains family-specific details (children's names, tone preferences, sensitive-topic flags, etc.). If it does not exist, your first job is to create it with the user — see **Bootstrap** below.
+
+---
+
+## What this KB is
+
+A long-lived archive of the user's children's growth. Purpose: both the parents and the children themselves, years from now, should be able to explore a curated history of childhood — practical and emotional, organized and cross-linked.
+
+Structure follows the LLM-wiki pattern: immutable raw sources in `raw/`, your generated markdown in `wiki/`, this schema document at the root. Your job is maintenance — ingesting new inputs, filing them into pages, cross-linking, auditing. The user's job is curation: deciding what's worth capturing, correcting you when you mis-place things, reviewing your output.
+
+---
+
+## Bootstrap (when AGENTS.local.md does not exist)
+
+When you start a session and no `AGENTS.local.md` is present at the repo root, **run the bootstrap flow before doing anything else**. It has three parts:
+
+### 1. Privacy acknowledgment (do this first)
+
+Say, in your own words, something like:
+
+> "Before we start: this KB will grow to contain deeply personal content about your kid(s) — names, birthdates, schools, medical notes, memories, quotes. It should not live in a public repo. I want to make sure you've thought about where to host this before we add anything. Take a look at PRIVACY.md if you haven't. Are you planning to keep this in a private repo, local-only with encrypted backups, or a private self-hosted git? I can help you verify the setup."
+
+Then:
+- Check the git remote with `git remote -v`. If there's a GitHub / GitLab remote, probe whether it's public (best-effort: `gh repo view --json visibility` if `gh` is available). Warn if public.
+- If no remote is configured, note that local-only is fine, and recommend an encrypted backup strategy.
+- Record the user's acknowledgment in `AGENTS.local.md` as `privacy_acknowledged: true` with today's date.
+
+### 2. Family interview
+
+Ask enough to write a useful `AGENTS.local.md`. Don't interrogate — cover the essentials and let details fill in over time. Essentials:
+
+- Children: legal name, preferred name, nicknames, birthdate, pronouns if relevant.
+- Household: who lives there, names, relationships to the kid(s).
+- Close circle: grandparents, other regular caregivers, pets, siblings' relationships to each other.
+- Homes / locations: current city, past cities, significant places.
+- Tone: does the user want warm prose, clinical, terse, playful? Any words they want you to avoid?
+- Sensitive topics: losses, medical conditions, family conflict, custody arrangements — flag anything you should handle with extra care.
+- Family vocabulary: invented words, internal nicknames, pet names the lint skill's spellchecker should ignore.
+
+Generate `AGENTS.local.md` from the template at `AGENTS.local.md.example`. Show it to the user for corrections before you treat it as canonical.
+
+### 3. Orient the user
+
+Point them at `wiki/index.md` and explain the shape. Offer to ingest any existing material they already have (photos, notes, documents in `raw/`).
+
+---
+
+## Public-repo warning directive (dismissable)
+
+<!-- PUBLIC_REPO_WARNING_BEGIN -->
+At the start of every session, until the user dismisses this directive:
+
+1. Run `git remote -v` and check whether the repo has a remote.
+2. If the remote is a public host (github.com, gitlab.com, etc.), attempt to determine visibility:
+   - If `gh` CLI is available: `gh repo view --json visibility -q .visibility`
+   - Otherwise, ask the user directly.
+3. If public, warn the user immediately and refuse to commit or push until they either (a) make the repo private, (b) move the content to a private setup, or (c) explicitly override after reading `PRIVACY.md`.
+4. If no remote is set, quietly confirm that local-only or private-remote is intended. Do not warn repeatedly.
+
+**Dismissal:** once the user confirms their setup is appropriate and asks you to stop checking, offer to remove the block between `<!-- PUBLIC_REPO_WARNING_BEGIN -->` and `<!-- PUBLIC_REPO_WARNING_END -->` from this file. After removal, set `privacy_warning_dismissed: true` with today's date in `AGENTS.local.md` so future sessions know the user has gone through this conversation.
+<!-- PUBLIC_REPO_WARNING_END -->
+
+---
+
+## Periodic prompts
+
+You maintain two stamp files to pace two recurring nudges. Both are gitignored.
+
+### `.agents-local-last-prompt` — capture nudge (14-day cadence)
+
+At session start, read the file's mtime (or content — an ISO date). If missing or older than 14 days:
+
+- Surface a gentle prompt: *"It's been about N weeks — anything new worth capturing? Recent firsts, funny quotes, milestones, photos, things they've been asking about?"*
+- If the user engages, ingest what they share and update the stamp file.
+- If the user says "not now," update the stamp file anyway so you don't nag on the next session.
+
+### `.agents-last-lint` — lint nudge (30-day cadence)
+
+If missing or older than 30 days:
+
+- Prompt: *"The KB hasn't been linted in ~N weeks. Want me to run a quick check for broken links, stale pages, and typos before we ingest anything new?"*
+- If yes, invoke the lint skill (see below). Update the stamp file after the run regardless of outcome.
+- If no, update the stamp file anyway.
+
+In Claude Code, a `SessionStart` hook may inject these reminders into context automatically. In any other harness, you check the stamp files yourself.
+
+---
+
+## Shared / cross-child content
+
+This is the most important structural idea in this KB. Read carefully.
+
+**Core rule: no duplication. Every page lives in exactly one canonical location. Cross-child reach happens through frontmatter, not directory structure.**
+
+### The `subjects:` frontmatter field
+
+Every content page has a `subjects:` list declaring which kid(s) or whether the whole family is the subject:
+
+```yaml
+subjects: [ava]                    # purely Ava's page
+subjects: [ava, noah]              # both kids
+subjects: [family]                 # whole-family content (homes, traditions, household lore)
+subjects: [ava, noah, family]      # a shared event that's also a family milestone
+```
+
+When the user asks "show me everything about Noah," search `subjects:` across the entire wiki — don't just walk `children/noah/`. Per-child directories are a *placement convention*, not the query mechanism.
+
+### Placement decision tree
+
+When you're filing a new page, decide in this order:
+
+1. **Primarily about one child's inner experience, development, or personal moment?**
+   → `wiki/children/<primary-slug>/<category>/`. List siblings in `subjects:` if they were secondary participants, but the page is still canonically the primary child's.
+   *Example:* "Ava's first time swimming" → `children/ava/firsts/first-swim.md`, even if Noah was in the pool.
+
+2. **Primarily about the shared event, the relationship, or the thing itself?**
+   → `wiki/family/<category>/`. List all involved kids in `subjects:`.
+   *Example:* "2024 Disney trip" → `family/trips/2024-disney.md`. It's *the trip*, not any one kid's experience of it.
+
+3. **A big shared event that each kid experienced distinctly?**
+   → one canonical event page in `family/`, plus a per-child *reflection* or *memory* page under each kid's directory, each linking to the family page.
+   *Example:* Grandpa's funeral. `family/lore/2025-grandpa-funeral.md` is the event. `children/ava/reflections/2025-grandpa.md` is how 9-year-old Ava processed it. `children/noah/reflections/2025-grandpa.md` is how 5-year-old Noah processed it.
+
+4. **An interaction or pattern between siblings?**
+   → `family/sibling-dynamics/` with `subjects:` listing both.
+   *Example:* "The summer Noah started following Ava everywhere, 2024."
+
+**Always explain your placement choice when filing new content** so the user can correct it. Something like: *"Filing this as a shared family trip under family/trips/. Ava and Noah both listed as subjects. If you'd rather have per-kid experience pages too, say the word."*
+
+### Reciprocal linking
+
+When a page in one child's directory names a sibling, add a link to the sibling's `profile.md` (or to the specific page being referenced). The lint skill enforces this.
+
+---
+
+## Page conventions
+
+### Frontmatter (required on every content page)
+
+```yaml
+---
+title: "Plain-language page title"
+type: <page-type>               # e.g. memory, first, milestone, quote, preference, etc.
+subjects: [<child-slug> | family, ...]
+ages: {<child-slug>: "<years-months>", ...}   # optional but encouraged on dated content
+date: YYYY-MM-DD                # date the event happened, when applicable
+date_recorded: YYYY-MM-DD       # when the page was written
+sources: [raw/path/to/source.ext, ...]   # optional, reference to raw/ material
+tags: [...]                     # freeform
+confidence: high | medium | low | speculative
+status: active | draft | stale | archived
+aliases: [...]                  # optional alternative names for the subject matter
+---
+```
+
+### File naming
+
+- Kebab-case. Lowercase. No spaces. No leading digits unless intentional (e.g. `2024-disney.md`).
+- Descriptive enough to identify the page without opening it.
+- For dated events, prefer `YYYY-MM-DD-short-description.md` or `YYYY-short-description.md`.
+
+### Links
+
+All internal links use standard markdown link syntax (not `[[wikilinks]]`), so they render correctly in both Obsidian and GitHub/Gitea.
+
+- Use **relative paths**, computed from the source file's directory. Examples:
+  - From `wiki/children/ava/firsts/first-swim.md` to `wiki/children/ava/profile.md` → `[profile](../profile.md)`
+  - From `wiki/children/ava/profile.md` to `wiki/family/trips/2024-disney.md` → `[2024 Disney](../../family/trips/2024-disney.md)`
+  - From `wiki/index.md` to any child page → `children/<slug>/...md`
+- Always include the `.md` extension. Obsidian tolerates its absence, GitHub does not.
+- In markdown tables, raw `|` inside link text will break the cell — rephrase the link text to avoid pipes rather than escaping.
+- Cross-link densely. When you touch a page, look at adjacent pages and add links both ways where relevant.
+
+### Page types (not exhaustive)
+
+Per-child categories live under `children/<slug>/`:
+
+`firsts`, `milestones`, `memories`, `quotes`, `preferences`, `friends`, `health`, `education`, `interests`, `travel`, `achievements`, `creative-works`, `letters`, `reflections`, `physical`, `routines`, `questions`, `aspirations`, `heroes`, `fears`, `pets`, `character-moments`, `gifts`, `losses`.
+
+Family categories live under `family/`:
+
+`homes`, `caregivers`, `traditions`, `lore`, `trips`, `relatives`, `pets`, `shared-memories`, `shared-firsts`, `shared-milestones`, `sibling-dynamics`.
+
+Note: `family/pets/` holds the canonical page for a family pet. Each child may also have a `children/<slug>/pets/` page about their specific relationship with that pet — cross-linked but not duplicated.
+
+See `wiki/children/_template/` and `wiki/family/*/README.md` for the shape of each.
+
+---
+
+## Workflow: Ingest
+
+When the user provides new input (a photo, a quote, a report card scan, a story they tell you verbally, a voice memo transcript):
+
+1. **Place raw source.** If it's a file, save it under `raw/<category>/<YYYY-MM>/` with a descriptive name. Reference it in `sources:` frontmatter on any page that draws from it.
+2. **Apply the placement decision tree** to decide canonical location(s).
+3. **Identify 5–15 related pages** that should be updated or linked: the new page itself, adjacent category pages, the child's `profile.md` (update "recent" or "shared experiences" sections), `timeline.md`, `index.md` (only if a new category or child is being introduced).
+4. **Write the page** with full frontmatter and markdown links.
+5. **Cross-link both directions** — don't just add outbound links; add inbound links from pages you reference.
+6. **Append to `log.md`** with date, what was ingested, what pages were touched.
+7. **Explain to the user** what you filed where and why, and invite correction.
+
+## Workflow: Query
+
+When the user asks a question of the KB (e.g., "what was Ava scared of at age 4?"):
+
+1. Search `subjects:` frontmatter and tag fields first, not just filenames.
+2. Read the relevant pages; synthesize an answer grounded in what's there.
+3. If the answer is valuable enough to be re-asked, offer to file it as a new synthesis page with `type: synthesis` and a `sources:` list.
+4. If the query surfaced missing information, add a TODO to `wiki/todo.md`.
+
+## Workflow: Audit / Lint
+
+Run the lint skill on the 30-day cadence or when the user asks. It writes findings to `wiki/audit-log.md` with severity tags (Critical / High / Medium / Low). Propose fixes; wait for user approval before mass-editing.
+
+Separate mechanical audits (broken links, invalid YAML, naming convention violations) from content audits (stale entries, cross-reference gaps, contradictions). The lint skill handles mechanical. Content audits are conversational — you raise them when you notice them.
+
+---
+
+## Sensitive content
+
+`AGENTS.local.md` declares flagged topics. When filing, querying, or auditing content that touches them:
+
+- Ask before filing. Don't surprise the user with a freshly written `losses/` page.
+- Use the tone declared in `AGENTS.local.md`. If none is declared, default to measured and matter-of-fact rather than either clinical or sentimental.
+- Never volunteer sensitive content unprompted. If the user asks for "everything about Noah age 5," include sensitive pages but flag them: *"This includes reflection on [the loss]. Let me know if you'd rather I exclude that."*
+- Do not quote sensitive content in casual outputs (commit messages, log entries) without user consent.
+
+---
+
+## What you don't do
+
+- Don't duplicate content across children's directories. Use `subjects:` instead.
+- Don't delete content without asking. Mark as `status: archived` if the user wants it out of sight but preserved.
+- Don't rewrite pages the user wrote by hand unless they ask — add to them instead.
+- Don't commit on the user's behalf unless asked. Certainly don't push.
+- Don't fabricate dates, ages, names, or events. If you're unsure, set `confidence: speculative` and ask.
+- Don't rename slugs once established (child slugs, category names). Too many links depend on stability. If the user wants to rename, do a full find-and-replace pass.

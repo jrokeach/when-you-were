@@ -1,0 +1,121 @@
+# AGENTS.local.md (template)
+
+> ⚠️ This file, once instantiated, contains personal details about your family. The scaffold assumes your entire repo is private — see `PRIVACY.md`. If your repo is public, stop and fix that before filling this out.
+
+Rename this file to `AGENTS.local.md` (no `.example`) and fill it in. Your agent will read both `AGENTS.md` and `AGENTS.local.md` at the start of every session.
+
+---
+
+## Family
+
+```yaml
+privacy_acknowledged: false         # set to true once you've read PRIVACY.md and confirmed your setup
+privacy_warning_dismissed: false    # set to true after agent removes the warning directive
+acknowledged_on: null               # YYYY-MM-DD
+```
+
+## Children
+
+List every child who'll have content in this KB. Add more blocks as needed.
+
+```yaml
+- slug: ava                         # kebab-case, used as directory name — DO NOT rename after content exists
+  legal_name: "Ava Full-Name"
+  preferred_name: "Ava"
+  nicknames: ["Avocado", "Bug"]
+  pronouns: "she/her"
+  birthdate: YYYY-MM-DD
+  notes: ""                         # anything the agent should know up front
+
+- slug: noah
+  legal_name: "Noah Full-Name"
+  preferred_name: "Noah"
+  nicknames: []
+  pronouns: "he/him"
+  birthdate: YYYY-MM-DD
+  notes: ""
+```
+
+## Household
+
+Who lives there, who's in the regular rotation.
+
+```yaml
+parents:
+  - name: ""
+    relationship: ""                # e.g. "mom", "dad", "step-parent"
+  - name: ""
+    relationship: ""
+
+other_household_members:
+  - name: ""
+    relationship: ""                # e.g. "grandparent", "sibling", "au pair"
+
+close_circle:
+  - name: ""
+    relationship: ""                # e.g. "grandma (mom's side)", "babysitter 2022-2024"
+```
+
+## Homes
+
+Places the family has lived, most recent first.
+
+```yaml
+- location: "City, State/Country"
+  dates: "YYYY — present"           # or "YYYY — YYYY"
+  notes: ""
+```
+
+## Tone and voice
+
+How you want the agent to write.
+
+```yaml
+tone:
+  register: ""                      # "warm", "clinical", "terse", "playful", "literary", etc.
+  pov: ""                           # who narrates: "parent", "neutral third-person", "journal-style"
+  avoid_words: []                   # words/phrases you don't want in your KB
+  preferred_quirks: ""              # anything distinctive you want preserved
+```
+
+## Sensitive topics
+
+Topics the agent should treat with extra care. Be specific.
+
+```yaml
+sensitive_topics:
+  - topic: ""                       # e.g. "grandparent's death, 2025"
+    handling: ""                    # what to do: "ask before filing", "measured tone only", "don't volunteer in summaries"
+  - topic: ""
+    handling: ""
+```
+
+## Family vocabulary
+
+Words, names, invented terms the spellchecker should ignore.
+
+```yaml
+family_vocabulary:
+  - ""                              # e.g. the kids' nicknames, family pet names, invented words
+  - ""
+  - ""
+```
+
+## Agent preferences
+
+Per-user preferences for how the agent operates.
+
+```yaml
+preferences:
+  capture_prompt_interval_days: 14
+  lint_prompt_interval_days: 30
+  auto_update_timeline: true
+  auto_update_profile_shared_experiences: true
+  explain_placement_choices: true
+```
+
+## Notes for the agent
+
+Free-form space for anything else you want the agent to know.
+
+---

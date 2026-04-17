@@ -1,0 +1,55 @@
+# kids-kb
+
+A downloadable scaffold for a family-scoped, LLM-maintained knowledge base about your kids — milestones, memories, quotes, preferences at each age, relationships, creative works — so that years from now, both you and they have a curated history of their childhood to look back on.
+
+Both **practical** (health, education, routines) and **emotional** (quotes, letters, reflections). Works with any LLM agent that reads `AGENTS.md`; has extra integration for Claude Code.
+
+Built on the [LLM wiki pattern](https://gist.github.com/jrokeach/1d21067027d50ec384dcbcb56536ea94): raw sources + LLM-generated wiki pages + a schema document that teaches the agent how to maintain it.
+
+---
+
+## Is this for me?
+
+It is if any of the following is true:
+
+- You have kids and you've noticed how fast their words, fears, fascinations, and friendships drift away.
+- You're already taking photos and notes in scattered places (Notes app, camera roll, texts to your partner) and wish it all lived somewhere durable.
+- You want both of you *and your kids later* to be able to explore it.
+- You're comfortable editing markdown files with an AI agent's help.
+
+## How it works, in one paragraph
+
+You clone this scaffold into a **private** repo. On first use, an AI agent reads `AGENTS.md`, asks you some bootstrap questions about your family, and creates a local `AGENTS.local.md`. From then on, you paste photos, type a quote your kid said at dinner, drop in a report card — and the agent files it into the right places, cross-links it to related pages, and keeps a chronological log. Periodically, it prompts you for what's new and asks to lint the KB for typos, broken links, and stale pages.
+
+## Quickstart
+
+1. **[READ `PRIVACY.md` FIRST.](PRIVACY.md)** This KB will grow to contain deeply personal content about minors. Most families should not host it in a public repo.
+2. Clone or download this template into a new **private** repository (or keep it local-only with encrypted backups).
+3. Open the project with your AI agent (Claude Code, or any agent that reads `AGENTS.md`).
+4. Ask it: *"Help me set this up."* The agent will read `AGENTS.md`, walk you through bootstrap, and generate your `AGENTS.local.md`.
+5. Start capturing. Paste quotes, photos, stories, observations. The agent handles the filing.
+
+## What's in the scaffold
+
+- [`AGENTS.md`](AGENTS.md) — instructions the AI agent follows to maintain this KB
+- [`AGENTS.local.md.example`](AGENTS.local.md.example) — template for your family-specific setup (the agent will generate the real one during bootstrap)
+- [`PRIVACY.md`](PRIVACY.md) — privacy guidance. Read before committing anywhere.
+- [`wiki/`](wiki/index.md) — where your knowledge base lives. Start at [`wiki/index.md`](wiki/index.md).
+- [`raw/`](raw/) — drop zone for source material (photos, scans, transcripts) the agent can ingest.
+- [`.claude/`](.claude/) — Claude Code integration (a `SessionStart` hook + a `/lint` skill). Safe to ignore if you use a different agent.
+
+## Categories covered
+
+The scaffold ships with a rich set of page types — both obvious (firsts, milestones, health, education) and less obvious (quotes, questions, fears, character moments, letters, reflections, aspirations, heroes, routines). See [`wiki/children/_template/`](wiki/children/_template/) for the full per-child menu and [`wiki/family/`](wiki/family/) for whole-family categories. The template is a menu, not a mandate — skip what doesn't fit your family.
+
+## Multi-child support
+
+Multi-child by default. Shared content (family trips, sibling dynamics, a grandparent's funeral) is handled through a **`subjects:`** frontmatter field rather than directory duplication. See the "Shared / cross-child content" section of [`AGENTS.md`](AGENTS.md) for how that works.
+
+## Contributing / forking
+
+This is a scaffold. If you fork it with improvements to the structure, AGENTS.md, or lint skill, PRs welcome — but **never** push a fork that contains your family's actual content. The template itself ships empty; `AGENTS.local.md` and any content under `wiki/children/` or `raw/` should only exist in your private instance.
+
+## Your KB starts here
+
+Once you've instantiated this scaffold, your knowledge base lives at [`wiki/index.md`](wiki/index.md). That's where to navigate from, day-to-day.
