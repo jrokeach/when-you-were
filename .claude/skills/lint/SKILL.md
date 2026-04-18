@@ -1,9 +1,9 @@
 ---
 name: lint
-description: "Lint the kids-kb wiki: check frontmatter validity, link resolution, filename conventions, typos, stale pages, orphans, and cross-child consistency. Writes findings to wiki/audit-log.md with severity tags, proposes fixes, waits for user approval before mass-editing. Invoke when the user asks to lint, when the 30-day lint nudge fires, or before a big ingest."
+description: "Lint the When You Were wiki: check frontmatter validity, link resolution, filename conventions, typos, stale pages, orphans, and cross-child consistency. Writes findings to wiki/audit-log.md with severity tags, proposes fixes, waits for user approval before mass-editing. Invoke when the user asks to lint, when the 30-day lint nudge fires, or before a big ingest."
 ---
 
-# kids-kb Lint Skill
+# When You Were Lint Skill
 
 ## Purpose
 

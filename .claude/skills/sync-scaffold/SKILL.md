@@ -1,6 +1,6 @@
 ---
 name: sync-scaffold
-description: "Pull upstream improvements from the kids-kb scaffold template into this instance, preserving family-specific data. Handles AGENTS.md Family details block protection, refuses to touch instance-only paths, surfaces diffs for user review before applying, runs /lint after. Invoke when the user asks to sync the scaffold, pull updates, or update the template; do not invoke routinely."
+description: "Pull upstream improvements from the When You Were scaffold template into this instance, preserving family-specific data. Handles AGENTS.md Family details block protection, refuses to touch instance-only paths, surfaces diffs for user review before applying, runs /lint after. Invoke when the user asks to sync the scaffold, pull updates, or update the template; do not invoke routinely."
 ---
 
 # sync-scaffold skill

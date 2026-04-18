@@ -1,4 +1,4 @@
-# kids-kb
+# When You Were
 
 A downloadable scaffold for a family-scoped, LLM-maintained knowledge base about your kids — milestones, memories, quotes, preferences at each age, relationships, creative works — so that years from now, both you and they have a curated history of their childhood to look back on.
 

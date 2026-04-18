@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SessionStart hook for kids-kb.
+# SessionStart hook for When You Were.
 #
 # Emits gentle reminders to the agent when:
 #   - AGENTS.md Family details is still the placeholder  (run bootstrap)
@@ -55,7 +55,7 @@ if (( ${#REMINDERS[@]} == 0 )); then
   exit 0
 fi
 
-echo "[kids-kb session reminders]"
+echo "[When You Were session reminders]"
 for r in "${REMINDERS[@]}"; do
   echo "- $r"
 done
