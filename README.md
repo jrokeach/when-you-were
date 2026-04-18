@@ -6,6 +6,8 @@ Both **practical** (health, education, routines) and **emotional** (quotes, lett
 
 Built on the [LLM wiki pattern](https://gist.github.com/jrokeach/1d21067027d50ec384dcbcb56536ea94): raw sources + LLM-generated wiki pages + a schema document that teaches the agent how to maintain it.
 
+See an instantiated example — a [fictional family KB](https://github.com/jrokeach/when-you-were-the-smith-family) — to see what the result looks like.
+
 ---
 
 ## Is this for me?
@@ -63,7 +65,7 @@ For asking questions of the archive.
 ## Quickstart
 
 1. **[READ `PRIVACY.md` FIRST.](PRIVACY.md)** This KB will grow to contain deeply personal content about minors. Most families should not host it in a public repo.
-2. Clone or download this template into a new **private** repository (or keep it local-only with encrypted backups). Here's an example of a [fictional family KB](https://github.com/jrokeach/when-you-were-the-smith-family) to see what the result looks like.
+2. Clone or download this template into a new **private** repository (or keep it local-only with encrypted backups).
 3. Open the project with your AI agent (Claude Code, or any agent that reads `AGENTS.md`).
 4. Ask it: *"Help me set this up."* The agent will read `AGENTS.md`, walk you through bootstrap, fill in the Family details section of `AGENTS.md`, and generate your `AGENTS.local.md`.
 5. Start capturing. Paste quotes, photos, stories, observations. The agent handles the filing.
