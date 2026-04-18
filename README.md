@@ -63,7 +63,7 @@ For asking questions of the archive.
 ## Quickstart
 
 1. **[READ `PRIVACY.md` FIRST.](PRIVACY.md)** This KB will grow to contain deeply personal content about minors. Most families should not host it in a public repo.
-2. Clone or download this template into a new **private** repository (or keep it local-only with encrypted backups).
+2. Clone or download this template into a new **private** repository (or keep it local-only with encrypted backups). Here's an example of a [fictional family KB](https://github.com/jrokeach/when-you-were-the-smith-family) to see what the result looks like.
 3. Open the project with your AI agent (Claude Code, or any agent that reads `AGENTS.md`).
 4. Ask it: *"Help me set this up."* The agent will read `AGENTS.md`, walk you through bootstrap, fill in the Family details section of `AGENTS.md`, and generate your `AGENTS.local.md`.
 5. Start capturing. Paste quotes, photos, stories, observations. The agent handles the filing.
