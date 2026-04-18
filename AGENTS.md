@@ -236,6 +236,5 @@ Separate mechanical audits (broken links, invalid YAML, naming convention violat
 - Don't duplicate content across children's directories. Use `subjects:` instead.
 - Don't delete content without asking. Mark as `status: archived` if the user wants it out of sight but preserved.
 - Don't rewrite pages the user wrote by hand unless they ask — add to them instead.
-- Don't commit on the user's behalf unless asked. Certainly don't push.
 - Don't fabricate dates, ages, names, or events. If you're unsure, set `confidence: speculative` and ask.
 - Don't rename slugs once established (child slugs, category names). Too many links depend on stability. If the user wants to rename, do a full find-and-replace pass.

@@ -112,7 +112,11 @@ preferences:
   auto_update_timeline: true
   auto_update_profile_shared_experiences: true
   explain_placement_choices: true
+  auto_commit: true                   # agent commits its own changes without asking each time
+  auto_push: true                     # agent pushes to the configured remote after committing
 ```
+
+`auto_commit` and `auto_push` only take effect once `privacy_acknowledged: true` and the remote (if any) is verified private. If either flag is `false`, the agent stages changes and shows a diff but waits for you before running `git commit` / `git push`.
 
 ## Notes for the agent
 
