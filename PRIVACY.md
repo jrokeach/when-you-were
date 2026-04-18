@@ -32,7 +32,7 @@ Pick one. They are all fine.
 
 - **Do not push to a public GitHub repo.** Once it's indexed, assume it's permanently archived.
 - Do not commit from a shared / work machine you don't control.
-- Do not paste AGENTS.local.md, photos, or wiki content into public issue trackers, pastebins, or support threads.
+- Do not paste a populated `AGENTS.md` (Family details), `AGENTS.local.md`, photos, or wiki content into public issue trackers, pastebins, or support threads.
 - Do not use this KB as a demo in blog posts or conference talks with real names intact.
 - Do not enable public GitHub Pages or similar rendering on the repo.
 
@@ -49,7 +49,7 @@ Pick one. They are all fine.
 - On first setup, the agent explicitly warns you about public repos and records your acknowledgment.
 - Until you acknowledge, on every session the agent re-checks the git remote and warns if it looks public.
 - Once you acknowledge, the warning can be dismissed permanently (the agent will offer to remove the directive from `AGENTS.md`).
-- The `.gitignore` does not protect `AGENTS.local.md` by default — because the entire repo is expected to be private. Don't treat `.gitignore` as a safety net here.
+- The `.gitignore` does not protect `AGENTS.md`, `AGENTS.local.md`, or anything under `wiki/` by default — because the entire repo is expected to be private. Don't treat `.gitignore` as a safety net here.
 
 ## Special considerations
 

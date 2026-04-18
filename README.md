@@ -19,20 +19,20 @@ It is if any of the following is true:
 
 ## How it works, in one paragraph
 
-You clone this scaffold into a **private** repo. On first use, an AI agent reads `AGENTS.md`, asks you some bootstrap questions about your family, and creates a local `AGENTS.local.md`. From then on, you paste photos, type a quote your kid said at dinner, drop in a report card — and the agent files it into the right places, cross-links it to related pages, and keeps a chronological log. Periodically, it prompts you for what's new and asks to lint the KB for typos, broken links, and stale pages.
+You clone this scaffold into a **private** repo. On first use, an AI agent reads `AGENTS.md`, asks you some bootstrap questions about your family, and fills in the Family details section of `AGENTS.md` (family-level data — children, household, tone, sensitive topics). It also creates a local `AGENTS.local.md` for your per-user, per-machine preferences (auto-commit behavior, prompt intervals). From then on, you paste photos, type a quote your kid said at dinner, drop in a report card — and the agent files it into the right places, cross-links it to related pages, and keeps a chronological log. Periodically, it prompts you for what's new and asks to lint the KB for typos, broken links, and stale pages.
 
 ## Quickstart
 
 1. **[READ `PRIVACY.md` FIRST.](PRIVACY.md)** This KB will grow to contain deeply personal content about minors. Most families should not host it in a public repo.
 2. Clone or download this template into a new **private** repository (or keep it local-only with encrypted backups).
 3. Open the project with your AI agent (Claude Code, or any agent that reads `AGENTS.md`).
-4. Ask it: *"Help me set this up."* The agent will read `AGENTS.md`, walk you through bootstrap, and generate your `AGENTS.local.md`.
+4. Ask it: *"Help me set this up."* The agent will read `AGENTS.md`, walk you through bootstrap, fill in the Family details section of `AGENTS.md`, and generate your `AGENTS.local.md`.
 5. Start capturing. Paste quotes, photos, stories, observations. The agent handles the filing.
 
 ## What's in the scaffold
 
-- [`AGENTS.md`](AGENTS.md) — instructions the AI agent follows to maintain this KB
-- [`AGENTS.local.md.example`](AGENTS.local.md.example) — template for your family-specific setup (the agent will generate the real one during bootstrap)
+- [`AGENTS.md`](AGENTS.md) — schema, workflow, and operating manual for the agent; also the canonical home of family-specific details (children, household, tone, sensitive topics) once bootstrap has populated them
+- [`AGENTS.local.md.example`](AGENTS.local.md.example) — template for **your** user- and machine-specific preferences (auto-commit, auto-push, prompt cadences, personal tone overrides). Different family members can keep different copies; it is not meant to be shared across users.
 - [`PRIVACY.md`](PRIVACY.md) — privacy guidance. Read before committing anywhere.
 - [`wiki/`](wiki/index.md) — where your knowledge base lives. Start at [`wiki/index.md`](wiki/index.md).
 - [`raw/`](raw/) — drop zone for source material (photos, scans, transcripts) the agent can ingest.

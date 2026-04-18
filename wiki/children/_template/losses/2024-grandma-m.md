@@ -13,7 +13,7 @@ status: active
 
 # Grandma M's death — how Sam is processing it
 
-> _This page type (`losses/`) is flagged as sensitive. The agent should not surface these pages in casual summaries without noting them. See `AGENTS.local.md` sensitive-topic handling._
+> _This page type (`losses/`) is flagged as sensitive. The agent should not surface these pages in casual summaries without noting them. See `sensitive_topics` in `AGENTS.md`'s Family details for handling rules._
 
 Canonical event: [Grandma M's death, April 2024](../../../family/lore/2024-grandma-m-death.md). This page is specifically about Sam's experience of it.
 

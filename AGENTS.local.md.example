@@ -1,109 +1,26 @@
 # AGENTS.local.md (template)
 
-> ⚠️ This file, once instantiated, contains personal details about your family. The scaffold assumes your entire repo is private — see `PRIVACY.md`. If your repo is public, stop and fix that before filling this out.
+**User- and environment-specific** settings for *this* checkout by *this* user. Family-level data (children, household, homes, tone, sensitive topics, family vocabulary) lives in `AGENTS.md` under the **Family details** section.
+
+Different family members and different machines can maintain different `AGENTS.local.md` files. This one should not be shared across users.
+
+> ⚠️ This file, once instantiated, can still reveal that *this repo* contains personal family content. The scaffold assumes your entire repo is private — see `PRIVACY.md`. If your repo is public, stop and fix that before filling this out.
 
 Rename this file to `AGENTS.local.md` (no `.example`) and fill it in. Your agent will read both `AGENTS.md` and `AGENTS.local.md` at the start of every session.
 
 ---
 
-## Family
+## Privacy state
 
 ```yaml
 privacy_acknowledged: false         # set to true once you've read PRIVACY.md and confirmed your setup
-privacy_warning_dismissed: false    # set to true after agent removes the warning directive
+privacy_warning_dismissed: false    # set to true after agent removes the dismissable warning block from AGENTS.md
 acknowledged_on: null               # YYYY-MM-DD
-```
-
-## Children
-
-List every child who'll have content in this KB. Add more blocks as needed.
-
-```yaml
-- slug: ava                         # kebab-case, used as directory name — DO NOT rename after content exists
-  legal_name: "Ava Full-Name"
-  preferred_name: "Ava"
-  nicknames: ["Avocado", "Bug"]
-  pronouns: "she/her"
-  birthdate: YYYY-MM-DD
-  notes: ""                         # anything the agent should know up front
-
-- slug: noah
-  legal_name: "Noah Full-Name"
-  preferred_name: "Noah"
-  nicknames: []
-  pronouns: "he/him"
-  birthdate: YYYY-MM-DD
-  notes: ""
-```
-
-## Household
-
-Who lives there, who's in the regular rotation.
-
-```yaml
-parents:
-  - name: ""
-    relationship: ""                # e.g. "mom", "dad", "step-parent"
-  - name: ""
-    relationship: ""
-
-other_household_members:
-  - name: ""
-    relationship: ""                # e.g. "grandparent", "sibling", "au pair"
-
-close_circle:
-  - name: ""
-    relationship: ""                # e.g. "grandma (mom's side)", "babysitter 2022-2024"
-```
-
-## Homes
-
-Places the family has lived, most recent first.
-
-```yaml
-- location: "City, State/Country"
-  dates: "YYYY — present"           # or "YYYY — YYYY"
-  notes: ""
-```
-
-## Tone and voice
-
-How you want the agent to write.
-
-```yaml
-tone:
-  register: ""                      # "warm", "clinical", "terse", "playful", "literary", etc.
-  pov: ""                           # who narrates: "parent", "neutral third-person", "journal-style"
-  avoid_words: []                   # words/phrases you don't want in your KB
-  preferred_quirks: ""              # anything distinctive you want preserved
-```
-
-## Sensitive topics
-
-Topics the agent should treat with extra care. Be specific.
-
-```yaml
-sensitive_topics:
-  - topic: ""                       # e.g. "grandparent's death, 2025"
-    handling: ""                    # what to do: "ask before filing", "measured tone only", "don't volunteer in summaries"
-  - topic: ""
-    handling: ""
-```
-
-## Family vocabulary
-
-Words, names, invented terms the spellchecker should ignore.
-
-```yaml
-family_vocabulary:
-  - ""                              # e.g. the kids' nicknames, family pet names, invented words
-  - ""
-  - ""
 ```
 
 ## Agent preferences
 
-Per-user preferences for how the agent operates.
+Per-user / per-environment preferences for how the agent operates in this checkout.
 
 ```yaml
 preferences:
@@ -112,14 +29,25 @@ preferences:
   auto_update_timeline: true
   auto_update_profile_shared_experiences: true
   explain_placement_choices: true
-  auto_commit: true                   # agent commits its own changes without asking each time
-  auto_push: true                     # agent pushes to the configured remote after committing
+  auto_commit: true                 # agent commits its own changes without asking each time
+  auto_push: true                   # agent pushes to the configured remote after committing
 ```
 
 `auto_commit` and `auto_push` only take effect once `privacy_acknowledged: true` and the remote (if any) is verified private. If either flag is `false`, the agent stages changes and shows a diff but waits for you before running `git commit` / `git push`.
 
+## Personal tone overrides
+
+Anything specific to *you* that should override the family default `tone` declared in `AGENTS.md`. Leave blank to inherit.
+
+```yaml
+tone_override:
+  register: ""                      # "warm", "clinical", "terse", "playful", "literary" — or leave "" to inherit
+  pov: ""                           # "parent", "neutral third-person", "journal-style" — or leave "" to inherit
+  avoid_words: []                   # your personal additions; merged with family list
+```
+
 ## Notes for the agent
 
-Free-form space for anything else you want the agent to know.
+Free-form space for anything else this user wants the agent to know about working with this checkout (e.g. "I ingest on Sundays", "don't auto-push when on mobile hotspot", etc.).
 
 ---
