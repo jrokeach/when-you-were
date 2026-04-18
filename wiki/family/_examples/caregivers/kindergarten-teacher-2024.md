@@ -6,7 +6,7 @@ date: 2024-09-03
 date_recorded: 2024-10-15
 tags: [caregiver, school, kindergarten]
 confidence: high
-status: active
+status: example
 ---
 
 # Sam's kindergarten teacher, 2024–2025
@@ -26,4 +26,4 @@ Kids often don't remember teachers' names. At a distance of 15 years, a caregive
 
 ## Relevant child pages
 
-- [Sam, kindergarten 2024](../../children/_template/education/kindergarten-2024.md)
+- [Sam, kindergarten 2024](../../../children/_template/education/kindergarten-2024.md)

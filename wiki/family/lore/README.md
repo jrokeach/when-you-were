@@ -15,6 +15,10 @@ Stories the family tells. The running jokes, the oft-retold incidents, the times
 - `YYYY-short-slug.md` if dated; just `slug.md` otherwise.
 - `subjects:` includes whichever kids were involved, or `[family]` if it predates them or involves everyone.
 
+## Reference examples
+
+- [Grandma M's death, April 2024](../_examples/lore/2024-grandma-m-death.md) *(sensitive)* — _fictional; see [`_examples/`](../_examples/README.md)_
+
 ## Pages
 
-- [Grandma M's death, April 2024](2024-grandma-m-death.md) *(sensitive)*
+_None yet._

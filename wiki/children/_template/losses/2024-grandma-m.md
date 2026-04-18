@@ -8,14 +8,14 @@ date_recorded: 2024-05-02
 tags: [loss, death, grief, handle-with-care]
 sensitive: true
 confidence: medium
-status: active
+status: example
 ---
 
 # Grandma M's death — how Sam is processing it
 
 > _This page type (`losses/`) is flagged as sensitive. The agent should not surface these pages in casual summaries without noting them. See `sensitive_topics` in `AGENTS.md`'s Family details for handling rules._
 
-Canonical event: [Grandma M's death, April 2024](../../../family/lore/2024-grandma-m-death.md). This page is specifically about Sam's experience of it.
+Canonical event: [Grandma M's death, April 2024](../../../family/_examples/lore/2024-grandma-m-death.md). This page is specifically about Sam's experience of it.
 
 ## What we know Sam knows
 
@@ -29,7 +29,7 @@ We didn't use euphemisms ("passed away", "went to sleep"). Sam has been matter-o
 
 - At the memorial: drew a picture of Grandma M's garden and left it on the chair next to the urn. No one told them to.
 - A week later, on the way to school: *"Who is the oldest person now?"*
-- A month later, asked whether [Biscuit](../../../family/pets/biscuit.md) was going to die soon.
+- A month later, asked whether [Biscuit](../../../family/_examples/pets/biscuit.md) was going to die soon.
 - Six months later, asked: *"What is a soul?"* — see [that question](../questions/what-is-a-soul.md). Possibly connected, possibly not.
 
 ## Parent note

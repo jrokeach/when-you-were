@@ -4,7 +4,7 @@ type: pet
 subjects: [family, _template]
 tags: [pet, dog]
 confidence: high
-status: active
+status: example
 ---
 
 # Biscuit
@@ -32,9 +32,9 @@ The family dog. Canonical page. Per-kid relationships live under `children/<slug
 
 - 2016: adopted.
 - 2019: Sam is born; Biscuit inspects the crib for approximately ten minutes then retreats to the hallway.
-- 2021: the cat-food incident (see [Sam's pet page](../../children/_template/pets/biscuit.md)).
+- 2021: the cat-food incident (see [Sam's pet page](../../../children/_template/pets/biscuit.md)).
 - 2024: showing signs of age. Slower on walks. The kids have noticed.
 
 ## Per-kid relationships
 
-- [Sam's relationship with Biscuit](../../children/_template/pets/biscuit.md)
+- [Sam's relationship with Biscuit](../../../children/_template/pets/biscuit.md)

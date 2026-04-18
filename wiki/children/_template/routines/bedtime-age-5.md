@@ -6,7 +6,7 @@ ages: {_template: "5"}
 date_recorded: 2024-11-20
 tags: [routine, bedtime, sleep]
 confidence: high
-status: active
+status: example
 ---
 
 # Bedtime routine, age 5

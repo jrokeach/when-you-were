@@ -8,7 +8,7 @@ date_recorded: 2024-11-15
 tags: [cardboard, ocean, build]
 sources: [raw/artwork/2024-11/cardboard-submarine-photos.md]
 confidence: high
-status: active
+status: example
 ---
 
 # Cardboard submarine

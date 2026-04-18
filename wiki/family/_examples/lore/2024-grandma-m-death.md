@@ -7,7 +7,7 @@ date_recorded: 2024-05-02
 tags: [loss, death, family, handle-with-care]
 sensitive: true
 confidence: high
-status: active
+status: example
 ---
 
 # Grandma M's death, April 2024
@@ -28,7 +28,7 @@ Canonical page for the event itself. Per-kid perspectives live under each child'
 
 ## Per-kid pages
 
-- [Sam's experience](../../children/_template/losses/2024-grandma-m.md)
+- [Sam's experience](../../../children/_template/losses/2024-grandma-m.md)
 
 ## See also
 

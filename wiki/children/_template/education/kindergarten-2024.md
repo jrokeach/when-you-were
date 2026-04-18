@@ -7,13 +7,13 @@ date: 2024-09-03
 date_recorded: 2024-10-15
 tags: [school, kindergarten]
 confidence: high
-status: active
+status: example
 ---
 
 # Kindergarten, 2024–2025
 
 - **School:** (school name)
-- **Teacher:** (teacher name) — see [caregiver page](../../../family/caregivers/kindergarten-teacher-2024.md)
+- **Teacher:** (teacher name) — see [caregiver page](../../../family/_examples/caregivers/kindergarten-teacher-2024.md)
 - **Start date:** 2024-09-03
 - **Room:** (room)
 

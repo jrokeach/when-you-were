@@ -4,7 +4,7 @@ type: physical
 subjects: [_template]
 tags: [physical, growth, log]
 confidence: high
-status: active
+status: example
 ---
 
 # Measurements log

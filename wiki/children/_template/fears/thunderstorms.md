@@ -6,7 +6,7 @@ ages: {_template: "4–6 (ongoing)"}
 date_recorded: 2024-11-03
 tags: [fear]
 confidence: high
-status: active
+status: example
 ---
 
 # Thunderstorms
@@ -17,7 +17,7 @@ Started around age 4 after a very loud storm overnight. Has not diminished as mu
 
 - Knowing the forecast a day in advance. The unpredictability is a big part of the fear.
 - Counting seconds between lightning and thunder to estimate distance. Sam likes that this is a *math* thing, not a *feelings* thing.
-- [Biscuit](../../../family/pets/biscuit.md) lying next to them.
+- [Biscuit](../../../family/_examples/pets/biscuit.md) lying next to them.
 
 ## What doesn't
 

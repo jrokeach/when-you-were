@@ -2,7 +2,7 @@
 title: "Child template"
 type: meta
 subjects: [_template]
-status: active
+status: example
 ---
 
 # `_template/` — reference structure for a child

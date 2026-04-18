@@ -7,7 +7,7 @@ date: 2024-12-01
 date_recorded: 2024-12-01
 tags: [hero, ocean, role-model]
 confidence: high
-status: active
+status: example
 ---
 
 # Marine biologist hero phase
@@ -19,7 +19,7 @@ Sam cannot yet say "Sylvia Earle" — they say "the ocean lady." But they know s
 ## Preceding hero phases
 
 - Ages 3–4: bus drivers, specifically the driver on route 74.
-- Age 4–5: [Biscuit](../../../family/pets/biscuit.md). For a while Sam said "I want to be a Biscuit." Not a dog. A Biscuit.
+- Age 4–5: [Biscuit](../../../family/_examples/pets/biscuit.md). For a while Sam said "I want to be a Biscuit." Not a dog. A Biscuit.
 - Age 5 (brief): the librarian at the branch, who learned Sam's name.
 
 ## See also

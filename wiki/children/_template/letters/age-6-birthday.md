@@ -8,7 +8,7 @@ date_recorded: 2025-06-15
 tags: [letter, birthday]
 author: "parent"
 confidence: high
-status: active
+status: example
 ---
 
 # Letter to Sam, age 6 birthday

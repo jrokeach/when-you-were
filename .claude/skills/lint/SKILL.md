@@ -34,7 +34,7 @@ For every `.md` file under `wiki/`:
 - Parses as valid YAML frontmatter.
 - Required fields present: `title`, `type`, `subjects`, `status`.
 - `subjects:` entries match either a known child slug (from the **Family details** section of `AGENTS.md`) or the literal `family`.
-- `status` ∈ {active, draft, stale, archived}.
+- `status` ∈ {active, draft, stale, archived, example}.
 - `confidence` (if present) ∈ {high, medium, low, speculative}.
 - Dates parse as ISO-8601 (YYYY-MM-DD).
 
@@ -43,6 +43,7 @@ For every `.md` file under `wiki/`:
 - Pages under `wiki/children/<slug>/` MUST include `<slug>` in `subjects:`. Flag as High.
 - Pages under `wiki/family/` MUST have `subjects:` with at least one child slug or `[family]`. Flag as High.
 - Pages whose title or body names a child by preferred name or nickname but does not list that child in `subjects:` → Medium warning.
+- Pages outside `wiki/children/_template/` and `wiki/family/_examples/` must NOT have `status: example`. Flag as High — the `example` status is reserved for the reference subtrees only.
 
 ### 3. Link resolution
 
@@ -117,7 +118,8 @@ Then:
 
 The skill scans `wiki/**/*.md` with these exclusions:
 
-- `wiki/children/_template/` — reference structure. Its `subjects: [_template]` placeholder is intentional; do not flag.
+- `wiki/children/_template/` — reference structure (fictional "Sam"). Its `subjects: [_template]` / `status: example` markers are intentional; do not flag.
+- `wiki/family/_examples/` — reference structure for family-category pages (fictional Biscuit, Sunday pancakes, etc.). Same treatment.
 - Anything explicitly marked `status: archived` — reported in a summary line only, not linted in detail.
 
 ## What the skill does NOT do

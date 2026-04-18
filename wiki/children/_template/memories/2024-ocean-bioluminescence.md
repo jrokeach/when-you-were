@@ -8,12 +8,12 @@ date_recorded: 2024-09-15
 tags: [ocean, awe, travel]
 sources: []
 confidence: high
-status: active
+status: example
 ---
 
 # The night the waves glowed
 
-On the [Oregon coast trip](../../../family/trips/2024-oregon-coast.md), we walked to the beach after dinner because someone at the cabin said the bioluminescence had been showing for a few nights.
+On the [Oregon coast trip](../../../family/_examples/trips/2024-oregon-coast.md), we walked to the beach after dinner because someone at the cabin said the bioluminescence had been showing for a few nights.
 
 Sam stood at the waterline in their coat and crocs. For a long time they didn't say anything. Then they crouched down, dragged their fingers through the surf, watched it flash blue, and whispered: *"the ocean has a brain."*
 

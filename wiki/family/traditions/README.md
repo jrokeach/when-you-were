@@ -14,6 +14,10 @@ Family rituals — holiday ones, weekly ones, the small recurring shapes of your
 - One page per tradition: `slug.md` (e.g. `sunday-pancakes.md`, `thanksgiving.md`).
 - If a tradition meaningfully changed, a new page or a new dated section within the existing page, not an overwrite.
 
+## Reference examples
+
+- [Sunday pancakes](../_examples/traditions/sunday-pancakes.md) — _fictional; see [`_examples/`](../_examples/README.md)_
+
 ## Pages
 
-- [Sunday pancakes](sunday-pancakes.md)
+_None yet._

@@ -6,7 +6,7 @@ ages: {_template: "5"}
 date_recorded: 2024-12-20
 tags: [favorites, snapshot]
 confidence: high
-status: active
+status: example
 ---
 
 # Favorites at age 5

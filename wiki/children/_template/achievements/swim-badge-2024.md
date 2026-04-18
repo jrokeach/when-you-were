@@ -7,7 +7,7 @@ date: 2024-07-22
 date_recorded: 2024-07-25
 tags: [swimming, achievement]
 confidence: high
-status: active
+status: example
 ---
 
 # Swim badge — level 2

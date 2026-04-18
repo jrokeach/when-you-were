@@ -21,6 +21,45 @@ It is if any of the following is true:
 
 You clone this scaffold into a **private** repo. On first use, an AI agent reads `AGENTS.md`, asks you some bootstrap questions about your family, and fills in the Family details section of `AGENTS.md` (family-level data — children, household, tone, sensitive topics). It also creates a local `AGENTS.local.md` for your per-user, per-machine preferences (auto-commit behavior, prompt intervals). From then on, you paste photos, type a quote your kid said at dinner, drop in a report card — and the agent files it into the right places, cross-links it to related pages, and keeps a chronological log. Periodically, it prompts you for what's new and asks to lint the KB for typos, broken links, and stale pages.
 
+## Working with your KB
+
+The scaffold is just markdown + YAML frontmatter + an `AGENTS.md`. That means lots of tools work with it. Pick by what you're trying to do.
+
+### Curating the KB (IDE-style coding agents)
+
+For when you sit down at your computer to ingest a batch of material, lint, or reorganize.
+
+- **Claude Code** — first-class support. `.claude/` ships with a `SessionStart` hook that nudges you on stale captures and lint cycles, plus `/lint` and `/sync-scaffold` skills.
+- **OpenAI Codex (CLI)** — reads `AGENTS.md` natively. Works out of the box.
+- **GitHub Copilot (chat)** — reads `AGENTS.md` in most integrations; point it at the file if it isn't auto-detected.
+- **Cursor** — add a one-liner to `.cursorrules` or project settings referencing `AGENTS.md`.
+- **opencode** — open-source TUI. Reads `AGENTS.md`.
+- **Any `AGENTS.md`-aware agent** — Zed AI, Windsurf, Aider, and others work as long as they follow the `AGENTS.md` convention.
+
+### Capturing on the go (chat-based personal assistants)
+
+For when a kid says something funny at the park and you want to log it before you forget.
+
+- **[OpenClaw](https://openclaw.ai/)** — personal AI assistant reachable via WhatsApp, Telegram, Discord, etc. Its GitHub and Obsidian integrations let you say "Ava said X at dinner tonight" into a chat and have it ingest the quote into the right page.
+- **Claude Cowork** — Anthropic's team-collaboration layer. Reads `AGENTS.md`.
+- **Any LLM chat with Git or filesystem access (via MCP)** — if it can read/write your repo, it can capture.
+
+### Reading and browsing the KB
+
+For everyday reference — looking back on what you wrote, pulling up a memory, or (eventually) sharing with the kid.
+
+- **Your git forge of choice** — GitHub, GitLab, Gitea. Renders markdown, follows relative links across pages.
+- **Obsidian** — open the repo as a vault. All links work. The Dataview plugin can query `subjects:` frontmatter for cross-child views.
+- **iA Writer, Typora, Marked, any markdown viewer** — file-by-file reading.
+
+### Querying the KB
+
+For asking questions of the archive.
+
+- **Ask an agent**: *"What was Ava scared of at age 4?"* — the agent searches `subjects:` frontmatter and page content.
+- **Command line**: `grep -l 'subjects:.*ava' wiki/**/*.md` lists every page about Ava, regardless of directory.
+- **Obsidian Dataview**: a `dataview` code block with `TABLE date, type FROM "wiki" WHERE contains(subjects, "ava") SORT date` renders a chronological Ava timeline.
+
 ## Quickstart
 
 1. **[READ `PRIVACY.md` FIRST.](PRIVACY.md)** This KB will grow to contain deeply personal content about minors. Most families should not host it in a public repo.

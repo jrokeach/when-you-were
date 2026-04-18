@@ -7,7 +7,7 @@ date: 2024-07-14
 date_recorded: 2024-07-14
 tags: [kindness, sibling, character]
 confidence: high
-status: active
+status: example
 ---
 
 # The shared last cookie
@@ -25,4 +25,4 @@ Because at five, Sam alternates between being the world's kindest sibling and be
 ## See also
 
 - [Sam's relationship with Robin](../friends/sibling-robin.md)
-- [family page on the sibling dynamic](../../../family/sibling-dynamics/2024-robin-following-sam.md)
+- [family page on the sibling dynamic](../../../family/_examples/sibling-dynamics/2024-robin-following-sam.md)

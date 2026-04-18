@@ -6,7 +6,7 @@ ages: {_template: "5 years 3 months"}
 date_recorded: 2024-10-05
 tags: [reflection, transition, move]
 confidence: medium
-status: active
+status: example
 ---
 
 # How Sam is doing after the move

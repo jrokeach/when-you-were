@@ -7,7 +7,7 @@ date: 2024-10-18
 date_recorded: 2024-10-18
 tags: [question, philosophical]
 confidence: high
-status: active
+status: example
 ---
 
 # "What is a soul?"

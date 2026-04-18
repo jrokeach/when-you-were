@@ -4,12 +4,12 @@ type: pet-relationship
 subjects: [_template]
 tags: [pet, relationship]
 confidence: high
-status: active
+status: example
 ---
 
 # Sam and Biscuit
 
-Canonical page for Biscuit the family dog: [family/pets/biscuit](../../../family/pets/biscuit.md). This page is specifically about Sam's relationship with her.
+Canonical page for Biscuit the family dog: [family/pets/biscuit](../../../family/_examples/pets/biscuit.md). This page is specifically about Sam's relationship with her.
 
 ## What Biscuit means to Sam
 

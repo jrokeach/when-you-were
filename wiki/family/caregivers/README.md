@@ -15,6 +15,10 @@ Teachers, nannies, au pairs, babysitters, coaches, instructors, daycare provider
 - Filename: `descriptive-slug.md` (e.g. `kindergarten-teacher-2024.md`, `nanny-2019-to-2021.md`).
 - `subjects:` lists every kid they cared for.
 
+## Reference examples
+
+- [Kindergarten teacher, 2024](../_examples/caregivers/kindergarten-teacher-2024.md) — _fictional; see [`_examples/`](../_examples/README.md)_
+
 ## Pages
 
-- [Kindergarten teacher, 2024](kindergarten-teacher-2024.md)
+_None yet._

@@ -7,12 +7,12 @@ date: 2024-09-12
 date_recorded: 2024-09-16
 tags: [travel, ocean]
 confidence: high
-status: active
+status: example
 ---
 
 # Oregon coast, 2024 — Sam's experience
 
-Canonical trip: [2024 Oregon coast trip](../../../family/trips/2024-oregon-coast.md). This page is Sam's individual perspective.
+Canonical trip: [2024 Oregon coast trip](../../../family/_examples/trips/2024-oregon-coast.md). This page is Sam's individual perspective.
 
 ## What Sam did
 
@@ -29,5 +29,5 @@ Canonical trip: [2024 Oregon coast trip](../../../family/trips/2024-oregon-coast
 
 ## See also
 
-- [canonical family trip page](../../../family/trips/2024-oregon-coast.md)
+- [canonical family trip page](../../../family/_examples/trips/2024-oregon-coast.md)
 - [oceans interest](../interests/oceans.md)

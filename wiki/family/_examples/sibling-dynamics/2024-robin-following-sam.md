@@ -6,7 +6,7 @@ date: 2024-06-01
 date_recorded: 2024-08-30
 tags: [sibling, relationship, phase]
 confidence: high
-status: active
+status: example
 ---
 
 # The summer Robin started following Sam everywhere, 2024
@@ -22,8 +22,8 @@ A phase, roughly June through August 2024. Robin (age 3) would not willingly be 
 
 ## How Sam handled it
 
-- Mostly well. See [the shared last cookie](../../children/_template/character-moments/shared-last-cookie.md) for a high point.
-- Sometimes badly. Specifically around the [submarine build](../../children/_template/creative-works/cardboard-submarine.md) — Robin touching it caused a meltdown.
+- Mostly well. See [the shared last cookie](../../../children/_template/character-moments/shared-last-cookie.md) for a high point.
+- Sometimes badly. Specifically around the [submarine build](../../../children/_template/creative-works/cardboard-submarine.md) — Robin touching it caused a meltdown.
 - By August, Sam started inviting Robin into projects ("you can be the lookout"), which seemed like a maturation.
 
 ## How Robin experienced it
@@ -36,5 +36,5 @@ This phase will end. When it does, everyone will forget it happened. The quiet w
 
 ## See also
 
-- [Sam on Robin](../../children/_template/friends/sibling-robin.md)
-- [the cookie](../../children/_template/character-moments/shared-last-cookie.md)
+- [Sam on Robin](../../../children/_template/friends/sibling-robin.md)
+- [the cookie](../../../children/_template/character-moments/shared-last-cookie.md)

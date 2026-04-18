@@ -15,6 +15,10 @@ Canonical pages for family pets. For per-kid relationships with a pet, use `chil
 - Include: species/breed, dates in the family, origin story, quirks, significant moments, (eventually) end of life.
 - `subjects: [family]` plus any kid who had a meaningful relationship with them.
 
+## Reference examples
+
+- [Biscuit](../_examples/pets/biscuit.md) — _fictional; see [`_examples/`](../_examples/README.md)_
+
 ## Pages
 
-- [Biscuit](biscuit.md)
+_None yet._

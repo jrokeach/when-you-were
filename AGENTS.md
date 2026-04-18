@@ -8,6 +8,44 @@ If the **Family details** section below is unpopulated, or `AGENTS.local.md` doe
 
 ---
 
+## Write-scope rule (read this carefully)
+
+Every file in this repo is either **upstream-tracked** or **instance-only**. The authoritative list is in [`UPSTREAM.md`](UPSTREAM.md).
+
+- **Instance-only** files — the actual KB — are yours to maintain freely. That is the job.
+- **Upstream-tracked** files (this one included, plus `.claude/**`, `PRIVACY.md`, the reference subtrees, etc.) are **read-mostly**. You must **not** write to an upstream-tracked file without first asking the user and confirming that they understand the change will be overwritten on the next `/sync-scaffold` run — unless they intend to contribute the change back to the template upstream.
+
+**Inside this file (`AGENTS.md`) specifically:**
+
+- The **only** region you may freely edit is the block between `<!-- FAMILY_DETAILS_BEGIN -->` and `<!-- FAMILY_DETAILS_END -->`. That block is protected during `/sync-scaffold`.
+- Writes anywhere else in `AGENTS.md` require explicit user confirmation; they will be overwritten by the next scaffold sync.
+- The dismissable public-repo warning (between `<!-- PUBLIC_REPO_WARNING_BEGIN -->` / `<!-- PUBLIC_REPO_WARNING_END -->`) is an intentional exception: you are explicitly authorized to remove that block after the user dismisses the warning.
+
+Never remove the `FAMILY_DETAILS_*` markers. The sync skill relies on them.
+
+---
+
+## Reference content (`_template/`, `_examples/`)
+
+Two subtrees ship with the scaffold as illustrations:
+
+- [`wiki/children/_template/`](wiki/children/_template/README.md) — a fictional child ("Sam") with one example page per per-child category.
+- [`wiki/family/_examples/`](wiki/family/_examples/README.md) — fictional family-level pages demonstrating the shape of each family category (Biscuit the dog, Sunday pancakes, 2024 Oregon coast, Grandma M, etc.).
+
+**These are not this family's data.** Never cite them as facts when answering queries. Never infer family history from them. Lint excludes both subtrees. Bootstrap offers to delete them once the user has reviewed the shape; families who want them as a living reference can keep them.
+
+Every page in these subtrees carries `status: example`. Any page with `status: example` that appears *outside* these subtrees is a bug — flag it.
+
+---
+
+## Upstream updates
+
+The scaffold improves over time (better lint checks, new categories, schema tweaks). Pull those improvements into this instance with the `/sync-scaffold` skill or the manual `git remote add upstream` workflow documented in [`UPSTREAM.md`](UPSTREAM.md).
+
+The skill preserves the Family details block in this file and never touches instance-only paths. Do not manually edit upstream-tracked files; the next sync will clobber your changes.
+
+---
+
 ## What this KB is
 
 A long-lived archive of the user's children's growth. Purpose: both the parents and the children themselves, years from now, should be able to explore a curated history of childhood — practical and emotional, organized and cross-linked.
@@ -102,6 +140,18 @@ Then walk the user through `AGENTS.local.md` to set their per-user / per-environ
 ### 3. Orient the user
 
 Point them at `wiki/index.md` and explain the shape. Offer to ingest any existing material they already have (photos, notes, documents in `raw/`).
+
+Then ask whether to keep or remove the shipped **reference content**:
+
+- `wiki/children/_template/` (fictional child "Sam" — 24 example pages)
+- `wiki/family/_examples/` (6 fictional family pages)
+
+These are illustrations, not this family's data. Two reasonable choices:
+
+- **Delete** (default suggestion): `rm -rf wiki/children/_template wiki/family/_examples`. Clean slate.
+- **Keep as a living reference**: leave them. Lint already excludes both subtrees. You (the agent) must never cite them as facts.
+
+Record the user's choice; do not ask again on subsequent sessions.
 
 ---
 

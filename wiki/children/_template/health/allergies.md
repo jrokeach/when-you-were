@@ -4,7 +4,7 @@ type: health
 subjects: [_template]
 tags: [medical, ongoing]
 confidence: high
-status: active
+status: example
 ---
 
 # Allergies and reactions

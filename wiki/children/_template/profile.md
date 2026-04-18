@@ -3,7 +3,7 @@ title: "Sam — profile"
 type: profile
 subjects: [_template]
 aliases: ["Sammy", "Sambo"]
-status: active
+status: example
 ---
 
 # Sam
@@ -21,7 +21,7 @@ status: active
 
 One paragraph the agent can use when orienting itself. Who is Sam in broad strokes at the time of most recent update? Disposition, current interests, relationships that matter most to them right now.
 
-_Example:_ Sam is in first grade, deeply into building things (magnetiles, Legos, cardboard), obsessed with oceans and bioluminescence, currently a little anxious about thunderstorms. Closest to their sibling [Robin](friends/sibling-robin.md) and the family dog [Biscuit](../../family/pets/biscuit.md) — who isn't technically a person but shows up everywhere in Sam's pages.
+_Example:_ Sam is in first grade, deeply into building things (magnetiles, Legos, cardboard), obsessed with oceans and bioluminescence, currently a little anxious about thunderstorms. Closest to their sibling [Robin](friends/sibling-robin.md) and the family dog [Biscuit](../../family/_examples/pets/biscuit.md) — who isn't technically a person but shows up everywhere in Sam's pages.
 
 ## Shared experiences
 
@@ -29,9 +29,9 @@ Auto-maintained by the agent. Links to `family/` pages where Sam is listed in `s
 
 <!-- shared-experiences-begin -->
 
-- [2024 Oregon coast trip](../../family/trips/2024-oregon-coast.md)
-- [Sunday pancakes](../../family/traditions/sunday-pancakes.md)
-- [The summer Robin started following Sam everywhere](../../family/sibling-dynamics/2024-robin-following-sam.md)
+- [2024 Oregon coast trip](../../family/_examples/trips/2024-oregon-coast.md)
+- [Sunday pancakes](../../family/_examples/traditions/sunday-pancakes.md)
+- [The summer Robin started following Sam everywhere](../../family/_examples/sibling-dynamics/2024-robin-following-sam.md)
 
 <!-- shared-experiences-end -->
 

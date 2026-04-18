@@ -5,7 +5,7 @@ subjects: [family, _template]
 date_recorded: 2024-11-01
 tags: [tradition, weekly, food]
 confidence: high
-status: active
+status: example
 ---
 
 # Sunday pancakes

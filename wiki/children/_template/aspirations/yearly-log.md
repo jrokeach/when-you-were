@@ -4,7 +4,7 @@ type: aspiration
 subjects: [_template]
 tags: [aspiration, log]
 confidence: high
-status: active
+status: example
 ---
 
 # What Sam wants to be when they grow up

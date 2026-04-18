@@ -15,6 +15,10 @@ Relationships and patterns between siblings over time. Not individual incidents 
 - Filename: `YYYY-short-slug.md` (e.g. `2024-robin-following-sam.md`).
 - `subjects:` lists the siblings involved.
 
+## Reference examples
+
+- [The summer Robin started following Sam everywhere, 2024](../_examples/sibling-dynamics/2024-robin-following-sam.md) — _fictional; see [`_examples/`](../_examples/README.md)_
+
 ## Pages
 
-- [The summer Robin started following Sam everywhere, 2024](2024-robin-following-sam.md)
+_None yet._

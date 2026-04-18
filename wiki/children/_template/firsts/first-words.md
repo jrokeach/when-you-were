@@ -7,7 +7,7 @@ date: 2020-05-22
 date_recorded: 2020-05-23
 tags: [language, development]
 confidence: high
-status: active
+status: example
 ---
 
 # First words
@@ -18,7 +18,7 @@ Sam's earliest recognizable words, in rough order.
 - **"mama"** — 2020-05-22. The first unambiguous person-word.
 - **"dada"** — about a week later.
 - **"up"** — the beginning of instructions. Demanded constantly.
-- **"dog"** (really "dah") — directed at [Biscuit](../../../family/pets/biscuit.md).
+- **"dog"** (really "dah") — directed at [Biscuit](../../../family/_examples/pets/biscuit.md).
 
 ## Context
 

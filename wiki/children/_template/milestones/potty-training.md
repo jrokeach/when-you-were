@@ -7,7 +7,7 @@ date: 2022-04-12
 date_recorded: 2022-04-20
 tags: [development, self-care]
 confidence: high
-status: active
+status: example
 ---
 
 # Potty training
@@ -17,7 +17,7 @@ Fully daytime trained by 2022-04-12 after a long resistant stretch. Nighttime no
 ## What worked
 
 - Stickers for any attempt, not just successes.
-- [Biscuit](../../../family/pets/biscuit.md) sitting next to the bathroom door somehow helped.
+- [Biscuit](../../../family/_examples/pets/biscuit.md) sitting next to the bathroom door somehow helped.
 - Giving up on the "big kid underwear" pressure and letting Sam pick their own.
 
 ## What didn't

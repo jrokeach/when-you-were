@@ -4,12 +4,12 @@ type: relationship
 subjects: [_template]
 tags: [sibling, relationship]
 confidence: high
-status: active
+status: example
 ---
 
 # Sam and Robin
 
-Robin is Sam's younger sibling (age 3 at the time of this page). For a canonical view of their relationship over time, see the family-level page: [The summer Robin started following Sam everywhere](../../../family/sibling-dynamics/2024-robin-following-sam.md).
+Robin is Sam's younger sibling (age 3 at the time of this page). For a canonical view of their relationship over time, see the family-level page: [The summer Robin started following Sam everywhere](../../../family/_examples/sibling-dynamics/2024-robin-following-sam.md).
 
 This page is specifically about how *Sam* relates to Robin — how it looks from Sam's side. Robin's own view lives under their own directory.
 

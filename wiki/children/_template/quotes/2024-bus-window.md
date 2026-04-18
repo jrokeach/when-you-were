@@ -7,7 +7,7 @@ date: 2024-08-03
 date_recorded: 2024-08-03
 tags: [kid-ism, observation]
 confidence: high
-status: active
+status: example
 ---
 
 # Bus window quote, August 2024
