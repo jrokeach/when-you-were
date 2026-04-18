@@ -57,7 +57,7 @@ This scaffold is dual-licensed:
 - **PolyForm Noncommercial 1.0.0** — the default license. Free for personal, educational, research, and noncommercial use. Commercial users must contact the author for a separate commercial license.
 - **Commercial license** — available upon request. Contact the author to negotiate terms.
 
-The full license text is in [`LICENSE`](LICENSE).
+The full license text is in [`LICENSE`](LICENSE.md).
 
 This pattern — restrictive first, more permissive later — is intentional. As the sole copyright holder, I retain the ability to relicense to MIT, Apache-2.0, or another open source license in the future if the project gains enough momentum to warrant it. The [DCO notice](CONTRIBUTING.md) in CONTRIBUTING.md ensures any external contributions can be included in a future relicensing.
 
