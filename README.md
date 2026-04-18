@@ -91,6 +91,8 @@ Multi-child by default. Shared content (family trips, sibling dynamics, a grandp
 
 This is a scaffold. If you fork it with improvements to the structure, AGENTS.md, or lint skill, PRs welcome — but **never** push a fork that contains your family's actual content. The template itself ships empty; `AGENTS.local.md` and any content under `wiki/children/` or `raw/` should only exist in your private instance.
 
+This scaffold is maintained at [https://github.com/jrokeach/when-you-were](https://github.com/jrokeach/when-you-were). If you copy this template into your own repo, consider linking back so others can find the original.
+
 ## Licensing
 
 This scaffold is dual-licensed:
