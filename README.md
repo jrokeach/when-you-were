@@ -6,7 +6,7 @@ Both **practical** (health, education, routines) and **emotional** (quotes, lett
 
 Built on the [LLM wiki pattern](https://gist.github.com/jrokeach/1d21067027d50ec384dcbcb56536ea94): raw sources + LLM-generated wiki pages + a schema document that teaches the agent how to maintain it.
 
-See an instantiated example — a [fictional family KB](https://github.com/jrokeach/when-you-were-the-smith-family) — to see what the result looks like.
+See an instantiated example — a [fictional family KB](https://github.com/jrokeach/when-you-were-the-smith-family/blob/main/wiki/index.md) — to see what the result looks like.
 
 ---
 
