@@ -15,6 +15,10 @@ Family-level milestones: moves, a new sibling joining the family, an adoption, a
 - `subjects:` usually `[family]` plus every kid present at the time.
 - If each kid processed the milestone differently, add per-kid `reflections/` pages.
 
+## Related examples
+
+A `2024-move.md` page here would pair with [Sam's post-move reflections](../../children/_template/reflections/2024-post-move.md).
+
 ## Pages
 
-_None yet in this template. A "2024-move" page would pair with [Sam's post-move reflections](../../children/_template/reflections/2024-post-move.md)._
+See [`index.md`](index.md) for what's filed in this directory.

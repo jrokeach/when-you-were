@@ -20,4 +20,4 @@ Family rituals — holiday ones, weekly ones, the small recurring shapes of your
 
 ## Pages
 
-_None yet._
+See [`index.md`](index.md) for what's filed in this directory.

@@ -21,4 +21,4 @@ Canonical pages for family pets. For per-kid relationships with a pet, use `chil
 
 ## Pages
 
-_None yet._
+See [`index.md`](index.md) for what's filed in this directory.

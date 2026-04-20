@@ -274,7 +274,7 @@ date_recorded: YYYY-MM-DD       # when the page was written
 sources: [raw/path/to/source.ext, ...]   # optional, reference to raw/ material
 tags: [...]                     # freeform
 confidence: high | medium | low | speculative
-status: active | draft | stale | archived
+status: active | draft | stale | archived | example   # `example` only inside _template/ and _examples/
 aliases: [...]                  # optional alternative names for the subject matter
 ---
 ```
@@ -310,6 +310,34 @@ Family categories live under `family/`:
 Note: `family/pets/` holds the canonical page for a family pet. Each child may also have a `children/<slug>/pets/` page about their specific relationship with that pet — cross-linked but not duplicated.
 
 See `wiki/children/_template/` and `wiki/family/*/README.md` for the shape of each.
+
+### Directory indexing (`index.md` per directory)
+
+Every content-holding directory under `wiki/` has an **`index.md`** — an instance-maintained content listing with a one-line summary per page. This is separate from `README.md` (which is the upstream-tracked schema/how-to doc).
+
+**The contract:**
+
+- When you file a new page in a directory, you MUST also add an entry to that directory's `index.md`. The entry is `- [Title](filename.md) — _short summary, one dependent clause._`
+- If the directory has no `index.md` yet (e.g. the first page filed into a real per-child subcategory like `wiki/children/ava/firsts/`), create one. Use the shape shown in `wiki/children/_template/firsts/index.md`.
+- When you rename or move a page, update the enclosing `index.md`(s) in the same edit.
+- When you archive a page (`status: archived`), leave the index entry but mark it (e.g. `_— archived_`).
+
+**Where README.md is involved:**
+
+- Upstream-tracked `wiki/family/<cat>/README.md` files explain filing conventions for that category and point at `index.md`. Do not add content listings to the README — they belong in `index.md`.
+- Per-child subcategory directories (e.g. `wiki/children/ava/quotes/`) usually have no README, just an `index.md`.
+
+**Instance-only vs. reference:**
+
+- `wiki/family/<cat>/index.md` and `wiki/children/<slug>/<subcat>/index.md` are **instance-only** (never touched by `/sync-scaffold`).
+- `wiki/family/_examples/*/index.md` and `wiki/children/_template/*/index.md` are **reference examples** (upstream-tracked, `status: example`). Use them to see the shape.
+
+**Lint enforces this.** Every content page must be linked from its enclosing `index.md`. Missing entries and listed-but-missing-file entries are High-severity findings.
+
+### Frontmatter `type` and `status` values
+
+- `type:` content types (see "Page types" above) plus `index` (for per-directory `index.md` files) and `meta` (for `README.md`, top-level meta pages).
+- `status:` one of `active`, `draft`, `stale`, `archived`, `example`. `example` is only valid inside `wiki/children/_template/` and `wiki/family/_examples/`.
 
 ---
 

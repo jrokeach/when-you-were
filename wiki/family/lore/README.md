@@ -21,4 +21,4 @@ Stories the family tells. The running jokes, the oft-retold incidents, the times
 
 ## Pages
 
-_None yet._
+See [`index.md`](index.md) for what's filed in this directory.

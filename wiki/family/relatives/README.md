@@ -15,6 +15,10 @@ Extended family — grandparents, aunts, uncles, cousins. One page per person. T
 - `subjects:` usually `[family]` plus whichever kids have meaningful relationships with them.
 - When a relative passes, the page stays active — add a section documenting it, and cross-link to any `family/lore/` or `children/<slug>/losses/` pages.
 
+## Related examples
+
+A `grandma-m.md` page here would pair with [the lore example](../_examples/lore/2024-grandma-m-death.md).
+
 ## Pages
 
-_None yet in this template. A `grandma-m.md` page would pair with [the lore example](../_examples/lore/2024-grandma-m-death.md)._
+See [`index.md`](index.md) for what's filed in this directory.

@@ -17,4 +17,4 @@ Discrete shared events that don't fit neatly into trips, traditions, or lore. A 
 
 ## Pages
 
-_None yet in this template._
+See [`index.md`](index.md) for what's filed in this directory.

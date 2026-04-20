@@ -136,10 +136,14 @@ Explicit "never touch" paths (instance-only; the skill refuses to include these 
 
 - `AGENTS.local.md` (gitignored; per-user preferences).
 - `.local/**` (gitignored; instance-only scratch/upgrade notes).
+- `wiki/family/*/index.md` (per-category content listings; scaffold ships initial placeholders, instance maintains thereafter — same class as `wiki/index.md`).
+- `wiki/children/<real-slug>/**/index.md` (lazy-created per-subcat indexes in real child directories).
+- `wiki/index.md`, `wiki/log.md`, `wiki/audit-log.md`, `wiki/contradictions.md`, `wiki/todo.md`, `wiki/timeline.md`.
 
 ## What this skill does NOT do
 
 - Does not sync `AGENTS.local.md` (user's per-user preferences — gitignored, not upstream-tracked).
 - Does not touch `wiki/children/<real-slug>/**` or `wiki/family/**` real content.
+- Does not overwrite per-directory `index.md` files in real (non-`_examples/`, non-`_template/`) content directories. Those are instance-maintained — the scaffold ships initial placeholders and the instance takes it from there.
 - Does not resolve merge conflicts inside upstream-tracked files that have been customized locally — if a local customization exists, surface it and let the user decide (keep local / take upstream / hand-merge).
 - Does not push without explicit per-repo consent.

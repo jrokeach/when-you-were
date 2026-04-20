@@ -15,9 +15,9 @@ These files define the *scaffold*. Improvements to them come from upstream and s
 - `PRIVACY.md`, `LICENSE.md`, `CONTRIBUTING.md`, `UPSTREAM.md` — scaffold documentation.
 - `.gitignore` — stamp-file exclusions, OS noise, and the `AGENTS.local.md` / `.local/` ignore rules themselves. Downstream instances pick up new ignore rules via sync.
 - `.claude/**` — hooks, skills, settings for Claude Code integration.
-- `wiki/children/_template/**` — fictional "Sam" reference subtree.
-- `wiki/family/_examples/**` — fictional family reference subtree.
-- `wiki/family/*/README.md` — the per-category intros explaining what goes in each family dir.
+- `wiki/children/_template/**` (including `**/index.md` reference examples) — fictional "Sam" reference subtree.
+- `wiki/family/_examples/**` (including `**/index.md` reference examples) — fictional family reference subtree.
+- `wiki/family/*/README.md` — the per-category intros explaining what goes in each family dir (scaffold schema doc).
 - `raw/README.md`, `raw/.gitkeep` — drop-zone scaffolding.
 
 ### Instance-only (never overwrite)
@@ -26,13 +26,23 @@ These files are yours. The sync process never touches them.
 
 - `AGENTS.local.md` — your per-user preferences (gitignored; each checkout has its own).
 - The `<!-- FAMILY_DETAILS_BEGIN -->` / `<!-- FAMILY_DETAILS_END -->` block inside `AGENTS.md` — your family data.
-- `wiki/children/<your-real-child-slug>/**` — per-child directories you added.
+- `wiki/children/<your-real-child-slug>/**` — per-child directories you added (including lazy-created `<subcat>/index.md` files).
 - Everything under `wiki/family/**` **except** what's listed in the upstream-tracked section above (i.e., all your real family content, but not `_examples/` or per-category READMEs).
+- `wiki/family/*/index.md` — per-category content listings. The scaffold ships initial placeholders; you maintain them as you file pages.
 - `wiki/index.md`, `wiki/log.md`, `wiki/audit-log.md`, `wiki/contradictions.md`, `wiki/todo.md`, `wiki/timeline.md` — instance-maintained state.
 - `raw/**` — everything except the `README.md` / `.gitkeep` already listed.
 - `.agents-*` stamp files (gitignored anyway).
 - `.local/` — gitignored scratch space for instance-only docs (upgrade notes, private plans). Never synced, never published.
 - `README.md` — if you've customized it for your family. If not, it's upstream-tracked.
+
+### README vs. index inside `wiki/family/<cat>/`
+
+Each shipped family-category directory has both:
+
+- `README.md` — the scaffold's **schema/how-to doc** (upstream-tracked). Explains what goes in the directory, filename conventions, and references the `index.md`. Do not edit — the next sync will overwrite your changes.
+- `index.md` — your **content listing** (instance-only). Lists each page in the directory with a one-line summary. Agents update this whenever they file a new page.
+
+The same split applies to per-child subcategory directories: once a real `wiki/children/<slug>/<subcat>/` contains content, its `index.md` is instance-only.
 
 If you're unsure whether a file is tracked, ask your agent or consult the `/sync-scaffold` skill — it refuses to touch anything outside the tracked list.
 

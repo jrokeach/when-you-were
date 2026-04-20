@@ -16,4 +16,4 @@ Places the family has lived. One page per home, most recent first. Pages include
 
 ## Pages
 
-_None yet. This template ships empty._
+See [`index.md`](index.md) for what's filed in this directory.

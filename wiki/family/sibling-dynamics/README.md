@@ -21,4 +21,4 @@ Relationships and patterns between siblings over time. Not individual incidents 
 
 ## Pages
 
-_None yet._
+See [`index.md`](index.md) for what's filed in this directory.

@@ -21,4 +21,4 @@ Teachers, nannies, au pairs, babysitters, coaches, instructors, daycare provider
 
 ## Pages
 
-_None yet._
+See [`index.md`](index.md) for what's filed in this directory.

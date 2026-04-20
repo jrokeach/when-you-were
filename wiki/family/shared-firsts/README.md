@@ -16,4 +16,4 @@ Firsts for the family unit, not for any individual kid: first pet, first home, f
 
 ## Pages
 
-_None yet in this template._
+See [`index.md`](index.md) for what's filed in this directory.

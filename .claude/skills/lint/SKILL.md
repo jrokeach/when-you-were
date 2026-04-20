@@ -33,8 +33,9 @@ For every `.md` file under `wiki/`:
 
 - Parses as valid YAML frontmatter.
 - Required fields present: `title`, `type`, `subjects`, `status`.
-- `subjects:` entries match either a known child slug (from the **Family details** section of `AGENTS.md`) or the literal `family`.
+- `subjects:` entries match either a known child slug (from the **Family details** section of `AGENTS.md`) or the literal `family`. Inside `_template/`, `[_template]` is allowed.
 - `status` ∈ {active, draft, stale, archived, example}.
+- `type` values include standard content types (memory, first, milestone, quote, etc.) plus `index` (for per-directory `index.md` files) and `meta` (for `README.md` and top-level meta pages).
 - `confidence` (if present) ∈ {high, medium, low, speculative}.
 - Dates parse as ISO-8601 (YYYY-MM-DD).
 
@@ -63,10 +64,20 @@ For every `.md` file under `wiki/`:
 - For every page under `children/<slug>/` that mentions a sibling's preferred name, check for a link to that sibling's `profile.md` or to the specific page referenced. Flag missing reciprocal links as Medium.
 - For every `family/` event page that lists multiple subjects, check that each child's `profile.md` "Shared experiences" section links back. Flag gaps as Low.
 
-### 6. Orphans
+### 6. Directory indexes & orphans
 
-- Pages with zero inbound links from `index.md`, any `profile.md`, or any other content page.
-- Flag as Medium. Orphans are not always bugs (fresh pages) but are worth a human eye.
+Every content-holding directory under `wiki/` (any directory containing `.md` files other than `README.md` / `index.md`) must contain an `index.md`, and that `index.md` must link to every content page in the directory. Reference trees (`_template/`, `_examples/`) are excluded from the family-slug check but the index-completeness check still applies to them so the reference examples stay valid.
+
+For each content-holding directory `D`:
+
+- **Missing `index.md` in `D` when `D` has ≥1 content page** — flag **Medium**. Propose creation with valid frontmatter (`type: index`, `subjects:` matching the directory scope) and a `## Pages` section listing the existing files with one-line summaries drawn from each page's title/leading prose.
+- **Content page in `D` not linked from `D/index.md`** — flag **High** (index drift). The filing step dropped the listing update. Propose adding the entry.
+- **`D/index.md` lists a file that no longer exists in `D`** — flag **High** (rename/delete drift). Propose either removing the dead entry or fixing the path if the file moved to a reachable location.
+- **Summary-style check**: listed entries in `D/index.md` should have a short summary (a dependent clause after an em-dash or en-dash). A listing with just the link and no summary is **Low** — suggests the filing agent didn't supply one.
+
+Plus the classic orphan check:
+
+- **Truly orphaned pages** — content pages with zero inbound links from any `index.md`, `profile.md`, or other content page. Flag as **Medium**. Orphans are not always bugs (fresh pages) but are worth a human eye. If a page's only inbound link is from its enclosing `index.md`, that counts — orphan means no linkage *anywhere*.
 
 ### 7. Stale content
 
@@ -118,8 +129,9 @@ Then:
 
 The skill scans `wiki/**/*.md` with these exclusions:
 
-- `wiki/children/_template/` — reference structure (fictional "Sam"). Its `subjects: [_template]` / `status: example` markers are intentional; do not flag.
+- `wiki/children/_template/` — reference structure (fictional "Sam"). Its `subjects: [_template]` / `status: example` markers are intentional; do not flag them against the family schema. Index-completeness *does* still apply inside this tree (so the reference examples stay valid).
 - `wiki/family/_examples/` — reference structure for family-category pages (fictional Biscuit, Sunday pancakes, etc.). Same treatment.
+- `index.md` files themselves are not linted for orphan-ness (they exist to reference other pages, not be referenced). They are linted for frontmatter validity and for the completeness/freshness of their `## Pages` listing.
 - Anything explicitly marked `status: archived` — reported in a summary line only, not linted in detail.
 
 ## What the skill does NOT do

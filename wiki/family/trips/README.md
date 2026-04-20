@@ -21,4 +21,4 @@ Family trips — canonical page per trip. Individual kids may have their own `tr
 
 ## Pages
 
-_None yet._
+See [`index.md`](index.md) for what's filed in this directory.
