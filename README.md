@@ -74,6 +74,7 @@ For asking questions of the archive.
 
 - [`AGENTS.md`](AGENTS.md) — schema, workflow, and operating manual for the agent. Layer 1 of a four-layer reading chain.
 - [`AGENTS.family.md.example`](AGENTS.family.md.example) — template for family-level data (children, household, homes, tone, sensitive topics, family vocabulary). Bootstrap copies this to `AGENTS.family.md` and fills it in. Layer 3 of the chain.
+- [`AGENTS.overlay.md.example`](AGENTS.overlay.md.example) — template for the optional layer-2 overlay. Self-hosted users can ignore this; host applications may inject a gitignored `AGENTS.overlay.md` at setup.
 - [`AGENTS.local.md.example`](AGENTS.local.md.example) — template for **your** user- and machine-specific preferences (auto-commit, auto-push, prompt cadences, personal tone overrides). Copy to `AGENTS.local.md` (gitignored) so different family members and machines can keep different preferences without conflict. Layer 4 of the chain.
 - [`PRIVACY.md`](PRIVACY.md) — privacy guidance. Read before committing anywhere.
 - [`wiki/`](wiki/index.md) — where your knowledge base lives. Start at [`wiki/index.md`](wiki/index.md).
@@ -90,7 +91,7 @@ Multi-child by default. Shared content (family trips, sibling dynamics, a grandp
 
 ## Contributing / forking
 
-This is a scaffold. If you fork it with improvements to the structure, AGENTS.md, or lint skill, PRs welcome — but **never** push a fork that contains your family's actual content. `AGENTS.local.md` is gitignored so it won't accidentally travel with a fork; your real content under `wiki/children/<slug>/` and `raw/` should only exist in your private instance. The template itself ships empty of family data.
+This is a scaffold. If you fork it with improvements to the structure, AGENTS.md, or lint skill, PRs welcome — but **never** push a fork that contains your family's actual content. `AGENTS.local.md` and `AGENTS.overlay.md` are gitignored so they won't accidentally travel with a fork; your real content under `wiki/children/<slug>/`, `AGENTS.family.md`, and `raw/` should only exist in your private instance. The template itself ships empty of family data. The optional `AGENTS.overlay.md` layer is gitignored; any host application's overlay stays in its own instance and will never travel with a fork.
 
 This scaffold is maintained at [https://github.com/jrokeach/when-you-were](https://github.com/jrokeach/when-you-were). If you copy this template into your own repo, consider linking back so others can find the original.
 

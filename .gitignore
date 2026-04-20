@@ -11,8 +11,13 @@ Thumbs.db
 .vscode/
 
 # Per-user / per-machine preferences. Different users and checkouts maintain
-# their own; shared family-level settings live in AGENTS.md. See PRIVACY.md.
+# their own; shared family-level settings live in AGENTS.family.md. See PRIVACY.md.
 AGENTS.local.md
+
+# Optional overlay layer, injected by a host application at setup (if any).
+# Never committed — each instance's overlay, if present, is environment-specific.
+# See AGENTS.overlay.md.example for the expected shape.
+AGENTS.overlay.md
 
 # Instance-only docs (upgrade notes, per-instance plans, scratch work) that
 # should never be published. Safe place for anything private.

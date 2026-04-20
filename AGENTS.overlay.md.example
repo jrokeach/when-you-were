@@ -1,0 +1,54 @@
+# AGENTS.overlay.md (template)
+
+**Optional overlay layer.** This file's real counterpart (`AGENTS.overlay.md`) is **gitignored** and, if present, is consulted by agents before `AGENTS.family.md`. Self-hosted users can safely ignore this template — the scaffold works fine with no overlay. Downstream tooling or a host application may inject the real `AGENTS.overlay.md` at setup time to refine tone, capabilities, or the reading chain.
+
+If you don't know whether you need this, you don't.
+
+## Reading order
+
+This is layer 2 of the 4-layer AGENTS stack:
+
+1. `AGENTS.md` (core schema — upstream-tracked)
+2. **`AGENTS.overlay.md`** ← you are here (optional)
+3. `AGENTS.family.md` (family-specific data — next in the chain)
+4. `AGENTS.local.md` (per-user preferences)
+
+## How to use this file
+
+**If you are self-hosting:** you almost certainly do not need an overlay. Skip this file; the scaffold reads `AGENTS.md` → `AGENTS.family.md` → `AGENTS.local.md` and works end-to-end without it.
+
+**If a host application installed an overlay for you:** a populated `AGENTS.overlay.md` exists at the repo root (gitignored). Don't edit it by hand unless the host application's docs say to; it is injected at setup and may be re-injected on update.
+
+**If you are building tooling that wants an overlay:** copy this file to `AGENTS.overlay.md` (drop the `.example` suffix) and populate the YAML below. The file stays gitignored — it won't travel with forks or PRs.
+
+---
+
+## Overlay schema (YAML)
+
+```yaml
+overlay_name: ""                    # human-readable name of this overlay
+overlay_version: ""                 # semver or date, for debugging / upgrades
+
+tone_override:                      # optional: supersedes the `tone:` block in AGENTS.family.md
+  register: ""                      # "warm", "clinical", "terse", "playful", "literary"
+  pov: ""                           # "parent", "neutral third-person", "journal-style"
+  avoid_words: []
+  preferred_quirks: ""
+
+capabilities:                       # optional: feature switches the host application toggles
+  - name: ""
+    enabled: false
+    notes: ""
+
+feature_flags: {}                   # optional: free-form key/value flags the host app reads
+
+notes: ""                           # freeform notes the agent should be aware of
+
+downstream: "AGENTS.family.md"      # the next layer to read after this one (do not remove)
+```
+
+---
+
+## Notes section (freeform)
+
+Add anything the agent should know about this overlay — where it came from, how to refresh it, what host application installed it.
