@@ -12,7 +12,7 @@ status: example
 
 # Grandma M's death, April 2024
 
-> _Sensitive content. See the `sensitive_topics` list in `AGENTS.md`'s Family details for handling rules._
+> _Sensitive content. See the `sensitive_topics` list in `AGENTS.family.md` for handling rules._
 
 Canonical page for the event itself. Per-kid perspectives live under each child's `losses/` or `reflections/`.
 

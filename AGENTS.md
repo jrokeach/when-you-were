@@ -1,10 +1,22 @@
 # AGENTS.md
 
-You are maintaining a family knowledge base about the user's children. This document is your schema, workflow, operating manual, **and** — once bootstrapped — the canonical home of family-specific details (children, household, homes, tone, sensitive-topic flags, family vocabulary). Read it at the start of every session.
+You are maintaining a family knowledge base about the user's children. This document is your schema, workflow, and operating manual. Read it at the start of every session.
 
-A companion file, `AGENTS.local.md`, contains **user- and environment-specific** preferences (auto-commit behavior, prompt intervals, personal tone overrides for this user on this machine). It is **gitignored** — different family members and different checkouts each maintain their own copy independently. Shared family-level settings live in this file (`AGENTS.md`).
+## Reading order for agents
 
-If the **Family details** section below is unpopulated, or `AGENTS.local.md` does not exist, your first job is to run the **Bootstrap** flow with the user.
+This file is layer 1 (core schema). After reading it, continue through the layer chain in order:
+
+1. **`AGENTS.overlay.md`** (layer 2, optional) — if present, read it next. It carries overlay-level instructions that may refine tone, capabilities, or how the remaining layers are interpreted. If it's absent, skip this step; the scaffold works fine without one.
+2. **`AGENTS.family.md`** (layer 3, required) — family-specific data (children, household, tone, sensitive topics, family vocabulary).
+3. **`AGENTS.local.md`** (layer 4, required) — per-user and per-machine preferences.
+
+If `AGENTS.family.md` does not exist at the repo root, run the **Bootstrap** flow below before doing anything else. Same if `AGENTS.local.md` does not exist.
+
+A short orientation to the companion files:
+
+- `AGENTS.family.md` — family-specific data, tracked in this private repo but never touched by `/sync-scaffold`. The agent creates it during Bootstrap from `AGENTS.family.md.example`.
+- `AGENTS.overlay.md` — optional overlay injected by a host application if one is set up. Gitignored. Absent by default — self-hosted scaffold works fine without it.
+- `AGENTS.local.md` — per-user and per-machine preferences (auto-commit behavior, prompt intervals, personal tone overrides). Gitignored — different family members and different checkouts each maintain their own copy.
 
 ---
 
@@ -18,11 +30,10 @@ Every file in this repo is either **upstream-tracked** or **instance-only**. The
 
 **Inside this file (`AGENTS.md`) specifically:**
 
-- The **only** region you may freely edit is the block between `<!-- FAMILY_DETAILS_BEGIN -->` and `<!-- FAMILY_DETAILS_END -->`. That block is protected during `/sync-scaffold`.
-- Writes anywhere else in `AGENTS.md` require explicit user confirmation; they will be overwritten by the next scaffold sync.
+- This file is upstream-tracked in full — do not edit it directly. Propose changes via upstream PR, or override selectively in `AGENTS.overlay.md` if one is present. Writes here will be overwritten by the next `/sync-scaffold`.
 - The dismissable public-repo warning (between `<!-- PUBLIC_REPO_WARNING_BEGIN -->` / `<!-- PUBLIC_REPO_WARNING_END -->`) is an intentional exception: you are explicitly authorized to remove that block after the user dismisses the warning.
 
-Never remove the `FAMILY_DETAILS_*` markers. The sync skill relies on them.
+Family-specific data lives in `AGENTS.family.md`, not in this file.
 
 ---
 
@@ -43,7 +54,7 @@ Every page in these subtrees carries `status: example`. Any page with `status: e
 
 The scaffold improves over time (better lint checks, new categories, schema tweaks). Pull those improvements into this instance with the `/sync-scaffold` skill or the manual `git remote add upstream` workflow documented in [`UPSTREAM.md`](UPSTREAM.md).
 
-The skill preserves the Family details block in this file and never touches instance-only paths. Do not manually edit upstream-tracked files; the next sync will clobber your changes.
+The skill never touches instance-only paths (including `AGENTS.family.md`, `AGENTS.overlay.md`, `AGENTS.local.md`, and the `wiki/` content). Do not manually edit upstream-tracked files; the next sync will clobber your changes.
 
 ---
 
@@ -57,59 +68,15 @@ Structure follows the LLM-wiki pattern: immutable raw sources in `raw/`, your ge
 
 ## Family details
 
-This section describes the family this KB is about. It is **family-specific** and shared across everyone who works with this repo — not per-user or per-machine. Keep it current as the family changes (new children, new addresses, new nicknames, new sensitivities).
+Family-specific data (children, household, homes, tone, sensitive topics, family vocabulary) lives in a separate layer-3 file: **[`AGENTS.family.md`](AGENTS.family.md)**. It is family-specific — shared across everyone who works with this repo, but not per-user or per-machine. Keep it current as the family changes (new children, new addresses, new nicknames, new sensitivities).
 
-Bootstrap populates this block. Maintain it thereafter.
-
-<!-- FAMILY_DETAILS_BEGIN -->
-_(Not yet filled in — run the Bootstrap flow. The expected shape is below; replace this placeholder with the real values.)_
-
-```yaml
-children:
-  - slug: ava                         # kebab-case; used as directory name — DO NOT rename after content exists
-    legal_name: "Ava Full-Name"
-    preferred_name: "Ava"
-    nicknames: ["Avocado", "Bug"]
-    pronouns: "she/her"
-    birthdate: YYYY-MM-DD
-    notes: ""                         # anything you want the agent to know up front
-
-household:
-  parents:
-    - name: ""
-      relationship: ""                # "mom", "dad", "step-parent", etc.
-  other_members:
-    - name: ""
-      relationship: ""                # "grandparent", "sibling", "au pair", etc.
-  close_circle:
-    - name: ""
-      relationship: ""                # "grandma (mom's side)", "babysitter 2022-2024", etc.
-
-homes:                                # places the family has lived, most recent first
-  - location: "City, State/Country"
-    dates: "YYYY — present"           # or "YYYY — YYYY"
-    notes: ""
-
-tone:                                 # default voice for agent-written prose
-  register: ""                        # "warm", "clinical", "terse", "playful", "literary"
-  pov: ""                             # "parent", "neutral third-person", "journal-style"
-  avoid_words: []
-  preferred_quirks: ""                # anything distinctive to preserve
-
-sensitive_topics:                     # handle with extra care
-  - topic: ""                         # e.g. "grandparent's death, 2025"
-    handling: ""                      # "ask before filing", "measured tone only", etc.
-
-family_vocabulary:                    # spellchecker allowlist: names, nicknames, invented words
-  - ""
-```
-<!-- FAMILY_DETAILS_END -->
+The expected YAML shape is documented in `AGENTS.family.md.example`; Bootstrap creates the real file from that template and populates it during the family interview.
 
 ---
 
-## Bootstrap (when Family details is empty or AGENTS.local.md is missing)
+## Bootstrap (when AGENTS.family.md or AGENTS.local.md is missing)
 
-When you start a session and either the **Family details** section above is still the placeholder or no `AGENTS.local.md` exists at the repo root, **run the bootstrap flow before doing anything else**. It has three parts:
+When you start a session and either `AGENTS.family.md` or `AGENTS.local.md` is missing at the repo root, **run the bootstrap flow before doing anything else**. It has three parts:
 
 ### 1. Privacy acknowledgment (do this first)
 
@@ -124,7 +91,7 @@ Then:
 
 ### 2. Family interview
 
-Ask enough to populate the **Family details** section of this file. Don't interrogate — cover the essentials and let details fill in over time. Essentials:
+Ask enough to populate `AGENTS.family.md`. Don't interrogate — cover the essentials and let details fill in over time. Essentials:
 
 - Children: legal name, preferred name, nicknames, birthdate, pronouns if relevant.
 - Household: who lives there, names, relationships to the kid(s).
@@ -134,9 +101,9 @@ Ask enough to populate the **Family details** section of this file. Don't interr
 - Sensitive topics: losses, medical conditions, family conflict, custody arrangements — flag anything you should handle with extra care.
 - Family vocabulary: invented words, internal nicknames, pet names the lint skill's spellchecker should ignore.
 
-Replace the placeholder inside the `<!-- FAMILY_DETAILS_BEGIN -->` / `<!-- FAMILY_DETAILS_END -->` block in `AGENTS.md` with the filled-in YAML. Show the user the result for corrections before you treat it as canonical.
+Copy `AGENTS.family.md.example` to `AGENTS.family.md` (if it doesn't already exist as a placeholder) and fill in the YAML schema with the user's answers. Show the user the result for corrections before you treat it as canonical.
 
-After the Family details are filled, walk the user through `AGENTS.local.md`. Two preferences deserve an explicit conversation, not a silent default:
+After `AGENTS.family.md` is filled, walk the user through `AGENTS.local.md`. Two preferences deserve an explicit conversation, not a silent default:
 
 - **`auto_commit`** — whether you should commit your own changes (file adds, frontmatter fixes, lint repairs) without asking each time. **Off by default.** Introduce the concept: *"When I make a change — filing a new quote, fixing a broken link, refactoring a page — should I commit it on my own, or stage it and show you the diff first? I ship with 'show you first' so nothing happens without you seeing it. If you trust my judgement on commits later, you can flip `auto_commit: true` in `AGENTS.local.md`."*
 - **`auto_push`** — whether you should push to the remote after committing. **Off by default.** Introduce the concept: *"And when I commit, should I also push to the remote? Pushing publishes your changes to wherever you've set up backup/sync. Off by default; flip to `true` once you're comfortable. Even with `auto_push: true`, I will refuse to push to a public remote."*
@@ -372,10 +339,10 @@ Separate mechanical audits (broken links, invalid YAML, naming convention violat
 
 ## Sensitive content
 
-The **Family details** section of this file declares flagged topics under `sensitive_topics`. When filing, querying, or auditing content that touches them:
+`AGENTS.family.md` declares flagged topics under `sensitive_topics`. When filing, querying, or auditing content that touches them:
 
 - Ask before filing. Don't surprise the user with a freshly written `losses/` page.
-- Use the tone declared under `tone` in Family details (with any per-user override from `AGENTS.local.md`). If none is declared, default to measured and matter-of-fact rather than either clinical or sentimental.
+- Use the tone declared under `tone` in `AGENTS.family.md` (with any per-user override from `AGENTS.local.md`). If none is declared, default to measured and matter-of-fact rather than either clinical or sentimental.
 - Never volunteer sensitive content unprompted. If the user asks for "everything about Noah age 5," include sensitive pages but flag them: *"This includes reflection on [the loss]. Let me know if you'd rather I exclude that."*
 - Do not quote sensitive content in casual outputs (commit messages, log entries) without user consent.
 

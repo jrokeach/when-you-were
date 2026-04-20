@@ -4,16 +4,29 @@ This scaffold is a living template. As it improves (better lint checks, new cate
 
 This document defines **which files are upstream-tracked** (safe to pull) versus **instance-only** (never overwrite), and how to do the sync — either through the `/sync-scaffold` skill or manually.
 
+## Reading order
+
+Agents reading this repo walk a four-layer chain at session start:
+
+1. **`AGENTS.md`** — core schema and operating manual. Upstream-tracked in full.
+2. **`AGENTS.overlay.md`** — optional layer injected by a host application. Instance-only + gitignored. If absent, skip.
+3. **`AGENTS.family.md`** — family-specific data (children, household, tone, etc.). Instance-only.
+4. **`AGENTS.local.md`** — per-user and per-machine preferences. Instance-only + gitignored.
+
+Each layer's `.example` counterpart is the schema template and is upstream-tracked.
+
 ## The split
 
 ### Upstream-tracked (pull updates)
 
 These files define the *scaffold*. Improvements to them come from upstream and should flow downstream.
 
-- `AGENTS.md` — **except** the region between `<!-- FAMILY_DETAILS_BEGIN -->` and `<!-- FAMILY_DETAILS_END -->`, which is family data and is preserved during sync.
-- `AGENTS.local.md.example` — the template copy, not the real `AGENTS.local.md`.
-- `PRIVACY.md`, `LICENSE.md`, `CONTRIBUTING.md`, `UPSTREAM.md` — scaffold documentation.
-- `.gitignore` — stamp-file exclusions, OS noise, and the `AGENTS.local.md` / `.local/` ignore rules themselves. Downstream instances pick up new ignore rules via sync.
+- `AGENTS.md` — core schema. Upstream-tracked **in full** (no protected region).
+- `AGENTS.family.md.example` — schema template for family-level data.
+- `AGENTS.overlay.md.example` — schema template for the optional overlay layer.
+- `AGENTS.local.md.example` — schema template for per-user preferences.
+- `PRIVACY.md`, `LICENSE.md`, `CONTRIBUTING.md`, `UPSTREAM.md`, `STORAGE.md` — scaffold documentation.
+- `.gitignore` — stamp-file exclusions, OS noise, and the `AGENTS.local.md` / `AGENTS.overlay.md` / `.local/` ignore rules themselves. Downstream instances pick up new ignore rules via sync.
 - `.claude/**` — hooks, skills, settings for Claude Code integration.
 - `wiki/children/_template/**` (including `**/index.md` reference examples) — fictional "Sam" reference subtree.
 - `wiki/family/_examples/**` (including `**/index.md` reference examples) — fictional family reference subtree.
@@ -24,8 +37,9 @@ These files define the *scaffold*. Improvements to them come from upstream and s
 
 These files are yours. The sync process never touches them.
 
+- `AGENTS.family.md` — your family data, populated at bootstrap. Tracked in your private repo (not gitignored), but never touched by sync. Stays out of upstream PRs; only the `.example` counterpart travels upstream.
+- `AGENTS.overlay.md` — gitignored. Optional overlay layer injected by a host application if you use one. Absent for self-hosted users — scaffold works fine without it.
 - `AGENTS.local.md` — your per-user preferences (gitignored; each checkout has its own).
-- The `<!-- FAMILY_DETAILS_BEGIN -->` / `<!-- FAMILY_DETAILS_END -->` block inside `AGENTS.md` — your family data.
 - `wiki/children/<your-real-child-slug>/**` — per-child directories you added (including lazy-created `<subcat>/index.md` files).
 - Everything under `wiki/family/**` **except** what's listed in the upstream-tracked section above (i.e., all your real family content, but not `_examples/` or per-category READMEs).
 - `wiki/family/*/index.md` — per-category content listings. The scaffold ships initial placeholders; you maintain them as you file pages.
@@ -52,7 +66,7 @@ Agents maintaining this KB must honor this rule:
 
 > **Do not write to an upstream-tracked file without first confirming with the user** that they understand the change will be overwritten on the next `/sync-scaffold` — unless they intend to contribute the change upstream via a PR against the template repo.
 >
-> Inside `AGENTS.md`, only write between the `<!-- FAMILY_DETAILS_BEGIN -->` / `<!-- FAMILY_DETAILS_END -->` markers. Do not remove or rewrite those markers.
+> `AGENTS.md` has no protected region; it is upstream-tracked in full. Family-specific data belongs in `AGENTS.family.md` (instance-only), not in `AGENTS.md`.
 
 See `AGENTS.md` "Write-scope rule" for the full statement.
 
@@ -71,12 +85,11 @@ The skill:
 1. Confirms your working tree is clean.
 2. Fetches the upstream template (default: the canonical template URL; override via a one-line `.scaffold-upstream` file at the repo root).
 3. Diffs upstream-tracked paths only.
-4. Preserves your Family details block in `AGENTS.md` by extracting it before the merge and re-inserting after.
-5. Shows you proposed changes before applying.
-6. Runs `/lint` after the merge.
-7. Offers to commit (respecting `auto_commit` / `auto_push` from your `AGENTS.local.md`).
+4. Shows you proposed changes before applying.
+5. Runs `/lint` after the merge.
+6. Offers to commit (respecting `auto_commit` / `auto_push` from your `AGENTS.local.md`).
 
-The skill refuses to touch instance-only paths and refuses to run if the Family-details markers are missing from your local `AGENTS.md`.
+The skill refuses to touch instance-only paths (`AGENTS.family.md`, `AGENTS.overlay.md`, `AGENTS.local.md`, your real `wiki/` content, and so on).
 
 ### Option B — manual `git remote add upstream`
 
@@ -91,10 +104,7 @@ Then for each upstream-tracked path you want to update:
 git checkout upstream/main -- <path>
 ```
 
-**Do not `git checkout upstream/main -- AGENTS.md` directly** — it will overwrite your Family details. For `AGENTS.md`, do one of:
-
-- Use the `/sync-scaffold` skill (it handles the merge correctly), or
-- Manually: fetch upstream's `AGENTS.md` into a tmp file, copy everything *outside* the `FAMILY_DETAILS_BEGIN/END` markers into your local `AGENTS.md`, leave your Family details block untouched.
+`AGENTS.md` is safe to `git checkout upstream/main -- AGENTS.md` — it has no protected region. Your family data lives in `AGENTS.family.md` (instance-only), which is never in the diff.
 
 Review the diff, run lint, commit.
 

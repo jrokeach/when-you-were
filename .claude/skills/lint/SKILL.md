@@ -33,7 +33,7 @@ For every `.md` file under `wiki/`:
 
 - Parses as valid YAML frontmatter.
 - Required fields present: `title`, `type`, `subjects`, `status`.
-- `subjects:` entries match either a known child slug (from the **Family details** section of `AGENTS.md`) or the literal `family`. Inside `_template/`, `[_template]` is allowed.
+- `subjects:` entries match either a known child slug (from `AGENTS.family.md`) or the literal `family`. Inside `_template/`, `[_template]` is allowed.
 - `status` ∈ {active, draft, stale, archived, example}.
 - `type` values include standard content types (memory, first, milestone, quote, etc.) plus `index` (for per-directory `index.md` files) and `meta` (for `README.md` and top-level meta pages).
 - `confidence` (if present) ∈ {high, medium, low, speculative}.
@@ -91,7 +91,7 @@ Plus the classic orphan check:
 ### 9. Typos (prose only)
 
 - Run a spellcheck over prose body (skip frontmatter, code blocks, link targets, and tables).
-- Whitelist all entries from the `family_vocabulary:` list in `AGENTS.md`'s Family details, plus `avoid_words` and custom vocab from the current user's `AGENTS.local.md` `tone_override`, plus all child slugs / preferred names / nicknames.
+- Whitelist all entries from the `family_vocabulary:` list in `AGENTS.family.md`, plus `avoid_words` and custom vocab from the current user's `AGENTS.local.md` `tone_override`, plus all child slugs / preferred names / nicknames.
 - Flag possible misspellings as Low.
 
 ### 10. Cross-child consistency
@@ -140,4 +140,4 @@ The skill scans `wiki/**/*.md` with these exclusions:
 - Does not merge pages without explicit user approval.
 - Does not delete orphans.
 - Does not rename slugs (too many links depend on stability).
-- Does not touch `AGENTS.md`, `AGENTS.local.md`, raw sources, or files outside `wiki/`.
+- Does not touch `AGENTS.md`, `AGENTS.overlay.md`, `AGENTS.family.md`, `AGENTS.local.md`, raw sources, or files outside `wiki/`.

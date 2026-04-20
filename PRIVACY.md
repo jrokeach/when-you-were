@@ -32,7 +32,7 @@ Pick one. They are all fine.
 
 - **Do not push to a public GitHub repo.** Once it's indexed, assume it's permanently archived.
 - Do not commit from a shared / work machine you don't control.
-- Do not paste a populated `AGENTS.md` (Family details), `AGENTS.local.md`, photos, or wiki content into public issue trackers, pastebins, or support threads.
+- Do not paste a populated `AGENTS.family.md`, `AGENTS.overlay.md`, `AGENTS.local.md`, photos, or wiki content into public issue trackers, pastebins, or support threads.
 - Do not use this KB as a demo in blog posts or conference talks with real names intact.
 - Do not enable public GitHub Pages or similar rendering on the repo.
 

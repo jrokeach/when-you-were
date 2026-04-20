@@ -2,7 +2,7 @@
 # SessionStart hook for When You Were.
 #
 # Emits gentle reminders to the agent when:
-#   - AGENTS.md Family details is still the placeholder  (run bootstrap)
+#   - AGENTS.family.md does not yet exist  (run bootstrap)
 #   - AGENTS.local.md does not yet exist  (run bootstrap)
 #   - .agents-local-last-prompt is missing or older than 14 days (capture nudge)
 #   - .agents-last-lint is missing or older than 30 days (lint nudge)
@@ -36,8 +36,11 @@ if [[ ! -f "AGENTS.local.md" ]]; then
   NEEDS_BOOTSTRAP=1
 fi
 
-if [[ -f "AGENTS.md" ]] && grep -q "Not yet filled in — run the Bootstrap flow" AGENTS.md 2>/dev/null; then
-  REMINDERS+=("AGENTS.md Family details is still the placeholder — run the Bootstrap flow (family interview: children, household, homes, tone, sensitive topics, vocabulary).")
+if [[ ! -f "AGENTS.family.md" ]]; then
+  REMINDERS+=("AGENTS.family.md does not exist — run the Bootstrap flow from AGENTS.md (family interview: children, household, homes, tone, sensitive topics, vocabulary).")
+  NEEDS_BOOTSTRAP=1
+elif grep -q "Not yet filled in — run the Bootstrap flow" AGENTS.family.md 2>/dev/null; then
+  REMINDERS+=("AGENTS.family.md is still the placeholder — run the Bootstrap flow (family interview: children, household, homes, tone, sensitive topics, vocabulary).")
   NEEDS_BOOTSTRAP=1
 fi
 

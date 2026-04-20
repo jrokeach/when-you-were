@@ -1,0 +1,70 @@
+# AGENTS.family.md (template)
+
+**Family-specific data** for this knowledge base — shared across everyone who works with this repo, but not across different families. The scaffold (`AGENTS.md`) reads this file to learn which children exist, who's in the household, tone defaults, sensitive-topic flags, and the spellchecker's family-vocabulary whitelist.
+
+This file is **instance-only** — it lives in your private repo, but `/sync-scaffold` never touches it. Different families have different copies; the scaffold itself ships only this `.example` template.
+
+## How to use this file
+
+**First-time setup:** copy this file to `AGENTS.family.md` (drop the `.example` suffix) and populate it during the Bootstrap flow. The agent will interview you for the contents.
+
+**Thereafter:** keep it current as the family changes — new children, new addresses, new nicknames, new sensitivities. The agent reads it at the start of every session.
+
+## Reading order
+
+This is layer 3 of the 4-layer AGENTS stack:
+
+1. `AGENTS.md` (core schema — upstream-tracked)
+2. `AGENTS.overlay.md` (optional; if present, read before this file)
+3. **`AGENTS.family.md`** ← you are here
+4. `AGENTS.local.md` (per-user preferences — next in the chain)
+
+---
+
+## Family details (YAML)
+
+```yaml
+children:
+  - slug: ava                         # kebab-case; used as directory name — DO NOT rename after content exists
+    legal_name: "Ava Full-Name"
+    preferred_name: "Ava"
+    nicknames: ["Avocado", "Bug"]
+    pronouns: "she/her"
+    birthdate: YYYY-MM-DD
+    notes: ""                         # anything you want the agent to know up front
+
+household:
+  parents:
+    - name: ""
+      relationship: ""                # "mom", "dad", "step-parent", etc.
+  other_members:
+    - name: ""
+      relationship: ""                # "grandparent", "sibling", "au pair", etc.
+  close_circle:
+    - name: ""
+      relationship: ""                # "grandma (mom's side)", "babysitter 2022-2024", etc.
+
+homes:                                # places the family has lived, most recent first
+  - location: "City, State/Country"
+    dates: "YYYY — present"           # or "YYYY — YYYY"
+    notes: ""
+
+tone:                                 # default voice for agent-written prose
+  register: ""                        # "warm", "clinical", "terse", "playful", "literary"
+  pov: ""                             # "parent", "neutral third-person", "journal-style"
+  avoid_words: []
+  preferred_quirks: ""                # anything distinctive to preserve
+
+sensitive_topics:                     # handle with extra care
+  - topic: ""                         # e.g. "grandparent's death, 2025"
+    handling: ""                      # "ask before filing", "measured tone only", etc.
+
+family_vocabulary:                    # spellchecker allowlist: names, nicknames, invented words
+  - ""
+```
+
+---
+
+## Notes section (freeform)
+
+Add any additional context about the family that doesn't fit the structured schema above. Examples: custody arrangements, recent moves in progress, ongoing situations the agent should know about. The agent reads this section too.

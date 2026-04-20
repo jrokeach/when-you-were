@@ -5,7 +5,8 @@ Pull requests to improve the scaffold (AGENTS.md, directory structure, lint skil
 ## What not to contribute
 
 - Never push a fork that contains your family's actual content. The template ships empty.
-- `AGENTS.local.md` is gitignored so it won't accidentally travel with a fork, but real content under `wiki/children/<slug>/` and `raw/` isn't — keep those in your private instance only.
+- `AGENTS.local.md` and `AGENTS.overlay.md` are gitignored so they won't accidentally travel with a fork. `AGENTS.family.md` is **not** gitignored (it belongs in the user's private repo alongside their `wiki/` content) but must never appear in an upstream PR — only its `.example` counterpart travels upstream.
+- Real content under `wiki/children/<slug>/` and `raw/` — including your family data in `AGENTS.family.md` — stays in your private instance only.
 
 ## DCO and Relicensing
 

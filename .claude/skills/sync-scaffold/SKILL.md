@@ -1,6 +1,6 @@
 ---
 name: sync-scaffold
-description: "Pull upstream improvements from the When You Were scaffold template into this instance, preserving family-specific data. Handles AGENTS.md Family details block protection, refuses to touch instance-only paths, surfaces diffs for user review before applying, runs /lint after. Invoke when the user asks to sync the scaffold, pull updates, or update the template; do not invoke routinely."
+description: "Pull upstream improvements from the When You Were scaffold template into this instance, preserving family-specific data. Refuses to touch instance-only paths (AGENTS.family.md, AGENTS.overlay.md, AGENTS.local.md, wiki content), surfaces diffs for user review before applying, runs /lint after. Invoke when the user asks to sync the scaffold, pull updates, or update the template; do not invoke routinely."
 ---
 
 # sync-scaffold skill
@@ -13,7 +13,7 @@ The split between upstream-tracked and instance-only files is authoritative in [
 
 ## Write-scope rule
 
-**You must not write to an upstream-tracked file outside of this sync flow** without first asking the user and confirming they understand the change will be overwritten on the next sync. Inside `AGENTS.md`, only the `<!-- FAMILY_DETAILS_BEGIN -->` / `<!-- FAMILY_DETAILS_END -->` block is instance-owned.
+**You must not write to an upstream-tracked file outside of this sync flow** without first asking the user and confirming they understand the change will be overwritten on the next sync. Family-specific data lives in `AGENTS.family.md` (instance-only), and any host-application overlay lives in `AGENTS.overlay.md` (instance-only, gitignored) — neither is touched by this flow.
 
 The sync process respects these boundaries. Honor them when editing manually too.
 
@@ -27,8 +27,7 @@ Do **not** run this routinely or on a timer. Updates can change agent-visible be
 ## Prerequisites
 
 1. Working tree is clean. If it isn't, refuse and ask the user to commit or stash first. Do not stash silently.
-2. `AGENTS.md` contains both `<!-- FAMILY_DETAILS_BEGIN -->` and `<!-- FAMILY_DETAILS_END -->` markers. If either is missing, abort and explain — the user's local `AGENTS.md` has been edited in a way that breaks merging, and they need to restore the markers before sync can run.
-3. An upstream URL is available. Source of truth, in order: (a) a one-line `.scaffold-upstream` file at the repo root, (b) the canonical default `https://github.com/jrokeach/when-you-were`, (c) a URL the user provides when prompted to override. If the `upstream` git remote doesn't exist, offer to add it.
+2. An upstream URL is available. Source of truth, in order: (a) a one-line `.scaffold-upstream` file at the repo root, (b) the canonical default `https://github.com/jrokeach/when-you-were`, (c) a URL the user provides when prompted to override. If the `upstream` git remote doesn't exist, offer to add it.
 
 ## Process
 
@@ -49,21 +48,15 @@ git fetch upstream
 
 Confirm the upstream default branch (usually `main`). The rest of this doc assumes `upstream/main`.
 
-### 3. Preserve the Family details block
-
-Before any merging, capture the current Family details region from the live `AGENTS.md`:
-
-- Read `AGENTS.md`.
-- Extract everything between (and including) `<!-- FAMILY_DETAILS_BEGIN -->` and `<!-- FAMILY_DETAILS_END -->`.
-- Store it in memory (or a tmp file).
-
-### 4. Compute diff for upstream-tracked paths only
+### 3. Compute diff for upstream-tracked paths only
 
 Upstream-tracked paths (authoritative list in `UPSTREAM.md`):
 
 - `AGENTS.md`
+- `AGENTS.family.md.example`
+- `AGENTS.overlay.md.example`
 - `AGENTS.local.md.example`
-- `PRIVACY.md`, `LICENSE.md`, `CONTRIBUTING.md`, `UPSTREAM.md`
+- `PRIVACY.md`, `LICENSE.md`, `CONTRIBUTING.md`, `UPSTREAM.md`, `STORAGE.md`
 - `.gitignore`
 - `.claude/**`
 - `wiki/children/_template/**`
@@ -81,32 +74,29 @@ If the diff is empty, skip. Otherwise collect it.
 
 **Never include any path outside this list.** If `git diff upstream/main` shows changes to an instance-only file, that means the upstream drifted from this instance in a way that touches your real content — report it to the user and stop; do not apply.
 
-### 5. Show the combined diff to the user
+### 4. Show the combined diff to the user
 
 Summarize by file: how many files changed, which ones, a short description of each. Include the full diff if small; for large diffs, offer a file-by-file walkthrough.
 
 Wait for user approval before applying anything.
 
-### 6. Apply
+### 5. Apply
 
-For each approved path except `AGENTS.md`:
+For each approved path:
 
 ```bash
 git checkout upstream/main -- <path>
 ```
 
-For `AGENTS.md`:
+`AGENTS.md` has no protected region — it is upstream-tracked in full. Family-specific data lives in `AGENTS.family.md` (instance-only, never included in the diff), so the sync is a straight file replacement.
 
-- `git checkout upstream/main -- AGENTS.md` to get the upstream version into the working tree.
-- Locate the `FAMILY_DETAILS_BEGIN/END` markers in the upstream version.
-- Replace the upstream's placeholder block with the preserved block captured in step 3.
-- If the upstream version removed or renamed the markers, abort and ask the user — this indicates an intentional schema change that needs human review.
+If `AGENTS.family.md` does not exist locally but the upstream scaffold expects it, that is a bootstrap state — surface it to the user rather than auto-creating the file.
 
-### 7. Lint
+### 6. Lint
 
 Run the `/lint` skill against the updated tree. Report any new findings introduced by the sync. The user should see any issues before committing.
 
-### 8. Commit and (optionally) push
+### 7. Commit and (optionally) push
 
 Compose a commit message describing what changed, referencing the upstream commit range:
 
@@ -114,7 +104,6 @@ Compose a commit message describing what changed, referencing the upstream commi
 Sync scaffold from upstream (<old-sha>..<new-sha>)
 
 Files updated: [list]
-Preserved: AGENTS.md Family details block
 ```
 
 Honor `auto_commit` / `auto_push` from `AGENTS.local.md`:
@@ -127,22 +116,25 @@ Honor `auto_commit` / `auto_push` from `AGENTS.local.md`:
 
 - Never touch any path not listed as upstream-tracked.
 - Never delete instance-only files.
-- Never remove the `FAMILY_DETAILS_BEGIN/END` markers; abort if they are missing from local or upstream.
 - Never force-push.
 - Never run with a dirty working tree.
-- If anything is ambiguous (marker renamed upstream, unexpected file in the tracked list, diff shows instance-file changes), stop and escalate to the user.
+- If anything is ambiguous (unexpected file in the tracked list, diff shows instance-file changes, schema change that affects the layer chain), stop and escalate to the user.
 
 Explicit "never touch" paths (instance-only; the skill refuses to include these in any diff or apply step):
 
+- `AGENTS.family.md` (instance-only; user's family data).
+- `AGENTS.overlay.md` (instance-only + gitignored; optional overlay injected by a host application).
 - `AGENTS.local.md` (gitignored; per-user preferences).
 - `.local/**` (gitignored; instance-only scratch/upgrade notes).
 - `wiki/family/*/index.md` (per-category content listings; scaffold ships initial placeholders, instance maintains thereafter — same class as `wiki/index.md`).
 - `wiki/children/<real-slug>/**/index.md` (lazy-created per-subcat indexes in real child directories).
 - `wiki/index.md`, `wiki/log.md`, `wiki/audit-log.md`, `wiki/contradictions.md`, `wiki/todo.md`, `wiki/timeline.md`.
 
+The `.example` counterparts (`AGENTS.family.md.example`, `AGENTS.overlay.md.example`, `AGENTS.local.md.example`) are upstream-tracked schema templates and ARE synced.
+
 ## What this skill does NOT do
 
-- Does not sync `AGENTS.local.md` (user's per-user preferences — gitignored, not upstream-tracked).
+- Does not sync `AGENTS.family.md`, `AGENTS.overlay.md`, or `AGENTS.local.md` (instance-only).
 - Does not touch `wiki/children/<real-slug>/**` or `wiki/family/**` real content.
 - Does not overwrite per-directory `index.md` files in real (non-`_examples/`, non-`_template/`) content directories. Those are instance-maintained — the scaffold ships initial placeholders and the instance takes it from there.
 - Does not resolve merge conflicts inside upstream-tracked files that have been customized locally — if a local customization exists, surface it and let the user decide (keep local / take upstream / hand-merge).

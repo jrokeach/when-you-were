@@ -1,6 +1,6 @@
 # AGENTS.local.md (template)
 
-**User- and environment-specific** settings for *this* checkout by *this* user. Family-level data (children, household, homes, tone, sensitive topics, family vocabulary) lives in `AGENTS.md` under the **Family details** section.
+**User- and environment-specific** settings for *this* checkout by *this* user. Family-level data (children, household, homes, tone, sensitive topics, family vocabulary) lives in `AGENTS.family.md`.
 
 Different family members and different machines can maintain different `AGENTS.local.md` files. This one should not be shared across users.
 
@@ -8,7 +8,7 @@ Different family members and different machines can maintain different `AGENTS.l
 
 **Note:** the renamed `AGENTS.local.md` is gitignored. Your preferences stay on your machine and won't be committed.
 
-Rename this file to `AGENTS.local.md` (no `.example`) and fill it in. Your agent will read both `AGENTS.md` and `AGENTS.local.md` at the start of every session.
+Rename this file to `AGENTS.local.md` (no `.example`) and fill it in. Your agent reads the full layer chain at the start of every session: `AGENTS.md` (core), `AGENTS.overlay.md` (if present), `AGENTS.family.md`, then `AGENTS.local.md`.
 
 ---
 
