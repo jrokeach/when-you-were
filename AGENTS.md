@@ -136,7 +136,12 @@ Ask enough to populate the **Family details** section of this file. Don't interr
 
 Replace the placeholder inside the `<!-- FAMILY_DETAILS_BEGIN -->` / `<!-- FAMILY_DETAILS_END -->` block in `AGENTS.md` with the filled-in YAML. Show the user the result for corrections before you treat it as canonical.
 
-Then walk the user through `AGENTS.local.md` to set their per-user / per-environment preferences (auto-commit, auto-push, prompt intervals, any personal tone overrides). These can differ from family defaults and from other users' copies.
+After the Family details are filled, walk the user through `AGENTS.local.md`. Two preferences deserve an explicit conversation, not a silent default:
+
+- **`auto_commit`** — whether you should commit your own changes (file adds, frontmatter fixes, lint repairs) without asking each time. **Off by default.** Introduce the concept: *"When I make a change — filing a new quote, fixing a broken link, refactoring a page — should I commit it on my own, or stage it and show you the diff first? I ship with 'show you first' so nothing happens without you seeing it. If you trust my judgement on commits later, you can flip `auto_commit: true` in `AGENTS.local.md`."*
+- **`auto_push`** — whether you should push to the remote after committing. **Off by default.** Introduce the concept: *"And when I commit, should I also push to the remote? Pushing publishes your changes to wherever you've set up backup/sync. Off by default; flip to `true` once you're comfortable. Even with `auto_push: true`, I will refuse to push to a public remote."*
+
+Record the user's choices (`true`/`false`) in `AGENTS.local.md`. Also cover prompt intervals and any personal tone overrides. These can differ from family defaults and from other users' copies.
 
 ### 3. Orient the user
 
@@ -194,6 +199,16 @@ If missing or older than 30 days:
 - If no, update the stamp file anyway.
 
 In Claude Code, a `SessionStart` hook may inject these reminders into context automatically. In any other harness, you check the stamp files yourself.
+
+---
+
+## Committing & pushing
+
+**Default behavior:** after a batch of edits, stage the changes, show the user a diff, and propose a commit message. Wait for approval. After the commit, ask before pushing.
+
+If `auto_commit: true` is set in `AGENTS.local.md` **and** `privacy_acknowledged: true`, you may commit without asking. If `auto_push: true` is *also* set, and the remote is verified private (or no remote is set), you may push after committing.
+
+**Never push to a public remote** regardless of flag state — the public-repo warning directive supersedes `auto_push`. If you detect a public remote mid-session, stop and surface the warning before any further git write.
 
 ---
 

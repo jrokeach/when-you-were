@@ -21,7 +21,7 @@ It is if any of the following is true:
 
 ## How it works, in one paragraph
 
-You clone this scaffold into a **private** repo. On first use, an AI agent reads `AGENTS.md`, asks you some bootstrap questions about your family, and fills in the Family details section of `AGENTS.md` (family-level data — children, household, tone, sensitive topics). It also creates a local `AGENTS.local.md` for your per-user, per-machine preferences (auto-commit behavior, prompt intervals). From then on, you paste photos, type a quote your kid said at dinner, drop in a report card — and the agent files it into the right places, cross-links it to related pages, and keeps a chronological log. Periodically, it prompts you for what's new and asks to lint the KB for typos, broken links, and stale pages.
+You clone this scaffold into a **private** repo. On first use, an AI agent reads `AGENTS.md`, asks you some bootstrap questions about your family, and fills in the Family details section of `AGENTS.md` (family-level data — children, household, tone, sensitive topics). It also creates a local `AGENTS.local.md` for your per-user, per-machine preferences (prompt intervals, auto-commit preferences — off by default, opt-in via the bootstrap flow). From then on, you paste photos, type a quote your kid said at dinner, drop in a report card — and the agent files it into the right places, cross-links it to related pages, and keeps a chronological log. Periodically, it prompts you for what's new and asks to lint the KB for typos, broken links, and stale pages.
 
 ## Working with your KB
 
