@@ -5,7 +5,7 @@ Pull requests to improve the scaffold (AGENTS.md, directory structure, lint skil
 ## What not to contribute
 
 - Never push a fork that contains your family's actual content. The template ships empty.
-- `AGENTS.local.md` and any content under `wiki/children/` or `raw/` should only exist in your private instance.
+- `AGENTS.local.md` is gitignored so it won't accidentally travel with a fork, but real content under `wiki/children/<slug>/` and `raw/` isn't — keep those in your private instance only.
 
 ## DCO and Relicensing
 

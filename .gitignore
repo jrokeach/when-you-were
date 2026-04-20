@@ -10,6 +10,10 @@ Thumbs.db
 .idea/
 .vscode/
 
-# Note: AGENTS.local.md is NOT ignored — this scaffold assumes your repo is
-# private. See PRIVACY.md. If you are committing this KB to a public remote,
-# STOP and read PRIVACY.md first.
+# Per-user / per-machine preferences. Different users and checkouts maintain
+# their own; shared family-level settings live in AGENTS.md. See PRIVACY.md.
+AGENTS.local.md
+
+# Instance-only docs (upgrade notes, per-instance plans, scratch work) that
+# should never be published. Safe place for anything private.
+.local/

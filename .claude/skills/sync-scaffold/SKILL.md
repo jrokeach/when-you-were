@@ -132,9 +132,14 @@ Honor `auto_commit` / `auto_push` from `AGENTS.local.md`:
 - Never run with a dirty working tree.
 - If anything is ambiguous (marker renamed upstream, unexpected file in the tracked list, diff shows instance-file changes), stop and escalate to the user.
 
+Explicit "never touch" paths (instance-only; the skill refuses to include these in any diff or apply step):
+
+- `AGENTS.local.md` (gitignored; per-user preferences).
+- `.local/**` (gitignored; instance-only scratch/upgrade notes).
+
 ## What this skill does NOT do
 
-- Does not sync `AGENTS.local.md` (user's per-user preferences — not upstream-tracked).
+- Does not sync `AGENTS.local.md` (user's per-user preferences — gitignored, not upstream-tracked).
 - Does not touch `wiki/children/<real-slug>/**` or `wiki/family/**` real content.
 - Does not resolve merge conflicts inside upstream-tracked files that have been customized locally — if a local customization exists, surface it and let the user decide (keep local / take upstream / hand-merge).
 - Does not push without explicit per-repo consent.

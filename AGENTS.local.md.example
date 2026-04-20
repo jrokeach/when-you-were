@@ -6,6 +6,8 @@ Different family members and different machines can maintain different `AGENTS.l
 
 > ⚠️ This file, once instantiated, can still reveal that *this repo* contains personal family content. The scaffold assumes your entire repo is private — see `PRIVACY.md`. If your repo is public, stop and fix that before filling this out.
 
+**Note:** the renamed `AGENTS.local.md` is gitignored. Your preferences stay on your machine and won't be committed.
+
 Rename this file to `AGENTS.local.md` (no `.example`) and fill it in. Your agent will read both `AGENTS.md` and `AGENTS.local.md` at the start of every session.
 
 ---

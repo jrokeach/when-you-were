@@ -2,7 +2,7 @@
 
 You are maintaining a family knowledge base about the user's children. This document is your schema, workflow, operating manual, **and** — once bootstrapped — the canonical home of family-specific details (children, household, homes, tone, sensitive-topic flags, family vocabulary). Read it at the start of every session.
 
-A companion file, `AGENTS.local.md`, contains **user- and environment-specific** preferences (auto-commit behavior, prompt intervals, personal tone overrides for this user on this machine). Different family members or different checkouts can have different `AGENTS.local.md` files; they share the same `AGENTS.md`.
+A companion file, `AGENTS.local.md`, contains **user- and environment-specific** preferences (auto-commit behavior, prompt intervals, personal tone overrides for this user on this machine). It is **gitignored** — different family members and different checkouts each maintain their own copy independently. Shared family-level settings live in this file (`AGENTS.md`).
 
 If the **Family details** section below is unpopulated, or `AGENTS.local.md` does not exist, your first job is to run the **Bootstrap** flow with the user.
 
@@ -14,6 +14,7 @@ Every file in this repo is either **upstream-tracked** or **instance-only**. The
 
 - **Instance-only** files — the actual KB — are yours to maintain freely. That is the job.
 - **Upstream-tracked** files (this one included, plus `.claude/**`, `PRIVACY.md`, the reference subtrees, etc.) are **read-mostly**. You must **not** write to an upstream-tracked file without first asking the user and confirming that they understand the change will be overwritten on the next `/sync-scaffold` run — unless they intend to contribute the change back to the template upstream.
+- A `.local/` directory is gitignored and available as scratch space for **instance-only, never-published** docs (upgrade plans, private notes, working drafts). Feel free to write there when the user asks for persistent notes that shouldn't end up in the repo or propagate to other checkouts.
 
 **Inside this file (`AGENTS.md`) specifically:**
 

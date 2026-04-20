@@ -49,7 +49,7 @@ Pick one. They are all fine.
 - On first setup, the agent explicitly warns you about public repos and records your acknowledgment.
 - Until you acknowledge, on every session the agent re-checks the git remote and warns if it looks public.
 - Once you acknowledge, the warning can be dismissed permanently (the agent will offer to remove the directive from `AGENTS.md`).
-- The `.gitignore` does not protect `AGENTS.md`, `AGENTS.local.md`, or anything under `wiki/` by default — because the entire repo is expected to be private. Don't treat `.gitignore` as a safety net here.
+- The `.gitignore` protects `AGENTS.local.md` (per-user preferences) and `.local/` (instance-only docs), but does **not** protect `AGENTS.md` (family details live there) or anything under `wiki/`. The entire repo is still expected to be private — don't treat `.gitignore` as a substitute for a private remote.
 
 ## Special considerations
 

@@ -73,7 +73,7 @@ For asking questions of the archive.
 ## What's in the scaffold
 
 - [`AGENTS.md`](AGENTS.md) — schema, workflow, and operating manual for the agent; also the canonical home of family-specific details (children, household, tone, sensitive topics) once bootstrap has populated them
-- [`AGENTS.local.md.example`](AGENTS.local.md.example) — template for **your** user- and machine-specific preferences (auto-commit, auto-push, prompt cadences, personal tone overrides). Different family members can keep different copies; it is not meant to be shared across users.
+- [`AGENTS.local.md.example`](AGENTS.local.md.example) — template for **your** user- and machine-specific preferences (auto-commit, auto-push, prompt cadences, personal tone overrides). Copy to `AGENTS.local.md` (gitignored) so different family members and machines can keep different preferences without conflict.
 - [`PRIVACY.md`](PRIVACY.md) — privacy guidance. Read before committing anywhere.
 - [`wiki/`](wiki/index.md) — where your knowledge base lives. Start at [`wiki/index.md`](wiki/index.md).
 - [`raw/`](raw/) — drop zone for source material (photos, scans, transcripts) the agent can ingest.
@@ -89,7 +89,7 @@ Multi-child by default. Shared content (family trips, sibling dynamics, a grandp
 
 ## Contributing / forking
 
-This is a scaffold. If you fork it with improvements to the structure, AGENTS.md, or lint skill, PRs welcome — but **never** push a fork that contains your family's actual content. The template itself ships empty; `AGENTS.local.md` and any content under `wiki/children/` or `raw/` should only exist in your private instance.
+This is a scaffold. If you fork it with improvements to the structure, AGENTS.md, or lint skill, PRs welcome — but **never** push a fork that contains your family's actual content. `AGENTS.local.md` is gitignored so it won't accidentally travel with a fork; your real content under `wiki/children/<slug>/` and `raw/` should only exist in your private instance. The template itself ships empty of family data.
 
 This scaffold is maintained at [https://github.com/jrokeach/when-you-were](https://github.com/jrokeach/when-you-were). If you copy this template into your own repo, consider linking back so others can find the original.
 

@@ -13,7 +13,7 @@ These files define the *scaffold*. Improvements to them come from upstream and s
 - `AGENTS.md` — **except** the region between `<!-- FAMILY_DETAILS_BEGIN -->` and `<!-- FAMILY_DETAILS_END -->`, which is family data and is preserved during sync.
 - `AGENTS.local.md.example` — the template copy, not the real `AGENTS.local.md`.
 - `PRIVACY.md`, `LICENSE.md`, `CONTRIBUTING.md`, `UPSTREAM.md` — scaffold documentation.
-- `.gitignore` — stamp-file exclusions and OS noise.
+- `.gitignore` — stamp-file exclusions, OS noise, and the `AGENTS.local.md` / `.local/` ignore rules themselves. Downstream instances pick up new ignore rules via sync.
 - `.claude/**` — hooks, skills, settings for Claude Code integration.
 - `wiki/children/_template/**` — fictional "Sam" reference subtree.
 - `wiki/family/_examples/**` — fictional family reference subtree.
@@ -24,13 +24,14 @@ These files define the *scaffold*. Improvements to them come from upstream and s
 
 These files are yours. The sync process never touches them.
 
-- `AGENTS.local.md` — your per-user preferences.
+- `AGENTS.local.md` — your per-user preferences (gitignored; each checkout has its own).
 - The `<!-- FAMILY_DETAILS_BEGIN -->` / `<!-- FAMILY_DETAILS_END -->` block inside `AGENTS.md` — your family data.
 - `wiki/children/<your-real-child-slug>/**` — per-child directories you added.
 - Everything under `wiki/family/**` **except** what's listed in the upstream-tracked section above (i.e., all your real family content, but not `_examples/` or per-category READMEs).
 - `wiki/index.md`, `wiki/log.md`, `wiki/audit-log.md`, `wiki/contradictions.md`, `wiki/todo.md`, `wiki/timeline.md` — instance-maintained state.
 - `raw/**` — everything except the `README.md` / `.gitkeep` already listed.
 - `.agents-*` stamp files (gitignored anyway).
+- `.local/` — gitignored scratch space for instance-only docs (upgrade notes, private plans). Never synced, never published.
 - `README.md` — if you've customized it for your family. If not, it's upstream-tracked.
 
 If you're unsure whether a file is tracked, ask your agent or consult the `/sync-scaffold` skill — it refuses to touch anything outside the tracked list.
