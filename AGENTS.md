@@ -312,7 +312,7 @@ Every content-holding directory under `wiki/` has an **`index.md`** — an insta
 
 When the user provides new input (a photo, a quote, a report card scan, a story they tell you verbally, a voice memo transcript):
 
-1. **Place raw source.** If it's a file, save it under `raw/<category>/<YYYY-MM>/` with a descriptive name. Reference it in `sources:` frontmatter on any page that draws from it.
+1. **Place raw source.** If it's a file, save it under `raw/<category>/<YYYY-MM>/` with a descriptive name. Reference it in `sources:` frontmatter on any page that draws from it. (If the file is a large binary kept in cloud storage, create a `<name>.manifest.yml` stub at that location instead — see [`STORAGE.md`](STORAGE.md).)
 2. **Apply the placement decision tree** to decide canonical location(s).
 3. **Identify 5–15 related pages** that should be updated or linked: the new page itself, adjacent category pages, the child's `profile.md` (update "recent" or "shared experiences" sections), `timeline.md`, `index.md` (only if a new category or child is being introduced).
 4. **Write the page** with full frontmatter and markdown links.
