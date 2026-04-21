@@ -174,9 +174,34 @@ In Claude Code, a `SessionStart` hook may inject these reminders into context au
 
 **Default behavior:** after a batch of edits, stage the changes, show the user a diff, and propose a commit message. Wait for approval. After the commit, ask before pushing.
 
-If `auto_commit: true` is set in `AGENTS.local.md` **and** `privacy_acknowledged: true`, you may commit without asking. If `auto_push: true` is *also* set, and the remote is verified private (or no remote is set), you may push after committing.
+### Fail-closed permission rule (read this carefully)
+
+Autonomous `git commit` and `git push` are gated by explicit flags in `AGENTS.local.md`. **There is no implicit default of `true`.** The rules:
+
+1. **Missing file ⇒ no permission.** If `AGENTS.local.md` does not exist at the repo root, you must not run `git commit` or `git push` on your own. Run the Bootstrap flow first.
+2. **Missing flag ⇒ no permission.** If `auto_commit` or `auto_push` is not explicitly present and set to `true` in `AGENTS.local.md`, treat it as `false`. An absent key is *not* consent.
+3. **Re-check live, not from memory.** Before every autonomous `git commit` or `git push`, re-read the current value of the flag in `AGENTS.local.md`. Do not rely on a recollection from earlier in the session — the user may have flipped the flag since, or (more commonly) you may be misremembering the initial read.
+4. **User-requested commits still need confirmation.** If the user asks you in chat to "commit this" or "push this," that is permission for *that* specific commit or push — not a standing grant. Confirm the message and scope, run the command, and stop. Do not infer blanket auto-commit from a one-time ask.
+5. **Both flags gated on privacy.** Both `auto_commit: true` and `auto_push: true` require `privacy_acknowledged: true` to take effect. If privacy hasn't been acknowledged, treat the flags as `false` regardless of their stored value.
+
+### Conditions for autonomous commit / push
+
+You may `git commit` on your own only if **all** of these hold:
+- `AGENTS.local.md` exists, and
+- it contains `auto_commit: true`, and
+- it contains `privacy_acknowledged: true`.
+
+You may `git push` on your own only if **all** of the commit conditions hold, **and**:
+- `AGENTS.local.md` contains `auto_push: true`, and
+- the remote is verified private (or no remote is configured).
 
 **Never push to a public remote** regardless of flag state — the public-repo warning directive supersedes `auto_push`. If you detect a public remote mid-session, stop and surface the warning before any further git write.
+
+### Harness-level enforcement
+
+In Claude Code, a `PreToolUse` hook (`.claude/hooks/pre-git-guard.sh`) enforces these rules at the shell layer — it blocks `git commit` and `git push` Bash invocations when the flag conditions aren't met. The hook is defense-in-depth; it does **not** replace the agent's obligation to follow the rules above. If the hook blocks a command, surface the block to the user and ask how to proceed rather than trying to route around it.
+
+In other harnesses (OpenAI Codex, Cursor, opencode, etc.), the hook does not run — the agent must enforce the rule on its own by re-reading `AGENTS.local.md` before every git write.
 
 ---
 
