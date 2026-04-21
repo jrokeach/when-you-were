@@ -40,6 +40,9 @@ These files are yours. The sync process never touches them.
 - `AGENTS.family.md` — your family data, populated at bootstrap. Tracked in your private repo (not gitignored), but never touched by sync. Stays out of upstream PRs; only the `.example` counterpart travels upstream.
 - `AGENTS.overlay.md` — gitignored. Optional overlay layer injected by a host application if you use one. Absent for self-hosted users — scaffold works fine without it.
 - `AGENTS.local.md` — your per-user preferences (gitignored; each checkout has its own).
+- `.claude/skills.overlay/**` — gitignored. Host-app-injected skills that sit alongside the upstream-tracked `.claude/skills/**`. Absent by default.
+- `.claude/hooks.overlay/**` — gitignored. Host-app-injected hook scripts. Absent by default.
+- `.claude/settings.local.json` — gitignored. Claude Code's built-in per-user / overlay settings layer; Claude Code merges it on top of `.claude/settings.json` (upstream-tracked) automatically. Use this file — not `settings.json` — for overlay hook registrations and local tweaks.
 - `wiki/children/<your-real-child-slug>/**` — per-child directories you added (including lazy-created `<subcat>/index.md` files).
 - Everything under `wiki/family/**` **except** what's listed in the upstream-tracked section above (i.e., all your real family content, but not `_examples/` or per-category READMEs).
 - `wiki/family/*/index.md` — per-category content listings. The scaffold ships initial placeholders; you maintain them as you file pages.

@@ -48,6 +48,14 @@ git fetch upstream
 
 Confirm the upstream default branch (usually `main`). The rest of this doc assumes `upstream/main`.
 
+### 2.5. Read the overlay's `instance_protected_paths` (if any)
+
+Before computing the diff, check whether `AGENTS.overlay.md` exists at the repo root. If it does, parse its YAML and read the `instance_protected_paths:` list. This is the host application's declaration of upstream-tracked files it has customized and wants sync to **skip**. Typical entries: `README.md`, per-category `README.md` files the host has rebranded, or other scaffold-shipped user-facing documents.
+
+- If the list is absent or empty, proceed normally.
+- If the list contains paths, remember them and skip them in step 5 below. In step 4, surface the skip list to the user: "The overlay asks me to skip N paths on sync: [list]. I'll show you upstream changes to those paths but will not apply them — you can hand-merge later if you want."
+- Paths outside the upstream-tracked list are ignored (can't protect something that isn't synced in the first place; surface that as a warning: "overlay declared `foo.md` as protected but it isn't upstream-tracked; nothing to protect").
+
 ### 3. Compute diff for upstream-tracked paths only
 
 Upstream-tracked paths (authoritative list in `UPSTREAM.md`):
@@ -82,11 +90,13 @@ Wait for user approval before applying anything.
 
 ### 5. Apply
 
-For each approved path:
+For each approved path **not** in the overlay's `instance_protected_paths` list from step 2.5:
 
 ```bash
 git checkout upstream/main -- <path>
 ```
+
+For each path that **is** in `instance_protected_paths`: **skip** the checkout. Do not apply upstream changes to protected paths. After the apply step, report: "Skipped N instance-protected paths: [list]. Upstream changes to those paths are visible in the diff above — hand-merge if desired."
 
 `AGENTS.md` has no protected region — it is upstream-tracked in full. Family-specific data lives in `AGENTS.family.md` (instance-only, never included in the diff), so the sync is a straight file replacement.
 
@@ -125,10 +135,14 @@ Explicit "never touch" paths (instance-only; the skill refuses to include these 
 - `AGENTS.family.md` (instance-only; user's family data).
 - `AGENTS.overlay.md` (instance-only + gitignored; optional overlay injected by a host application).
 - `AGENTS.local.md` (gitignored; per-user preferences).
+- `.claude/skills.overlay/**` (gitignored; host-app-injected skills).
+- `.claude/hooks.overlay/**` (gitignored; host-app-injected hook scripts).
+- `.claude/settings.local.json` (gitignored; Claude Code's per-user / overlay settings layer).
 - `.local/**` (gitignored; instance-only scratch/upgrade notes).
 - `wiki/family/*/index.md` (per-category content listings; scaffold ships initial placeholders, instance maintains thereafter — same class as `wiki/index.md`).
 - `wiki/children/<real-slug>/**/index.md` (lazy-created per-subcat indexes in real child directories).
 - `wiki/index.md`, `wiki/log.md`, `wiki/audit-log.md`, `wiki/contradictions.md`, `wiki/todo.md`, `wiki/timeline.md`.
+- Plus any paths listed in `AGENTS.overlay.md`'s `instance_protected_paths:` field (host-declared; see step 2.5).
 
 The `.example` counterparts (`AGENTS.family.md.example`, `AGENTS.overlay.md.example`, `AGENTS.local.md.example`) are upstream-tracked schema templates and ARE synced.
 

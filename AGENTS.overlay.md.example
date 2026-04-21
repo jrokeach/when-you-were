@@ -25,27 +25,66 @@ This is layer 2 of the 4-layer AGENTS stack:
 
 ## Overlay schema (YAML)
 
+See `AGENTS.md` "Interpreting the overlay" for the authoritative description of how agents read each field. This `.example` is the canonical shape; the prose in `AGENTS.md` is the canonical behavior.
+
 ```yaml
 overlay_name: ""                    # human-readable name of this overlay
 overlay_version: ""                 # semver or date, for debugging / upgrades
 
-tone_override:                      # optional: supersedes the `tone:` block in AGENTS.family.md
+tone_override:                      # optional: supersedes the `tone:` sub-fields in AGENTS.family.md
   register: ""                      # "warm", "clinical", "terse", "playful", "literary"
   pov: ""                           # "parent", "neutral third-person", "journal-style"
   avoid_words: []
   preferred_quirks: ""
 
-capabilities:                       # optional: feature switches the host application toggles
-  - name: ""
+capabilities:                       # optional: host-app-named features, each on/off
+  - name: ""                        # host-specific; agents surface these when the user asks
     enabled: false
     notes: ""
 
-feature_flags: {}                   # optional: free-form key/value flags the host app reads
+feature_flags: {}                   # optional: free-form key/value the host app reads at runtime
 
-notes: ""                           # freeform notes the agent should be aware of
+instance_protected_paths: []        # optional: upstream-tracked paths the host / user has
+                                    # customized and wants /sync-scaffold to skip on the next
+                                    # sync. E.g. [README.md, wiki/family/trips/README.md].
+                                    # /sync-scaffold honors this list; see UPSTREAM.md.
 
-downstream: "AGENTS.family.md"      # the next layer to read after this one (do not remove)
+notes: ""                           # freeform notes the agent reads as context before the
+                                    # rest of the layer chain
+
+downstream: "AGENTS.family.md"      # the next layer to read after this one. Must be
+                                    # AGENTS.family.md in the current scaffold; the field
+                                    # exists so host apps can assert the chain, not rewrite it.
 ```
+
+### What an overlay can and cannot do
+
+An overlay **can**:
+
+- refine tone for agent-written prose,
+- gate host-app-specific capabilities,
+- ship additional skills (`.claude/skills.overlay/`) and hooks (`.claude/hooks.overlay/` + `.claude/settings.local.json`) that coexist with the scaffold's,
+- declare `instance_protected_paths` so `/sync-scaffold` skips host-customized files.
+
+An overlay **cannot**:
+
+- override safety gates (the public-repo warning, the fail-closed auto-commit rule, the write-scope rule),
+- rewrite the layer chain (`downstream:` must stay `AGENTS.family.md`),
+- grant write access to upstream-tracked files beyond what the protected-paths mechanism describes.
+
+Safety gates are enforced in `AGENTS.md` (core) and cannot be relaxed by a lower layer.
+
+---
+
+## Overlay-injected skills, hooks, and settings
+
+Three gitignored locations are reserved for host-app additions that must not collide with the upstream-tracked `.claude/`:
+
+- **`.claude/skills.overlay/`** — host-app skills (any `SKILL.md` inside gets auto-discovered by Claude Code alongside the scaffold's skills).
+- **`.claude/hooks.overlay/`** — host-app hook scripts.
+- **`.claude/settings.local.json`** — Claude Code's built-in gitignored settings layer; register overlay hooks and any per-user tweaks here. Claude Code merges this on top of `.claude/settings.json` automatically.
+
+`/sync-scaffold` never touches these three paths. See `UPSTREAM.md` for the full instance-only list.
 
 ---
 

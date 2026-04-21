@@ -6,7 +6,7 @@ You are maintaining a family knowledge base about the user's children. This docu
 
 This file is layer 1 (core schema). After reading it, continue through the layer chain in order:
 
-1. **`AGENTS.overlay.md`** (layer 2, optional) — if present, read it next. It carries overlay-level instructions that may refine tone, capabilities, or how the remaining layers are interpreted. If it's absent, skip this step; the scaffold works fine without one.
+1. **`AGENTS.overlay.md`** (layer 2, optional) — if present, read it next. It carries overlay-level instructions that may refine tone, capabilities, or how the remaining layers are interpreted. See "Interpreting the overlay" below for how to act on its fields. If the file is absent, skip this step; the scaffold works fine without one.
 2. **`AGENTS.family.md`** (layer 3, required) — family-specific data (children, household, tone, sensitive topics, family vocabulary).
 3. **`AGENTS.local.md`** (layer 4, required) — per-user and per-machine preferences.
 
@@ -17,6 +17,29 @@ A short orientation to the companion files:
 - `AGENTS.family.md` — family-specific data, tracked in this private repo but never touched by `/sync-scaffold`. The agent creates it during Bootstrap from `AGENTS.family.md.example`.
 - `AGENTS.overlay.md` — optional overlay injected by a host application if one is set up. Gitignored. Absent by default — self-hosted scaffold works fine without it.
 - `AGENTS.local.md` — per-user and per-machine preferences (auto-commit behavior, prompt intervals, personal tone overrides). Gitignored — different family members and different checkouts each maintain their own copy.
+
+### Interpreting the overlay (when `AGENTS.overlay.md` is present)
+
+Most instances will never have an overlay — self-hosted scaffolds work fine without one. If `AGENTS.overlay.md` *is* present at the repo root, treat its fields as follows. The expected YAML shape is in `AGENTS.overlay.md.example`.
+
+- **`notes:`** — always read as prose context before proceeding through the rest of the layer chain. An overlay's `notes:` field typically explains where the overlay came from, what host application installed it, and any environment-specific expectations.
+- **`tone_override:`** — if any sub-field is set (`register`, `pov`, `avoid_words`, `preferred_quirks`), it **supersedes** the matching sub-field in `AGENTS.family.md`'s `tone:` block when writing prose. A user-level `tone_override:` in `AGENTS.local.md` still wins over the overlay — the layering is core ← overlay ← family ← local.
+- **`capabilities:`** — each entry names a feature and whether it's `enabled:`. When a capability is disabled, do not use that feature even if AGENTS.md documents it; when it's enabled, the overlay is granting (or confirming) a specific behavior. Capabilities are host-app-specific and named by the host; agents should surface a capability's `notes:` when the user asks what the overlay is doing.
+- **`feature_flags:`** — a free-form key/value map the host application reads. Agents are not expected to act on these directly unless the user asks about them; surface them as "the overlay has these flags set" when relevant.
+- **`instance_protected_paths:`** — a list of upstream-tracked paths the host application or user has customized and wants `/sync-scaffold` to skip on the next sync. When running `/sync-scaffold`, honor this list. Do not write outside this list's protection; the list describes what sync should *skip*, not a broader write grant.
+- **`downstream:`** — the next file in the reading chain after the overlay. Always `AGENTS.family.md` in the current scaffold; the field exists so host applications can assert they know the chain, not so they can rewrite it. If `downstream:` names anything other than `AGENTS.family.md`, treat it as a bug in the overlay and surface to the user.
+
+An overlay cannot grant itself permissions the core schema refuses (e.g. the overlay cannot turn off the public-repo warning directive, cannot relax the fail-closed auto-commit rule, and cannot expand the write-scope rule). Overlays refine behavior within the core schema; they do not override safety gates.
+
+### Overlay-injected skills, hooks, and settings
+
+A host application may ship additional Claude Code skills or hooks on top of the scaffold's. The scaffold reserves three gitignored locations for these:
+
+- **`.claude/skills.overlay/`** — host-app skills. Claude Code auto-discovers skills under `.claude/skills/**`; this directory is a sibling convention that downstream instances can use without colliding with the upstream-tracked `.claude/skills/`. Invoke them the same way as built-in skills.
+- **`.claude/hooks.overlay/`** — host-app hook scripts. Register them in `.claude/settings.local.json` (not `settings.json`, which is upstream-tracked).
+- **`.claude/settings.local.json`** — Claude Code's built-in gitignored settings layer. Use it for overlay hook registrations and per-user customization. Claude Code merges `settings.local.json` on top of `settings.json` automatically.
+
+`/sync-scaffold` treats all three as instance-only and never touches them.
 
 ---
 

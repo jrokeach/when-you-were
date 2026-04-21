@@ -22,3 +22,13 @@ AGENTS.overlay.md
 # Instance-only docs (upgrade notes, per-instance plans, scratch work) that
 # should never be published. Safe place for anything private.
 .local/
+
+# Overlay extension surface — host-app skills, hooks, and per-user / overlay
+# settings registrations. These sit alongside the upstream-tracked
+# `.claude/skills/`, `.claude/hooks/`, and `.claude/settings.json` but are
+# never committed; each instance's additions stay local. Claude Code merges
+# `settings.local.json` on top of `settings.json` automatically.
+# See AGENTS.overlay.md.example "Overlay-injected skills, hooks, and settings".
+.claude/skills.overlay/
+.claude/hooks.overlay/
+.claude/settings.local.json
