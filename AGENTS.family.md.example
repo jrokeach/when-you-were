@@ -4,6 +4,10 @@
 
 This file is **instance-only** — it lives in your private repo, but `/sync-scaffold` never touches it. Different families have different copies; the scaffold itself ships only this `.example` template.
 
+**Non-children as first-class subjects (optional).** Parents, grandparents, caregivers, and pets can appear in `subjects:` frontmatter alongside children if you declare a slug for them. Add a `slug:` to any `household.*` entry, or populate the `pets:` block below, and that name becomes a valid `subjects:` value. Pages about those people and pets still live in the existing `wiki/family/relatives/`, `wiki/family/caregivers/`, `wiki/family/pets/` directories — this is purely a subject-namespace extension, not a new directory structure. Leave the `slug:` fields empty and non-children stay as unstructured context (the pre-extension behavior). See `AGENTS.md` "Non-child subjects (optional)".
+
+**Slug uniqueness.** All slugs declared anywhere in this file — under `children:`, any `household.*[].slug`, or `pets[].slug` — share one flat namespace and MUST be globally unique. Lint flags duplicates as Critical.
+
 ## How to use this file
 
 **First-time setup:** copy this file to `AGENTS.family.md` (drop the `.example` suffix) and populate it during the Bootstrap flow. The agent will interview you for the contents.
@@ -34,15 +38,48 @@ children:
     notes: ""                         # anything you want the agent to know up front
 
 household:
+  # Any entry below can be promoted to a first-class subject by adding a `slug:`.
+  # Entries without a slug remain as unstructured context (pre-extension behavior).
+  # Slugs declared here share a global namespace with `children:` and `pets:` — see "Slug uniqueness" above.
+  #
+  # NOTE: The example slugs in this template (`mom`, `grandma-m`, plus `biscuit` in `pets:` below)
+  # exist so that pages under `wiki/family/_examples/` and `wiki/children/_template/` can
+  # demonstrate the non-child-subjects pattern with realistic, lint-valid frontmatter. When you
+  # copy this file to `AGENTS.family.md`, replace or remove these examples.
   parents:
-    - name: ""
-      relationship: ""                # "mom", "dad", "step-parent", etc.
+    - name: "Jane Example"
+      relationship: "mother"
+      slug: mom                       # optional — kebab-case; leave empty or omit to skip
+      preferred_name: "Mom"           # optional — what the kids call them
+      pronouns: "she/her"             # optional
+      birthdate: YYYY-MM-DD           # optional
+      notes: ""                       # optional
   other_members:
     - name: ""
       relationship: ""                # "grandparent", "sibling", "au pair", etc.
+      slug: ""                        # optional
+      preferred_name: ""              # optional
+      birthdate: YYYY-MM-DD           # optional
+      notes: ""                       # optional
   close_circle:
-    - name: ""
-      relationship: ""                # "grandma (mom's side)", "babysitter 2022-2024", etc.
+    - name: "Margaret Example"
+      relationship: "grandma (mom's side)"
+      slug: grandma-m                 # optional — e.g. "grandma-m" if you want a canonical page
+      nicknames: ["Grandma M", "GG"]  # optional
+      birthdate: YYYY-MM-DD           # optional
+      notes: ""                       # optional
+
+pets:                                 # optional — each entry with a slug becomes a first-class subject
+  # Leave the list empty (or delete the block) if the family has no pets, or no pet the family
+  # wants tracked as a subject.
+  - slug: biscuit                     # kebab-case; e.g. "biscuit"
+    preferred_name: "Biscuit"
+    nicknames: ["Biscy"]
+    species: "dog"                    # "dog", "cat", "rabbit", "bird", etc.
+    breed: ""                         # optional
+    joined: YYYY-MM-DD                # adoption / arrival date (optional)
+    departed: YYYY-MM-DD              # death / rehoming; omit if still with the family
+    notes: ""
 
 homes:                                # places the family has lived, most recent first
   - location: "City, State/Country"

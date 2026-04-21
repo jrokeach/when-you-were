@@ -33,7 +33,14 @@ For every `.md` file under `wiki/`:
 
 - Parses as valid YAML frontmatter.
 - Required fields present: `title`, `type`, `subjects`, `status`.
-- `subjects:` entries match either a known child slug (from `AGENTS.family.md`) or the literal `family`. Inside `_template/`, `[_template]` is allowed.
+- `subjects:` entries match one of:
+  - a known child slug (from `children:` in `AGENTS.family.md`),
+  - a person slug (from any `household.*[]` entry in `AGENTS.family.md` whose optional `slug:` field is set),
+  - a pet slug (from `pets:` in `AGENTS.family.md`),
+  - the literal `family`.
+
+  Inside `wiki/children/_template/` and `wiki/family/_examples/`, the literal `_template` is allowed as a subject, **and** slugs declared in `AGENTS.family.md.example` (children, household, pets) are also valid — this lets the reference subtrees demonstrate the non-child-subjects pattern even before the user has populated their own `AGENTS.family.md`.
+- All slugs declared across the three registries in `AGENTS.family.md` (children, household people, pets) share one flat global namespace and MUST be unique. Duplicate slugs are **Critical** — they make `subjects:` entries ambiguous.
 - `status` ∈ {active, draft, stale, archived, example}.
 - `type` values include standard content types (memory, first, milestone, quote, etc.) plus `index` (for per-directory `index.md` files) and `meta` (for `README.md` and top-level meta pages).
 - `confidence` (if present) ∈ {high, medium, low, speculative}.
@@ -42,7 +49,10 @@ For every `.md` file under `wiki/`:
 ### 2. Placement / subject consistency
 
 - Pages under `wiki/children/<slug>/` MUST include `<slug>` in `subjects:`. Flag as High.
-- Pages under `wiki/family/` MUST have `subjects:` with at least one child slug or `[family]`. Flag as High.
+- Pages under `wiki/family/` MUST have `subjects:` with at least one declared slug (child, person, or pet) or `[family]`. Flag as High.
+- Pages at `wiki/family/pets/<slug>.md` MUST include `<slug>` in `subjects:` if `<slug>` matches a declared pet slug in `AGENTS.family.md`. (Mirrors the per-child-directory rule.) Flag as Medium.
+- Pages at `wiki/family/relatives/<slug>.md` MUST include `<slug>` in `subjects:` if `<slug>` matches a declared person slug in `AGENTS.family.md` (via any `household.*[].slug`). Flag as Medium.
+- Pages at `wiki/family/caregivers/<slug>.md` MUST include `<slug>` in `subjects:` if `<slug>` matches a declared person slug in `AGENTS.family.md`. Flag as Medium.
 - Pages whose title or body names a child by preferred name or nickname but does not list that child in `subjects:` → Medium warning.
 - Pages outside `wiki/children/_template/` and `wiki/family/_examples/` must NOT have `status: example`. Flag as High — the `example` status is reserved for the reference subtrees only.
 
@@ -91,7 +101,7 @@ Plus the classic orphan check:
 ### 9. Typos (prose only)
 
 - Run a spellcheck over prose body (skip frontmatter, code blocks, link targets, and tables).
-- Whitelist all entries from the `family_vocabulary:` list in `AGENTS.family.md`, plus `avoid_words` and custom vocab from the current user's `AGENTS.local.md` `tone_override`, plus all child slugs / preferred names / nicknames.
+- Whitelist all entries from the `family_vocabulary:` list in `AGENTS.family.md`, plus `avoid_words` and custom vocab from the current user's `AGENTS.local.md` `tone_override`, plus all child slugs / preferred names / nicknames, plus any declared person slugs and pet slugs and their `preferred_name` / `nicknames` from `household.*[]` and `pets:` in `AGENTS.family.md`.
 - Flag possible misspellings as Low.
 
 ### 10. Cross-child consistency

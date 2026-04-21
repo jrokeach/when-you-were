@@ -100,6 +100,7 @@ Ask enough to populate `AGENTS.family.md`. Don't interrogate — cover the essen
 - Tone: does the user want warm prose, clinical, terse, playful? Any words they want you to avoid?
 - Sensitive topics: losses, medical conditions, family conflict, custody arrangements — flag anything you should handle with extra care.
 - Family vocabulary: invented words, internal nicknames, pet names the lint skill's spellchecker should ignore.
+- **Later (optional, don't interview for this on day one):** if the user eventually wants parents, grandparents, caregivers, or pets to appear as first-class subjects in `subjects:` (queryable as "everything about Grandma M" or "everything about Biscuit"), they can add `slug:` values to the `household.*` entries or populate `pets:` in `AGENTS.family.md`. Mention this as a possibility, but don't ask for it during bootstrap — it's an opt-in they can add whenever they're ready.
 
 Copy `AGENTS.family.md.example` to `AGENTS.family.md` (if it doesn't already exist as a placeholder) and fill in the YAML schema with the user's answers. Show the user the result for corrections before you treat it as canonical.
 
@@ -187,16 +188,22 @@ This is the most important structural idea in this KB. Read carefully.
 
 ### The `subjects:` frontmatter field
 
-Every content page has a `subjects:` list declaring which kid(s) or whether the whole family is the subject:
+Every content page has a `subjects:` list declaring which entity (or entities) the page is about. Subject values are flat slugs drawn from any registry declared in `AGENTS.family.md` — children, household people (where an optional `slug:` has been set on the entry), or pets — plus the literal `family` for whole-family content. Slugs are globally unique across all three registries.
 
 ```yaml
 subjects: [ava]                    # purely Ava's page
 subjects: [ava, noah]              # both kids
 subjects: [family]                 # whole-family content (homes, traditions, household lore)
 subjects: [ava, noah, family]      # a shared event that's also a family milestone
+subjects: [biscuit]                # purely about the dog
+subjects: [biscuit, ava]           # the dog, with Ava as secondary subject
+subjects: [grandma-m, family]      # a grandparent, framed as family-level content
+subjects: [mom]                    # a parent's own profile / milestone / reflection
 ```
 
-When the user asks "show me everything about Noah," search `subjects:` across the entire wiki — don't just walk `children/noah/`. Per-child directories are a *placement convention*, not the query mechanism.
+Non-child subjects (pets, parents, grandparents, caregivers) are **opt-in**: they only become valid subjects once a `slug:` is declared for them in `AGENTS.family.md`. An entry without a slug stays as unstructured context; the page shape is unchanged. See "Non-child subjects (optional)" in the placement decision tree below.
+
+When the user asks "show me everything about Noah," search `subjects:` across the entire wiki — don't just walk `children/noah/`. Per-child directories are a *placement convention*, not the query mechanism. The same query works for any declared slug: "show me everything about Biscuit" matches on `subjects: [biscuit, ...]` regardless of which directory the page lives in.
 
 ### Placement decision tree
 
@@ -220,6 +227,18 @@ When you're filing a new page, decide in this order:
 
 **Always explain your placement choice when filing new content** so the user can correct it. Something like: *"Filing this as a shared family trip under family/trips/. Ava and Noah both listed as subjects. If you'd rather have per-kid experience pages too, say the word."*
 
+### Non-child subjects (optional)
+
+Pets and tracked non-children (parents, grandparents, caregivers) can appear in `subjects:` if a slug has been declared for them in `AGENTS.family.md` — a `slug:` field on a `household.*` entry, or an entry in the `pets:` block. Canonical pages about them still live in the existing directories: `wiki/family/pets/`, `wiki/family/relatives/`, `wiki/family/caregivers/`. **Non-children do not get their own top-level directories.** This feature is a subject-namespace extension, nothing more.
+
+Use non-child subjects for pages that are **about** that person or pet: a pet profile, a pet's rescue story, a grandparent's visit, a parent's own milestone or reflection. When the content is primarily about a child — even if a pet or a grandparent is in it — file under `children/<slug>/` as usual and list the non-child as a *secondary* subject.
+
+*Examples:*
+- `family/pets/biscuit.md` → `subjects: [biscuit, family]` (the canonical profile page for the family dog).
+- `family/relatives/grandma-m.md` → `subjects: [grandma-m, family]`.
+- `children/ava/memories/2024-biscuit-rescue.md` → `subjects: [ava, biscuit]` (Ava's memory of the day we brought Biscuit home; filed under Ava because it's her memory, with Biscuit as secondary subject).
+- `family/lore/2025-grandma-m-funeral.md` → `subjects: [grandma-m, family]` (the event page; per-child reflections still go under each kid's directory per rule 3 above).
+
 ### Reciprocal linking
 
 When a page in one child's directory names a sibling, add a link to the sibling's `profile.md` (or to the specific page being referenced). The lint skill enforces this.
@@ -234,7 +253,7 @@ When a page in one child's directory names a sibling, add a link to the sibling'
 ---
 title: "Plain-language page title"
 type: <page-type>               # e.g. memory, first, milestone, quote, preference, etc.
-subjects: [<child-slug> | family, ...]
+subjects: [<slug> | family, ...]   # <slug> is any declared child/person/pet slug from AGENTS.family.md
 ages: {<child-slug>: "<years-months>", ...}   # optional but encouraged on dated content
 date: YYYY-MM-DD                # date the event happened, when applicable
 date_recorded: YYYY-MM-DD       # when the page was written
@@ -274,7 +293,7 @@ Family categories live under `family/`:
 
 `homes`, `caregivers`, `traditions`, `lore`, `trips`, `relatives`, `pets`, `shared-memories`, `shared-firsts`, `shared-milestones`, `sibling-dynamics`.
 
-Note: `family/pets/` holds the canonical page for a family pet. Each child may also have a `children/<slug>/pets/` page about their specific relationship with that pet — cross-linked but not duplicated.
+Note: `family/pets/` holds the canonical page for a family pet. Each child may also have a `children/<slug>/pets/` page about their specific relationship with that pet — cross-linked but not duplicated. If the pet has a slug declared in `AGENTS.family.md`, both the canonical page (`family/pets/<pet-slug>.md`) and any per-child pet page should list the pet slug in `subjects:`. That way, "show me everything about Biscuit" naturally surfaces both.
 
 See `wiki/children/_template/` and `wiki/family/*/README.md` for the shape of each.
 

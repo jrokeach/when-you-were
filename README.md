@@ -89,6 +89,8 @@ The scaffold ships with a rich set of page types — both obvious (firsts, miles
 
 Multi-child by default. Shared content (family trips, sibling dynamics, a grandparent's funeral) is handled through a **`subjects:`** frontmatter field rather than directory duplication. See the "Shared / cross-child content" section of [`AGENTS.md`](AGENTS.md) for how that works.
 
+Pets and non-child people (parents, grandparents, caregivers) can also optionally be tracked as first-class subjects — add a slug to their entry in `AGENTS.family.md` and they become queryable the same way as children ("show me everything about Biscuit" or "…about Grandma M"). Opt-in per entity; non-children without a declared slug stay as unstructured context.
+
 ## Contributing / forking
 
 This is a scaffold. If you fork it with improvements to the structure, AGENTS.md, or lint skill, PRs welcome — but **never** push a fork that contains your family's actual content. `AGENTS.local.md` and `AGENTS.overlay.md` are gitignored so they won't accidentally travel with a fork; your real content under `wiki/children/<slug>/`, `AGENTS.family.md`, and `raw/` should only exist in your private instance. The template itself ships empty of family data. The optional `AGENTS.overlay.md` layer is gitignored; any host application's overlay stays in its own instance and will never travel with a fork.

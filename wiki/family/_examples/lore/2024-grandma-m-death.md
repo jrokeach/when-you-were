@@ -1,7 +1,7 @@
 ---
 title: "Grandma M's death, April 2024"
 type: loss
-subjects: [family, _template]
+subjects: [grandma-m, family, _template]
 date: 2024-04-11
 date_recorded: 2024-05-02
 tags: [loss, death, family, handle-with-care]

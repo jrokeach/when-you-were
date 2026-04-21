@@ -1,7 +1,7 @@
 ---
 title: "Biscuit"
 type: pet
-subjects: [family, _template]
+subjects: [biscuit, family, _template]
 tags: [pet, dog]
 confidence: high
 status: example
