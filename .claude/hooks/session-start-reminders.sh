@@ -4,6 +4,7 @@
 # Emits gentle reminders to the agent when:
 #   - AGENTS.family.md does not yet exist  (run bootstrap)
 #   - AGENTS.local.md does not yet exist  (run bootstrap)
+#   - AGENTS.overlay.md is present        (read it after AGENTS.md)
 #   - .agents-local-last-prompt is missing or older than 14 days (capture nudge)
 #   - .agents-last-lint is missing or older than 30 days (lint nudge)
 #
@@ -42,6 +43,10 @@ if [[ ! -f "AGENTS.family.md" ]]; then
 elif grep -q "Not yet filled in — run the Bootstrap flow" AGENTS.family.md 2>/dev/null; then
   REMINDERS+=("AGENTS.family.md is still the placeholder — run the Bootstrap flow (family interview: children, household, homes, tone, sensitive topics, vocabulary).")
   NEEDS_BOOTSTRAP=1
+fi
+
+if [[ -f "AGENTS.overlay.md" ]]; then
+  REMINDERS+=("AGENTS.overlay.md is present — layer 2 of the AGENTS chain. Read it after AGENTS.md and before AGENTS.family.md. See the \"Interpreting the overlay\" section in AGENTS.md for how to act on its fields.")
 fi
 
 if (( NEEDS_BOOTSTRAP == 0 )); then

@@ -37,7 +37,7 @@ preferences:
 
 **Default (both flags `false`):** the agent stages changes and shows you a diff, but waits for your approval before running `git commit` or `git push`. Flip either flag to `true` if you trust the agent to complete the git operation on its own.
 
-**Fail-closed:** these flags are **only** permissive when they are **explicitly present and set to `true`**. If this file doesn't exist, or if a flag is absent / commented out / set to anything other than `true`, the agent must treat it as `false` and ask before committing or pushing. An absent key is not consent. Don't rely on a verbal "yeah go ahead and auto-commit from now on" — either flip the flag here, or approve each operation as it happens.
+**Fail-closed with layered resolution.** Precedence follows the standard AGENTS chain (core ← overlay ← family ← local): if `AGENTS.local.md` sets `auto_commit` / `auto_push` explicitly — to `true` OR `false` — local wins. If `AGENTS.local.md` is silent on a key, `AGENTS.overlay.md` is consulted as a fallback (a host application may grant these flags via its overlay). If neither file sets it, the default is `false`. `privacy_acknowledged` is local-only — the overlay cannot grant per-user consent, and no flag is permissive until `privacy_acknowledged: true` is set in this file. Don't rely on a verbal "yeah go ahead and auto-commit from now on" — either flip the flag here, or approve each operation as it happens.
 
 **Both flags gated on privacy.** Both `auto_commit` and `auto_push` require `privacy_acknowledged: true` above. Even with `auto_push: true`, the agent will refuse to push to a public remote.
 

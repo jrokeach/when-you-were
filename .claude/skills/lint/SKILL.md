@@ -35,12 +35,13 @@ For every `.md` file under `wiki/`:
 - Required fields present: `title`, `type`, `subjects`, `status`.
 - `subjects:` entries match one of:
   - a known child slug (from `children:` in `AGENTS.family.md`),
-  - a person slug (from any `household.*[]` entry in `AGENTS.family.md` whose optional `slug:` field is set),
+  - a person slug (from an entry in `household.parents[]`, `household.other_members[]`, or `household.close_circle[]` in `AGENTS.family.md` whose optional `slug:` field is set),
   - a pet slug (from `pets:` in `AGENTS.family.md`),
   - the literal `family`.
 
   Inside `wiki/children/_template/` and `wiki/family/_examples/`, the literal `_template` is allowed as a subject, **and** slugs declared in `AGENTS.family.md.example` (children, household, pets) are also valid — this lets the reference subtrees demonstrate the non-child-subjects pattern even before the user has populated their own `AGENTS.family.md`.
-- All slugs declared across the three registries in `AGENTS.family.md` (children, household people, pets) share one flat global namespace and MUST be unique. Duplicate slugs are **Critical** — they make `subjects:` entries ambiguous.
+- All slugs declared across the three registries in `AGENTS.family.md` (children, household people from `parents` / `other_members` / `close_circle`, and pets) share one flat global namespace and MUST be unique. Duplicate slugs are **Critical** — they make `subjects:` entries ambiguous.
+- Every declared `slug:` (on any `household.*[]` entry or any `pets:` entry) must be kebab-case: lowercase ASCII letters, digits, and hyphens; no spaces, underscores, or uppercase. Same rule as child slugs. Flag violations as **High** — a non-kebab slug can't safely appear in filenames or `subjects:` arrays.
 - `status` ∈ {active, draft, stale, archived, example}.
 - `type` values include standard content types (memory, first, milestone, quote, etc.) plus `index` (for per-directory `index.md` files) and `meta` (for `README.md` and top-level meta pages).
 - `confidence` (if present) ∈ {high, medium, low, speculative}.

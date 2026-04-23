@@ -22,14 +22,16 @@ A short orientation to the companion files:
 
 Most instances will never have an overlay — self-hosted scaffolds work fine without one. If `AGENTS.overlay.md` *is* present at the repo root, treat its fields as follows. The expected YAML shape is in `AGENTS.overlay.md.example`.
 
+- **`overlay_name:`** / **`overlay_version:`** — identification metadata. Surface these when the user asks what overlay is installed ("Overlay: `<name>` v`<version>`"); no other behavioral effect.
 - **`notes:`** — always read as prose context before proceeding through the rest of the layer chain. An overlay's `notes:` field typically explains where the overlay came from, what host application installed it, and any environment-specific expectations.
 - **`tone_override:`** — if any sub-field is set (`register`, `pov`, `avoid_words`, `preferred_quirks`), it **supersedes** the matching sub-field in `AGENTS.family.md`'s `tone:` block when writing prose. A user-level `tone_override:` in `AGENTS.local.md` still wins over the overlay — the layering is core ← overlay ← family ← local.
 - **`capabilities:`** — each entry names a feature and whether it's `enabled:`. When a capability is disabled, do not use that feature even if AGENTS.md documents it; when it's enabled, the overlay is granting (or confirming) a specific behavior. Capabilities are host-app-specific and named by the host; agents should surface a capability's `notes:` when the user asks what the overlay is doing.
 - **`feature_flags:`** — a free-form key/value map the host application reads. Agents are not expected to act on these directly unless the user asks about them; surface them as "the overlay has these flags set" when relevant.
+- **`preferences.auto_commit:`** / **`preferences.auto_push:`** — a host application may grant these flags at the overlay layer. Precedence follows the standard chain: if `AGENTS.local.md` sets the same key (to `true` OR `false`), local wins; if local is silent, the overlay's value applies; if neither sets it, the fail-closed default is `false`. `privacy_acknowledged:` is **not** overlay-settable — it is per-user consent and must live in `AGENTS.local.md`. The pre-git-guard hook reads both files and enforces this precedence.
 - **`instance_protected_paths:`** — a list of upstream-tracked paths the host application or user has customized and wants `/sync-scaffold` to skip on the next sync. When running `/sync-scaffold`, honor this list. Do not write outside this list's protection; the list describes what sync should *skip*, not a broader write grant.
-- **`downstream:`** — the next file in the reading chain after the overlay. Always `AGENTS.family.md` in the current scaffold; the field exists so host applications can assert they know the chain, not so they can rewrite it. If `downstream:` names anything other than `AGENTS.family.md`, treat it as a bug in the overlay and surface to the user.
+- **`downstream:`** — self-assertion by the overlay that it knows the next layer in the chain. Always `AGENTS.family.md` in the current scaffold. If the field names anything else, warn the user that the overlay appears out of date with the scaffold's chain model, then proceed using `AGENTS.family.md` regardless — the overlay cannot actually rewrite the chain, only assert knowledge of it.
 
-An overlay cannot grant itself permissions the core schema refuses (e.g. the overlay cannot turn off the public-repo warning directive, cannot relax the fail-closed auto-commit rule, and cannot expand the write-scope rule). Overlays refine behavior within the core schema; they do not override safety gates.
+An overlay cannot grant itself permissions the core schema refuses (e.g. the overlay cannot turn off the public-repo warning directive, cannot grant `privacy_acknowledged`, and cannot expand the write-scope rule). Overlays refine behavior within the core schema; they do not override safety gates.
 
 ### Overlay-injected skills, hooks, and settings
 
@@ -199,23 +201,24 @@ In Claude Code, a `SessionStart` hook may inject these reminders into context au
 
 ### Fail-closed permission rule (read this carefully)
 
-Autonomous `git commit` and `git push` are gated by explicit flags in `AGENTS.local.md`. **There is no implicit default of `true`.** The rules:
+Autonomous `git commit` and `git push` are gated by explicit flags resolved through the AGENTS layer chain. **There is no implicit default of `true`.** The rules:
 
-1. **Missing file ⇒ no permission.** If `AGENTS.local.md` does not exist at the repo root, you must not run `git commit` or `git push` on your own. Run the Bootstrap flow first.
-2. **Missing flag ⇒ no permission.** If `auto_commit` or `auto_push` is not explicitly present and set to `true` in `AGENTS.local.md`, treat it as `false`. An absent key is *not* consent.
-3. **Re-check live, not from memory.** Before every autonomous `git commit` or `git push`, re-read the current value of the flag in `AGENTS.local.md`. Do not rely on a recollection from earlier in the session — the user may have flipped the flag since, or (more commonly) you may be misremembering the initial read.
-4. **User-requested commits still need confirmation.** If the user asks you in chat to "commit this" or "push this," that is permission for *that* specific commit or push — not a standing grant. Confirm the message and scope, run the command, and stop. Do not infer blanket auto-commit from a one-time ask.
-5. **Both flags gated on privacy.** Both `auto_commit: true` and `auto_push: true` require `privacy_acknowledged: true` to take effect. If privacy hasn't been acknowledged, treat the flags as `false` regardless of their stored value.
+1. **Missing `AGENTS.local.md` ⇒ no permission.** If `AGENTS.local.md` does not exist at the repo root, you must not run `git commit` or `git push` on your own. Run the Bootstrap flow first. `privacy_acknowledged` can only live in `AGENTS.local.md` — an overlay cannot grant per-user consent.
+2. **Layered resolution for `auto_commit` / `auto_push`.** Precedence follows core ← overlay ← family ← local. If `AGENTS.local.md` sets the key (to `true` OR `false`), local wins. If local is silent, `AGENTS.overlay.md` is consulted as a fallback (a host application may grant these flags via its overlay). If neither sets it, treat it as `false`.
+3. **Missing or negative resolution ⇒ no permission.** After layer resolution, if `auto_commit` / `auto_push` does not resolve to `true`, treat it as `false`. An absent or commented-out key is *not* consent.
+4. **Re-check live, not from memory.** Before every autonomous `git commit` or `git push`, re-read the effective values from `AGENTS.local.md` (and `AGENTS.overlay.md` if local is silent). Do not rely on a recollection from earlier in the session — the user may have flipped the flag since, or (more commonly) you may be misremembering the initial read.
+5. **User-requested commits still need confirmation.** If the user asks you in chat to "commit this" or "push this," that is permission for *that* specific commit or push — not a standing grant. Confirm the message and scope, run the command, and stop. Do not infer blanket auto-commit from a one-time ask.
+6. **Both flags gated on privacy.** Both resolved `auto_commit: true` and `auto_push: true` require `privacy_acknowledged: true` in `AGENTS.local.md` to take effect. If privacy hasn't been acknowledged, treat the flags as `false` regardless of their stored value anywhere.
 
 ### Conditions for autonomous commit / push
 
 You may `git commit` on your own only if **all** of these hold:
 - `AGENTS.local.md` exists, and
-- it contains `auto_commit: true`, and
-- it contains `privacy_acknowledged: true`.
+- `auto_commit` resolves to `true` (local explicit wins; else overlay fallback; else `false`), and
+- `AGENTS.local.md` contains `privacy_acknowledged: true`.
 
 You may `git push` on your own only if **all** of the commit conditions hold, **and**:
-- `AGENTS.local.md` contains `auto_push: true`, and
+- `auto_push` resolves to `true` (same layered rule as `auto_commit`), and
 - the remote is verified private (or no remote is configured).
 
 **Never push to a public remote** regardless of flag state — the public-repo warning directive supersedes `auto_push`. If you detect a public remote mid-session, stop and surface the warning before any further git write.

@@ -139,7 +139,7 @@ Explicit "never touch" paths (instance-only; the skill refuses to include these 
 - `.claude/hooks.overlay/**` (gitignored; host-app-injected hook scripts).
 - `.claude/settings.local.json` (gitignored; Claude Code's per-user / overlay settings layer).
 - `.local/**` (gitignored; instance-only scratch/upgrade notes).
-- `wiki/family/*/index.md` (per-category content listings; scaffold ships initial placeholders, instance maintains thereafter — same class as `wiki/index.md`).
+- `wiki/family/*/index.md` (per-category content listings — `*` means real category dirs like `pets/`, `relatives/`, `caregivers/`, etc. `_examples/index.md` and `_template/index.md` are part of the reference subtrees and ARE upstream-tracked). Scaffold ships initial placeholders for real categories; instance maintains thereafter — same class as `wiki/index.md`.
 - `wiki/children/<real-slug>/**/index.md` (lazy-created per-subcat indexes in real child directories).
 - `wiki/index.md`, `wiki/log.md`, `wiki/audit-log.md`, `wiki/contradictions.md`, `wiki/todo.md`, `wiki/timeline.md`.
 - Plus any paths listed in `AGENTS.overlay.md`'s `instance_protected_paths:` field (host-declared; see step 2.5).

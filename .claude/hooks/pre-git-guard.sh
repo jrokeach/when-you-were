@@ -3,10 +3,19 @@
 #
 # Enforces the fail-closed permission rule from AGENTS.md "Committing & pushing":
 #
-#   - `git commit` is blocked unless AGENTS.local.md exists AND contains both
-#     `auto_commit: true` and `privacy_acknowledged: true`.
+#   - `git commit` is blocked unless `auto_commit: true` AND
+#     `privacy_acknowledged: true` are in effect.
 #   - `git push` is blocked unless the commit conditions are met AND
-#     `auto_push: true` is also set.
+#     `auto_push: true` is also in effect.
+#
+# Layer precedence (core ← overlay ← family ← local):
+#   - `auto_commit` / `auto_push` — if AGENTS.local.md sets the key (to true
+#     OR false), local wins. If local is silent on the key, AGENTS.overlay.md
+#     is consulted as a fallback. If neither sets it, the fail-closed default
+#     (false) applies.
+#   - `privacy_acknowledged` — AGENTS.local.md only. The overlay cannot grant
+#     per-user consent on behalf of the user. If AGENTS.local.md is absent,
+#     commit/push are blocked regardless of overlay state.
 #
 # The hook runs before every Bash tool call. If the command contains
 # `git commit` or `git push` and the conditions aren't met, it exits with
@@ -76,9 +85,11 @@ if (( is_commit == 0 && is_push == 0 )); then
 fi
 
 # -----------------------------------------------------------------------------
-# Check AGENTS.local.md flags.
+# Check flag values from AGENTS.local.md (primary) and AGENTS.overlay.md
+# (fallback for auto_commit / auto_push only).
 # -----------------------------------------------------------------------------
 LOCAL="AGENTS.local.md"
+OVERLAY="AGENTS.overlay.md"
 
 if [[ ! -f "$LOCAL" ]]; then
   {
@@ -90,10 +101,11 @@ if [[ ! -f "$LOCAL" ]]; then
     echo "  2. acknowledged privacy (privacy_acknowledged: true),"
     echo "  3. explicitly set auto_commit: true (and auto_push: true if pushing)."
     echo ""
-    echo "If the user just asked you to make this commit, stage the changes and ask them"
-    echo "to run 'git commit' themselves. Do NOT re-run with a workaround — the block"
-    echo "exists to catch the exact failure mode where an agent assumes consent it"
-    echo "wasn't given."
+    echo "privacy_acknowledged is per-user consent and must live in AGENTS.local.md —"
+    echo "an overlay cannot grant it on the user's behalf. If the user just asked you"
+    echo "to make this commit, stage the changes and ask them to run 'git commit'"
+    echo "themselves. Do NOT re-run with a workaround — the block exists to catch the"
+    echo "exact failure mode where an agent assumes consent it wasn't given."
     echo ""
     echo "(Scaffold contributor? Set AGENT_GIT_APPROVED=1 in your shell before launching"
     echo "Claude Code. Do not set this in a real family-KB instance.)"
@@ -101,28 +113,69 @@ if [[ ! -f "$LOCAL" ]]; then
   exit 2
 fi
 
-# Grep for flag values. Accept `key: true` with flexible whitespace.
-grep_flag() {
-  local key="$1"
-  grep -Eq "^[[:space:]]*${key}:[[:space:]]*true([[:space:]]|#|$)" "$LOCAL"
+# True if FILE contains a line of the form `<key>: true` (any indentation).
+grep_true_in() {
+  local file="$1"; local key="$2"
+  [[ -f "$file" ]] || return 1
+  grep -Eq "^[[:space:]]*${key}:[[:space:]]*true([[:space:]]|#|$)" "$file"
 }
 
-priv_ok=0; grep_flag "privacy_acknowledged" && priv_ok=1
-commit_ok=0; grep_flag "auto_commit"          && commit_ok=1
-push_ok=0;   grep_flag "auto_push"            && push_ok=1
+# True if FILE mentions `<key>:` at all (any value). Used to detect whether
+# a layer is explicit on a key vs. silent — explicit local wins over overlay
+# regardless of value.
+grep_key_set_in() {
+  local file="$1"; local key="$2"
+  [[ -f "$file" ]] || return 1
+  grep -Eq "^[[:space:]]*${key}:" "$file"
+}
+
+# Layered flag resolution for auto_commit / auto_push.
+# Local wins if it's explicit. Otherwise overlay is consulted. Otherwise false.
+resolve_flag() {
+  local key="$1"
+  if grep_key_set_in "$LOCAL" "$key"; then
+    grep_true_in "$LOCAL" "$key" && return 0 || return 1
+  fi
+  grep_true_in "$OVERLAY" "$key" && return 0 || return 1
+}
+
+# privacy_acknowledged is local-only — no overlay fallback.
+priv_ok=0;   grep_true_in "$LOCAL" "privacy_acknowledged" && priv_ok=1
+commit_ok=0; resolve_flag "auto_commit" && commit_ok=1
+push_ok=0;   resolve_flag "auto_push"   && push_ok=1
+
+# Dump an effective-state line for a key, showing which file (if any) set it.
+# Usage: show_effective_state <key> <file1> [<file2> ...]
+show_effective_state() {
+  local key="$1"; shift
+  local f
+  for f in "$@"; do
+    if [[ -f "$f" ]] && grep -Eq "^[[:space:]]*${key}:" "$f"; then
+      local value
+      # Trim leading whitespace + "<key>:" and trailing whitespace, leaving just the value.
+      value="$(grep -E "^[[:space:]]*${key}:" "$f" | head -1 | sed -E "s/^[[:space:]]*${key}:[[:space:]]*//; s/[[:space:]]*$//")"
+      [[ -z "$value" ]] && value="(empty)"
+      echo "  ${key}: ${value} (from ${f})"
+      return 0
+    fi
+  done
+  echo "  ${key}: (unset in AGENTS.local.md${2:+ and AGENTS.overlay.md})"
+}
 
 # Commit gate.
 if (( is_commit == 1 )); then
   if (( commit_ok != 1 || priv_ok != 1 )); then
     {
-      echo "BLOCKED: git commit attempted, but AGENTS.local.md does not grant autonomous commit."
+      echo "BLOCKED: git commit attempted, but the layered config does not grant autonomous commit."
       echo ""
-      echo "Current state:"
-      echo "  auto_commit:          $(grep -E '^[[:space:]]*auto_commit:' "$LOCAL" | head -1 || echo '(unset)')"
-      echo "  privacy_acknowledged: $(grep -E '^[[:space:]]*privacy_acknowledged:' "$LOCAL" | head -1 || echo '(unset)')"
+      echo "Effective state:"
+      show_effective_state "auto_commit" "$LOCAL" "$OVERLAY"
+      show_effective_state "privacy_acknowledged" "$LOCAL"
       echo ""
-      echo "Both auto_commit and privacy_acknowledged must be explicitly 'true' before you"
-      echo "may run git commit on your own. See AGENTS.md \"Committing & pushing\"."
+      echo "auto_commit must resolve to 'true' (from AGENTS.local.md, or from"
+      echo "AGENTS.overlay.md if local is silent), AND privacy_acknowledged must be"
+      echo "'true' in AGENTS.local.md. See AGENTS.md \"Committing & pushing\" and"
+      echo "\"Interpreting the overlay\" for precedence details."
       echo ""
       echo "If the user asked for this specific commit: stage the changes, show them the"
       echo "diff, and have them run 'git commit' themselves. Do not ask them to flip the"
@@ -136,14 +189,15 @@ fi
 if (( is_push == 1 )); then
   if (( push_ok != 1 || priv_ok != 1 )); then
     {
-      echo "BLOCKED: git push attempted, but AGENTS.local.md does not grant autonomous push."
+      echo "BLOCKED: git push attempted, but the layered config does not grant autonomous push."
       echo ""
-      echo "Current state:"
-      echo "  auto_push:            $(grep -E '^[[:space:]]*auto_push:' "$LOCAL" | head -1 || echo '(unset)')"
-      echo "  privacy_acknowledged: $(grep -E '^[[:space:]]*privacy_acknowledged:' "$LOCAL" | head -1 || echo '(unset)')"
+      echo "Effective state:"
+      show_effective_state "auto_push" "$LOCAL" "$OVERLAY"
+      show_effective_state "privacy_acknowledged" "$LOCAL"
       echo ""
-      echo "Both auto_push and privacy_acknowledged must be explicitly 'true' before you"
-      echo "may run git push on your own. See AGENTS.md \"Committing & pushing\"."
+      echo "auto_push must resolve to 'true' (from AGENTS.local.md, or from"
+      echo "AGENTS.overlay.md if local is silent), AND privacy_acknowledged must be"
+      echo "'true' in AGENTS.local.md. See AGENTS.md \"Committing & pushing\"."
       echo ""
       echo "Never push to a public remote regardless of flag state."
     } >&2

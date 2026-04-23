@@ -44,6 +44,21 @@ capabilities:                       # optional: host-app-named features, each on
 
 feature_flags: {}                   # optional: free-form key/value the host app reads at runtime
 
+preferences:                        # optional: host-app-level agent preferences. Mirrors the
+                                    # same keys in AGENTS.local.md. AGENTS.local.md wins when
+                                    # both files set the same key (standard layer precedence:
+                                    # core ← overlay ← family ← local). If AGENTS.local.md is
+                                    # silent on a key, the overlay's value applies. If neither
+                                    # sets it, the fail-closed default (false) applies.
+                                    #
+                                    # Only `auto_commit` and `auto_push` are honored from the
+                                    # overlay — `privacy_acknowledged` is per-user consent and
+                                    # must live in AGENTS.local.md regardless of overlay state.
+  auto_commit: false                # host app can grant auto-commit by default; local user can
+                                    # still disable by setting `auto_commit: false` in their
+                                    # AGENTS.local.md.
+  auto_push: false                  # same rules as auto_commit.
+
 instance_protected_paths: []        # optional: upstream-tracked paths the host / user has
                                     # customized and wants /sync-scaffold to skip on the next
                                     # sync. E.g. [README.md, wiki/family/trips/README.md].

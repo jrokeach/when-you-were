@@ -26,6 +26,7 @@ These files define the *scaffold*. Improvements to them come from upstream and s
 - `AGENTS.overlay.md.example` — schema template for the optional overlay layer.
 - `AGENTS.local.md.example` — schema template for per-user preferences.
 - `PRIVACY.md`, `LICENSE.md`, `CONTRIBUTING.md`, `UPSTREAM.md`, `STORAGE.md` — scaffold documentation.
+- `README.md` — scaffold introduction. Upstream-tracked by default. If you've rebranded or customized it for your family, list it under `instance_protected_paths:` in `AGENTS.overlay.md` (see [`AGENTS.overlay.md.example`](AGENTS.overlay.md.example)) so `/sync-scaffold` skips it on future pulls.
 - `.gitignore` — stamp-file exclusions, OS noise, and the `AGENTS.local.md` / `AGENTS.overlay.md` / `.local/` ignore rules themselves. Downstream instances pick up new ignore rules via sync.
 - `.claude/**` — hooks, skills, settings for Claude Code integration.
 - `wiki/children/_template/**` (including `**/index.md` reference examples) — fictional "Sam" reference subtree.
@@ -50,7 +51,6 @@ These files are yours. The sync process never touches them.
 - `raw/**` — everything except the `README.md` / `.gitkeep` already listed.
 - `.agents-*` stamp files (gitignored anyway).
 - `.local/` — gitignored scratch space for instance-only docs (upgrade notes, private plans). Never synced, never published.
-- `README.md` — if you've customized it for your family. If not, it's upstream-tracked.
 
 ### README vs. index inside `wiki/family/<cat>/`
 
