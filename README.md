@@ -31,7 +31,7 @@ The scaffold is just markdown + YAML frontmatter + an `AGENTS.md`. That means lo
 
 For when you sit down at your computer to ingest a batch of material, lint, or reorganize.
 
-- **Claude Code** — first-class support. `.claude/` ships with a `SessionStart` hook that nudges you on stale captures and lint cycles, plus `/lint` and `/sync-scaffold` skills.
+- **Claude Code** — first-class support. `.claude/` ships with a `SessionStart` hook that nudges you on stale captures and lint cycles, plus compatibility copies of the `/lint` and `/sync-scaffold` skills.
 - **OpenAI Codex (CLI)** — reads `AGENTS.md` natively. Works out of the box.
 - **GitHub Copilot (chat)** — reads `AGENTS.md` in most integrations; point it at the file if it isn't auto-detected.
 - **Cursor** — add a one-liner to `.cursorrules` or project settings referencing `AGENTS.md`.
@@ -76,10 +76,14 @@ For asking questions of the archive.
 - [`AGENTS.family.md.example`](AGENTS.family.md.example) — template for family-level data (children, household, homes, tone, sensitive topics, family vocabulary). Bootstrap copies this to `AGENTS.family.md` and fills it in. Layer 3 of the chain.
 - [`AGENTS.overlay.md.example`](AGENTS.overlay.md.example) — template for the optional layer-2 overlay. Self-hosted users can ignore this; host applications may inject a gitignored `AGENTS.overlay.md` at setup.
 - [`AGENTS.local.md.example`](AGENTS.local.md.example) — template for **your** user- and machine-specific preferences (auto-commit, auto-push, prompt cadences, personal tone overrides). Copy to `AGENTS.local.md` (gitignored) so different family members and machines can keep different preferences without conflict. Layer 4 of the chain.
+- [`OVERLAY_CONTRACT.md`](OVERLAY_CONTRACT.md) — public contract for host applications that install a private overlay.
+- [`UPSTREAM.manifest.yml`](UPSTREAM.manifest.yml) and [`schema/`](schema/) — machine-readable path and data contracts for tools that need to validate or sync the scaffold.
+- [`scripts/validate_scaffold.py`](scripts/validate_scaffold.py) — dependency-free validator used by CI to keep the public template coherent.
 - [`PRIVACY.md`](PRIVACY.md) — privacy guidance. Read before committing anywhere.
 - [`wiki/`](wiki/index.md) — where your knowledge base lives. Start at [`wiki/index.md`](wiki/index.md).
 - [`raw/`](raw/) — drop zone for source material (photos, scans, transcripts) the agent can ingest.
-- [`.claude/`](.claude/) — Claude Code integration (a `SessionStart` hook + a `/lint` skill). Safe to ignore if you use a different agent.
+- [`.agents/`](.agents/) — agent-agnostic scaffold skills.
+- [`.claude/`](.claude/) — Claude Code integration (hooks plus compatibility copies of the skills). Safe to ignore if you use a different agent.
 
 ## Categories covered
 

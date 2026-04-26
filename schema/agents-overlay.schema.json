@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jrokeach/when-you-were/schema/agents-overlay.schema.json",
+  "title": "When You Were AGENTS.overlay.md YAML payload",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "overlay_name": { "type": "string" },
+    "overlay_version": { "type": "string" },
+    "tone_override": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "register": { "type": "string" },
+        "pov": { "type": "string" },
+        "avoid_words": { "type": "array", "items": { "type": "string" } },
+        "preferred_quirks": { "type": "string" }
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["name", "enabled"],
+        "properties": {
+          "name": { "type": "string" },
+          "enabled": { "type": "boolean" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "feature_flags": { "type": "object", "additionalProperties": true },
+    "preferences": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "auto_commit": { "type": "boolean" },
+        "auto_push": { "type": "boolean" }
+      }
+    },
+    "instance_protected_paths": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "notes": { "type": "string" },
+    "downstream": { "type": "string", "const": "AGENTS.family.md" }
+  }
+}
+

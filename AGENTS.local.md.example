@@ -41,7 +41,7 @@ preferences:
 
 **Both flags gated on privacy.** Both `auto_commit` and `auto_push` require `privacy_acknowledged: true` above. Even with `auto_push: true`, the agent will refuse to push to a public remote.
 
-In Claude Code, a PreToolUse hook (`.claude/hooks/pre-git-guard.sh`) enforces these rules at the shell layer — it blocks `git commit` and `git push` invocations that aren't sanctioned by the flags. Other harnesses rely on the agent following the prose rule in `AGENTS.md`.
+In Claude Code, a PreToolUse hook (`.claude/hooks/pre-git-guard.sh`) enforces these rules at the shell layer — it blocks `git commit` and `git push` invocations that aren't sanctioned by the flags. Other harnesses and host apps should enforce the same rule from `AGENTS.md` and `UPSTREAM.manifest.yml`.
 
 ## Personal tone overrides
 

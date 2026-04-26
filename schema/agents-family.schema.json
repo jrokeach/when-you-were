@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jrokeach/when-you-were/schema/agents-family.schema.json",
+  "title": "When You Were AGENTS.family.md YAML payload",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "children": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["slug", "preferred_name"],
+        "properties": {
+          "slug": { "$ref": "#/$defs/slug" },
+          "legal_name": { "type": "string" },
+          "preferred_name": { "type": "string" },
+          "nicknames": { "type": "array", "items": { "type": "string" } },
+          "pronouns": { "type": "string" },
+          "birthdate": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "household": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "parents": { "$ref": "#/$defs/personList" },
+        "other_members": { "$ref": "#/$defs/personList" },
+        "close_circle": { "$ref": "#/$defs/personList" }
+      }
+    },
+    "pets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "slug": { "$ref": "#/$defs/slug" },
+          "preferred_name": { "type": "string" },
+          "nicknames": { "type": "array", "items": { "type": "string" } },
+          "species": { "type": "string" },
+          "breed": { "type": "string" },
+          "joined": { "type": "string" },
+          "departed": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "homes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "location": { "type": "string" },
+          "dates": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "tone": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "register": { "type": "string" },
+        "pov": { "type": "string" },
+        "avoid_words": { "type": "array", "items": { "type": "string" } },
+        "preferred_quirks": { "type": "string" }
+      }
+    },
+    "sensitive_topics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "topic": { "type": "string" },
+          "handling": { "type": "string" }
+        }
+      }
+    },
+    "family_vocabulary": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "personList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": { "type": "string" },
+          "relationship": { "type": "string" },
+          "slug": { "$ref": "#/$defs/slug" },
+          "preferred_name": { "type": "string" },
+          "nicknames": { "type": "array", "items": { "type": "string" } },
+          "pronouns": { "type": "string" },
+          "birthdate": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}
+

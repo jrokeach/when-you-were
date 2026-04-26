@@ -78,7 +78,7 @@ An overlay **can**:
 
 - refine tone for agent-written prose,
 - gate host-app-specific capabilities,
-- ship additional skills (`.claude/skills.overlay/`) and hooks (`.claude/hooks.overlay/` + `.claude/settings.local.json`) that coexist with the scaffold's,
+- ship additional skills (`.agents/skills.overlay/`) and hooks (`.agents/hooks.overlay/` + `.agents/settings.local.json`) that coexist with the scaffold's, with optional Claude Code compatibility paths under `.claude/`,
 - declare `instance_protected_paths` so `/sync-scaffold` skips host-customized files.
 
 An overlay **cannot**:
@@ -93,13 +93,14 @@ Safety gates are enforced in `AGENTS.md` (core) and cannot be relaxed by a lower
 
 ## Overlay-injected skills, hooks, and settings
 
-Three gitignored locations are reserved for host-app additions that must not collide with the upstream-tracked `.claude/`:
+Gitignored locations are reserved for host-app additions that must not collide with upstream-tracked scaffold files:
 
-- **`.claude/skills.overlay/`** — host-app skills (any `SKILL.md` inside gets auto-discovered by Claude Code alongside the scaffold's skills).
-- **`.claude/hooks.overlay/`** — host-app hook scripts.
-- **`.claude/settings.local.json`** — Claude Code's built-in gitignored settings layer; register overlay hooks and any per-user tweaks here. Claude Code merges this on top of `.claude/settings.json` automatically.
+- **`.agents/skills.overlay/`** — host-app skills for AGENTS-aware tooling.
+- **`.agents/hooks.overlay/`** — host-app hook scripts or hook descriptors.
+- **`.agents/settings.local.json`** — generic per-user / overlay settings.
+- **`.claude/skills.overlay/`**, **`.claude/hooks.overlay/`**, and **`.claude/settings.local.json`** — Claude Code compatibility paths.
 
-`/sync-scaffold` never touches these three paths. See `UPSTREAM.md` for the full instance-only list.
+`/sync-scaffold` never touches these paths. See `OVERLAY_CONTRACT.md`, `UPSTREAM.md`, and `UPSTREAM.manifest.yml` for the full instance-only list.
 
 ---
 

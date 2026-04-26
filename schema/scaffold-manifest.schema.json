@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jrokeach/when-you-were/schema/scaffold-manifest.schema.json",
+  "title": "When You Were upstream path manifest",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema_version", "scaffold_version", "upstream_tracked"],
+  "properties": {
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "scaffold_version": { "type": "string", "minLength": 1 },
+    "description": { "type": "string" },
+    "classification_precedence": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "upstream_tracked": { "$ref": "#/$defs/pathSet" },
+    "template_seed_instance_files": { "$ref": "#/$defs/pathSetWithDescription" },
+    "instance_only": { "$ref": "#/$defs/pathSet" },
+    "overlay_extension_paths": { "$ref": "#/$defs/pathSet" },
+    "sync_exclusions": { "$ref": "#/$defs/pathSetWithDescription" },
+    "ignored_private_paths": { "$ref": "#/$defs/pathSet" }
+  },
+  "$defs": {
+    "pathSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "exact": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "globs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "pathSetWithDescription": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "description": { "type": "string" },
+        "exact": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "globs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    }
+  }
+}

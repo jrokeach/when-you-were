@@ -49,7 +49,7 @@ Pick one. They are all fine.
 - On first setup, the agent explicitly warns you about public repos and records your acknowledgment.
 - Until you acknowledge, on every session the agent re-checks the git remote and warns if it looks public.
 - Once you acknowledge, the warning can be dismissed permanently (the agent will offer to remove the directive from `AGENTS.md`).
-- The `.gitignore` protects `AGENTS.local.md` (per-user preferences), `AGENTS.overlay.md` (optional host-app overlay, if present), the overlay extension surface (`.claude/skills.overlay/`, `.claude/hooks.overlay/`, `.claude/settings.local.json`), and `.local/` (instance-only docs) — but does **not** protect `AGENTS.family.md` (family details live there) or anything under `wiki/`. The entire repo is still expected to be private — don't treat `.gitignore` as a substitute for a private remote.
+- The `.gitignore` protects `AGENTS.local.md` (per-user preferences), `AGENTS.overlay.md` (optional host-app overlay, if present), the overlay extension surface (`.agents/skills.overlay/`, `.agents/hooks.overlay/`, `.agents/settings.local.json`, plus Claude Code compatibility paths under `.claude/`), `.scaffold-upstream`, and `.local/` (instance-only docs) — but does **not** protect `AGENTS.family.md` (family details live there) or anything under `wiki/`. The entire repo is still expected to be private — don't treat `.gitignore` as a substitute for a private remote.
 
 ## Special considerations
 

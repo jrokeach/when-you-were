@@ -1,0 +1,140 @@
+schema_version: 1
+scaffold_version: "0.2.0"
+
+description: >
+  Machine-readable path contract for the When You Were scaffold. Agents and
+  host applications should treat this file as the structured counterpart to
+  UPSTREAM.md. Prose remains helpful context; this manifest is the path list
+  tooling should read.
+
+classification_precedence:
+  - upstream_tracked
+  - template_seed_instance_files
+  - overlay_extension_paths
+  - ignored_private_paths
+  - instance_only
+
+upstream_tracked:
+  exact:
+    - .agents/skills/lint/SKILL.md
+    - .agents/skills/sync-scaffold/SKILL.md
+    - .claude/hooks/pre-git-guard.sh
+    - .claude/hooks/session-start-reminders.sh
+    - .claude/settings.json
+    - .claude/skills/lint/SKILL.md
+    - .claude/skills/sync-scaffold/SKILL.md
+    - .github/workflows/validate.yml
+    - .gitignore
+    - AGENTS.family.md.example
+    - AGENTS.local.md.example
+    - AGENTS.md
+    - AGENTS.overlay.md.example
+    - CONTRIBUTING.md
+    - LICENSE.md
+    - OVERLAY_CONTRACT.md
+    - PRIVACY.md
+    - README.md
+    - STORAGE.md
+    - UPSTREAM.md
+    - UPSTREAM.manifest.yml
+    - raw/.gitkeep
+    - raw/README.md
+    - schema/agents-family.schema.json
+    - schema/agents-local.schema.json
+    - schema/agents-overlay.schema.json
+    - schema/frontmatter.schema.json
+    - schema/raw-manifest.schema.json
+    - schema/scaffold-manifest.schema.json
+    - scripts/validate_scaffold.py
+  globs:
+    - wiki/children/_template/**
+    - wiki/family/_examples/**
+    - wiki/family/*/README.md
+
+template_seed_instance_files:
+  description: >
+    These files are tracked in the public template so a new clone has a useful
+    starting point, but downstream sync tooling must treat them as instance
+    state after bootstrap.
+  exact:
+    - AGENTS.family.md
+    - wiki/README.md
+    - wiki/audit-log.md
+    - wiki/contradictions.md
+    - wiki/index.md
+    - wiki/log.md
+    - wiki/timeline.md
+    - wiki/todo.md
+  globs:
+    - wiki/family/*/index.md
+
+instance_only:
+  exact:
+    - AGENTS.family.md
+    - AGENTS.local.md
+    - AGENTS.overlay.md
+    - .agents-last-lint
+    - .agents-local-last-prompt
+    - .scaffold-upstream
+  globs:
+    - .local/**
+    - raw/**
+    - wiki/children/<real-slug>/**
+    - wiki/family/**
+
+overlay_extension_paths:
+  exact:
+    - .agents/settings.local.json
+    - .claude/settings.local.json
+  globs:
+    - .agents/hooks.overlay/**
+    - .agents/skills.overlay/**
+    - .claude/hooks.overlay/**
+    - .claude/skills.overlay/**
+
+sync_exclusions:
+  description: >
+    Sync tooling must never apply upstream changes to these paths in an
+    instantiated family KB. Overlay-declared instance_protected_paths are added
+    at runtime.
+  exact:
+    - AGENTS.family.md
+    - AGENTS.local.md
+    - AGENTS.overlay.md
+    - .agents-last-lint
+    - .agents-local-last-prompt
+    - .agents/settings.local.json
+    - .claude/settings.local.json
+    - .scaffold-upstream
+    - wiki/README.md
+    - wiki/audit-log.md
+    - wiki/contradictions.md
+    - wiki/index.md
+    - wiki/log.md
+    - wiki/timeline.md
+    - wiki/todo.md
+  globs:
+    - .agents/hooks.overlay/**
+    - .agents/skills.overlay/**
+    - .claude/hooks.overlay/**
+    - .claude/skills.overlay/**
+    - .local/**
+    - raw/**
+    - wiki/children/<real-slug>/**
+    - wiki/family/*/index.md
+
+ignored_private_paths:
+  exact:
+    - AGENTS.local.md
+    - AGENTS.overlay.md
+    - .agents/settings.local.json
+    - .agents-last-lint
+    - .agents-local-last-prompt
+    - .claude/settings.local.json
+    - .scaffold-upstream
+  globs:
+    - .agents/hooks.overlay/**
+    - .agents/skills.overlay/**
+    - .claude/hooks.overlay/**
+    - .claude/skills.overlay/**
+    - .local/**

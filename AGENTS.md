@@ -35,22 +35,23 @@ An overlay cannot grant itself permissions the core schema refuses (e.g. the ove
 
 ### Overlay-injected skills, hooks, and settings
 
-A host application may ship additional Claude Code skills or hooks on top of the scaffold's. The scaffold reserves three gitignored locations for these:
+A host application may ship additional skills or hooks on top of the scaffold's. The scaffold reserves an agent-agnostic extension surface for these, plus Claude Code compatibility paths:
 
-- **`.claude/skills.overlay/`** — host-app skills. Claude Code auto-discovers skills under `.claude/skills/**`; this directory is a sibling convention that downstream instances can use without colliding with the upstream-tracked `.claude/skills/`. Invoke them the same way as built-in skills.
-- **`.claude/hooks.overlay/`** — host-app hook scripts. Register them in `.claude/settings.local.json` (not `settings.json`, which is upstream-tracked).
-- **`.claude/settings.local.json`** — Claude Code's built-in gitignored settings layer. Use it for overlay hook registrations and per-user customization. Claude Code merges `settings.local.json` on top of `settings.json` automatically.
+- **`.agents/skills.overlay/`** — host-app skills for AGENTS-aware tools.
+- **`.agents/hooks.overlay/`** — host-app hook scripts or hook descriptors for tools that support them.
+- **`.agents/settings.local.json`** — gitignored per-user / overlay settings for generic host tooling.
+- **`.claude/skills.overlay/`**, **`.claude/hooks.overlay/`**, and **`.claude/settings.local.json`** — Claude Code compatibility paths. Claude Code merges `settings.local.json` on top of `.claude/settings.json` automatically.
 
-`/sync-scaffold` treats all three as instance-only and never touches them.
+`/sync-scaffold` treats all overlay extension paths as instance-only and never touches them. See [`OVERLAY_CONTRACT.md`](OVERLAY_CONTRACT.md) and [`UPSTREAM.manifest.yml`](UPSTREAM.manifest.yml) for the structured contract.
 
 ---
 
 ## Write-scope rule (read this carefully)
 
-Every file in this repo is either **upstream-tracked** or **instance-only**. The authoritative list is in [`UPSTREAM.md`](UPSTREAM.md).
+Every file in this repo is either **upstream-tracked** or **instance-only**. The authoritative structured list is in [`UPSTREAM.manifest.yml`](UPSTREAM.manifest.yml), with prose guidance in [`UPSTREAM.md`](UPSTREAM.md).
 
 - **Instance-only** files — the actual KB — are yours to maintain freely. That is the job.
-- **Upstream-tracked** files (this one included, plus `.claude/**`, `PRIVACY.md`, the reference subtrees, etc.) are **read-mostly**. You must **not** write to an upstream-tracked file without first asking the user and confirming that they understand the change will be overwritten on the next `/sync-scaffold` run — unless they intend to contribute the change back to the template upstream.
+- **Upstream-tracked** files (this one included, plus `.agents/skills/**`, `.claude/**`, `PRIVACY.md`, the reference subtrees, etc.) are **read-mostly**. You must **not** write to an upstream-tracked file without first asking the user and confirming that they understand the change will be overwritten on the next `/sync-scaffold` run — unless they intend to contribute the change back to the template upstream.
 - A `.local/` directory is gitignored and available as scratch space for **instance-only, never-published** docs (upgrade plans, private notes, working drafts). Feel free to write there when the user asks for persistent notes that shouldn't end up in the repo or propagate to other checkouts.
 
 **Inside this file (`AGENTS.md`) specifically:**

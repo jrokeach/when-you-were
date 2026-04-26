@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jrokeach/when-you-were/schema/agents-local.schema.json",
+  "title": "When You Were AGENTS.local.md YAML payload",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "privacy_acknowledged": { "type": "boolean" },
+    "privacy_warning_dismissed": { "type": "boolean" },
+    "acknowledged_on": { "type": ["string", "null"] },
+    "preferences": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "capture_prompt_interval_days": { "type": "integer", "minimum": 1 },
+        "lint_prompt_interval_days": { "type": "integer", "minimum": 1 },
+        "auto_update_timeline": { "type": "boolean" },
+        "auto_update_profile_shared_experiences": { "type": "boolean" },
+        "explain_placement_choices": { "type": "boolean" },
+        "auto_commit": { "type": "boolean" },
+        "auto_push": { "type": "boolean" }
+      }
+    },
+    "tone_override": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "register": { "type": "string" },
+        "pov": { "type": "string" },
+        "avoid_words": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
+

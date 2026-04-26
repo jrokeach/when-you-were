@@ -44,4 +44,4 @@ The agent treats files under `raw/` as immutable sources. It reads them, cites t
 
 ## Storage modes
 
-By default, files under `raw/` are committed to Git directly. If you have heavy binaries (video, long audio, high-res scans, large PDF corpora), the scaffold also supports a hybrid mode where a `<name>.manifest.yml` stub sits here in place of the binary and points at a cloud bucket. Pages reference the raw source the same way in either case. See [`STORAGE.md`](../STORAGE.md) for the decision tree and manifest convention.
+By default, files under `raw/` are committed to Git directly. If you have heavy binaries (video, long audio, high-res scans, large PDF corpora), the scaffold also supports a hybrid mode where a `<name>.manifest.yml` stub sits here in place of the binary and points at a cloud bucket. Pages reference the raw source the same way in either case. See [`STORAGE.md`](../STORAGE.md) for the decision tree and manifest convention, and [`schema/raw-manifest.schema.json`](../schema/raw-manifest.schema.json) for the portable manifest shape.

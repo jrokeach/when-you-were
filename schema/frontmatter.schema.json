@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jrokeach/when-you-were/schema/frontmatter.schema.json",
+  "title": "When You Were wiki page frontmatter",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["title", "type", "subjects", "status"],
+  "properties": {
+    "title": { "type": "string", "minLength": 1 },
+    "type": {
+      "type": "string",
+      "enum": [
+        "achievement",
+        "aspiration",
+        "caregiver",
+        "character-moment",
+        "creative-work",
+        "education",
+        "fear",
+        "first",
+        "friend",
+        "gift",
+        "health",
+        "hero",
+        "home",
+        "index",
+        "interest",
+        "letter",
+        "loss",
+        "lore",
+        "memory",
+        "meta",
+        "milestone",
+        "pet",
+        "physical",
+        "preference",
+        "profile",
+        "question",
+        "quote",
+        "reflection",
+        "relative",
+        "routine",
+        "shared-first",
+        "shared-memory",
+        "shared-milestone",
+        "sibling-dynamics",
+        "synthesis",
+        "tradition",
+        "travel",
+        "trip"
+      ]
+    },
+    "subjects": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "ages": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "date": { "type": "string", "format": "date" },
+    "date_recorded": { "type": "string", "format": "date" },
+    "sources": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["high", "medium", "low", "speculative"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "draft", "stale", "archived", "example"]
+    },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
+

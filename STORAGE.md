@@ -4,7 +4,7 @@ Where the bytes live.
 
 This scaffold is **Git-only by default**. Text, frontmatter, and small images commit directly. For families who accumulate heavy binaries (video, long audio, high-res scans, large PDF corpora), Git alone doesn't scale — so the scaffold also supports a **hybrid** mode where binaries live in a cloud bucket and Git holds references.
 
-The scaffold ships **no cloud tooling** — no upload helpers, no resolver libraries, no migration scripts. This document is guidance plus a filesystem convention (`.manifest.yml` stubs). Actual tooling is out of scope today; families or host applications add their own.
+The scaffold ships **no cloud tooling** — no upload helpers, no resolver libraries, no migration scripts. This document is guidance plus a filesystem convention (`.manifest.yml` stubs) and a public schema (`schema/raw-manifest.schema.json`). Actual tooling is out of scope today; families or host applications add their own.
 
 ---
 
@@ -40,6 +40,8 @@ notes: ""                     # optional
 ```
 
 The **manifest** is what Git sees. The **binary** is in the bucket. Pages reference the raw source via `sources:` frontmatter as usual; agents (or humans) resolving a reference follow the manifest when the path ends in `.manifest.yml`.
+
+The machine-readable schema for this stub is [`schema/raw-manifest.schema.json`](schema/raw-manifest.schema.json). Host applications may add provider-specific metadata as extra fields, but they should preserve the required keys so exports remain portable.
 
 ### Rules
 

@@ -2,6 +2,7 @@
 # These are local state, not content — safe to ignore.
 .agents-local-last-prompt
 .agents-last-lint
+.scaffold-upstream
 
 # OS / editor noise
 .DS_Store
@@ -24,11 +25,13 @@ AGENTS.overlay.md
 .local/
 
 # Overlay extension surface — host-app skills, hooks, and per-user / overlay
-# settings registrations. These sit alongside the upstream-tracked
-# `.claude/skills/`, `.claude/hooks/`, and `.claude/settings.json` but are
-# never committed; each instance's additions stay local. Claude Code merges
-# `settings.local.json` on top of `settings.json` automatically.
+# settings registrations. These sit alongside the upstream-tracked generic
+# `.agents/` surface and Claude Code compatibility files but are never
+# committed; each instance's additions stay local.
 # See AGENTS.overlay.md.example "Overlay-injected skills, hooks, and settings".
+.agents/skills.overlay/
+.agents/hooks.overlay/
+.agents/settings.local.json
 .claude/skills.overlay/
 .claude/hooks.overlay/
 .claude/settings.local.json

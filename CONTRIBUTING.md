@@ -1,6 +1,13 @@
 # Contributing
 
-Pull requests to improve the scaffold (AGENTS.md, directory structure, lint skill) are welcome.
+Pull requests to improve the scaffold (AGENTS.md, directory structure, lint skill, schemas, validation, or overlay contract) are welcome.
+
+Before opening a PR, run:
+
+```bash
+python3 scripts/validate_scaffold.py
+bash -n .claude/hooks/*.sh
+```
 
 ## What not to contribute
 

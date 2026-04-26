@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jrokeach/when-you-were/schema/raw-manifest.schema.json",
+  "title": "When You Were raw source manifest",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["storage", "provider", "bucket", "key", "sha256", "bytes", "media_type"],
+  "properties": {
+    "storage": { "type": "string", "enum": ["cloud"] },
+    "provider": { "type": "string", "enum": ["s3", "gcs", "b2", "r2", "minio", "custom"] },
+    "bucket": { "type": "string", "minLength": 1 },
+    "key": { "type": "string", "minLength": 1 },
+    "sha256": { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$" },
+    "bytes": { "type": "integer", "minimum": 0 },
+    "media_type": { "type": "string", "minLength": 1 },
+    "captured_at": { "type": "string" },
+    "notes": { "type": "string" }
+  }
+}
+
