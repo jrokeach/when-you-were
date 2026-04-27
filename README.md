@@ -78,7 +78,8 @@ For asking questions of the archive.
 - [`AGENTS.local.md.example`](AGENTS.local.md.example) — template for **your** user- and machine-specific preferences (auto-commit, auto-push, prompt cadences, personal tone overrides). Copy to `AGENTS.local.md` (gitignored) so different family members and machines can keep different preferences without conflict. Layer 4 of the chain.
 - [`OVERLAY_CONTRACT.md`](OVERLAY_CONTRACT.md) — public contract for host applications that install a private overlay.
 - [`UPSTREAM.manifest.yml`](UPSTREAM.manifest.yml) and [`schema/`](schema/) — machine-readable path and data contracts for tools that need to validate or sync the scaffold.
-- [`scripts/validate_scaffold.py`](scripts/validate_scaffold.py) — dependency-free validator used by CI to keep the public template coherent.
+- [`scripts/local_ci.sh`](scripts/local_ci.sh) — local wrapper for the same checks GitHub Actions runs.
+- [`scripts/validate_scaffold.py`](scripts/validate_scaffold.py) — dependency-free validator used by CI to keep the public template coherent, including GitHub Actions annotations for file/line failures.
 - [`PRIVACY.md`](PRIVACY.md) — privacy guidance. Read before committing anywhere.
 - [`wiki/`](wiki/index.md) — where your knowledge base lives. Start at [`wiki/index.md`](wiki/index.md).
 - [`raw/`](raw/) — drop zone for source material (photos, scans, transcripts) the agent can ingest.

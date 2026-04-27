@@ -230,6 +230,27 @@ In Claude Code, a `PreToolUse` hook (`.claude/hooks/pre-git-guard.sh`) enforces 
 
 In other harnesses (OpenAI Codex, Cursor, opencode, etc.), the hook does not run — the agent must enforce the rule on its own by re-reading `AGENTS.local.md` before every git write.
 
+### Validation and CI feedback loop
+
+Before staging or committing any scaffold or wiki change, run the repo's local CI helper if it exists:
+
+```bash
+bash scripts/local_ci.sh
+```
+
+If that helper is absent in an older checkout, run the same checks manually: `python3 scripts/validate_scaffold.py` and `bash -n .claude/hooks/*.sh` when those files exist. Treat local validation failures as part of the current task — fix them before committing or tell the user exactly why they cannot be fixed.
+
+When you push to a GitHub repository with GitHub Actions enabled, do not treat `git push` as the end of the work. Poll the resulting workflow run or fetch the failed check logs/annotations before your final response. With the GitHub CLI, the usual commands are:
+
+```bash
+gh run list --limit 1
+gh run view <run-id> --log-failed
+```
+
+If the repository is hosted somewhere without GitHub Actions, the `gh` CLI is unavailable, or network access prevents check polling, say that plainly in your final response. Otherwise, a pushed change is not complete until the relevant CI run has either passed or you have reported the failure and next fix.
+
+Validators intended for GitHub Actions should emit workflow annotations (`::error file=...,line=...::...`) in addition to human-readable stderr. Broken markdown links, invalid frontmatter, and similar mechanical failures must point at the file and line whenever practical so the next agent can see the same failure context GitHub sees.
+
 ---
 
 ## Shared / cross-child content

@@ -10,20 +10,60 @@ public template contract.
 from __future__ import annotations
 
 import json
+import os
 import re
 import subprocess
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+@dataclass
+class ValidationError:
+    message: str
+    path: Path | None = None
+    line: int | None = None
 
 
 def rel(path: Path) -> str:
     return path.relative_to(ROOT).as_posix()
 
 
-def fail(errors: list[str], message: str) -> None:
-    errors.append(message)
+def fail(errors: list[ValidationError], message: str, path: Path | None = None, line: int | None = None) -> None:
+    errors.append(ValidationError(message=message, path=path, line=line))
+
+
+def format_error(error: ValidationError) -> str:
+    if error.path is None:
+        return error.message
+    location = rel(error.path)
+    if error.line is not None:
+        location = f"{location}:{error.line}"
+    return f"{location}: {error.message}"
+
+
+def escape_command_value(value: str) -> str:
+    return value.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+
+
+def escape_command_property(value: str) -> str:
+    return escape_command_value(value).replace(":", "%3A").replace(",", "%2C")
+
+
+def emit_github_annotation(error: ValidationError) -> None:
+    props: list[str] = []
+    if error.path is not None:
+        props.append(f"file={escape_command_property(rel(error.path))}")
+    if error.line is not None:
+        props.append(f"line={error.line}")
+    prop_text = f" {','.join(props)}" if props else ""
+    print(f"::error{prop_text}::{escape_command_value(error.message)}", file=sys.stderr)
+
+
+def line_number_for_offset(text: str, offset: int) -> int:
+    return text.count("\n", 0, offset) + 1
 
 
 def parse_simple_manifest(path: Path) -> dict[str, dict[str, list[str]]]:
@@ -94,15 +134,16 @@ def parse_simple_yaml_scalars(path: Path) -> dict[str, str]:
     return data
 
 
-def check_json_schemas(errors: list[str]) -> None:
+def check_json_schemas(errors: list[ValidationError]) -> None:
     for path in sorted((ROOT / "schema").glob("*.json")):
         try:
             json.loads(path.read_text(encoding="utf-8"))
         except Exception as exc:  # noqa: BLE001 - report parser detail
-            fail(errors, f"{rel(path)} is not valid JSON: {exc}")
+            line = getattr(exc, "lineno", None)
+            fail(errors, f"is not valid JSON: {exc}", path, line)
 
 
-def check_manifest(errors: list[str]) -> dict[str, dict[str, list[str]]]:
+def check_manifest(errors: list[ValidationError]) -> dict[str, dict[str, list[str]]]:
     path = ROOT / "UPSTREAM.manifest.yml"
     if not path.exists():
         fail(errors, "UPSTREAM.manifest.yml is missing")
@@ -110,81 +151,82 @@ def check_manifest(errors: list[str]) -> dict[str, dict[str, list[str]]]:
     text = path.read_text(encoding="utf-8")
     for required in ("schema_version:", "scaffold_version:", "upstream_tracked:"):
         if required not in text:
-            fail(errors, f"UPSTREAM.manifest.yml missing {required}")
+            fail(errors, f"missing {required}", path)
     manifest = parse_simple_manifest(path)
     for tracked in manifest.get("upstream_tracked", {}).get("exact", []):
         if not (ROOT / tracked).exists():
-            fail(errors, f"UPSTREAM.manifest.yml lists missing upstream path: {tracked}")
+            fail(errors, f"lists missing upstream path: {tracked}", path)
     return manifest
 
 
-def check_frontmatter(errors: list[str]) -> None:
+def check_frontmatter(errors: list[ValidationError]) -> None:
     for path in sorted((ROOT / "wiki").rglob("*.md")):
         data = parse_frontmatter(path)
         if not data:
-            fail(errors, f"{rel(path)} missing YAML frontmatter")
+            fail(errors, "missing YAML frontmatter", path, 1)
             continue
         for key in ("title", "type", "subjects", "status"):
             if key not in data:
-                fail(errors, f"{rel(path)} missing frontmatter key: {key}")
+                fail(errors, f"missing frontmatter key: {key}", path, 1)
         subjects = parse_inline_list(data.get("subjects", ""))
         if not subjects:
-            fail(errors, f"{rel(path)} subjects must be an inline non-empty list")
+            fail(errors, "subjects must be an inline non-empty list", path, 1)
         status = data.get("status", "")
         in_reference = rel(path).startswith("wiki/children/_template/") or rel(path).startswith(
             "wiki/family/_examples/"
         )
         if status == "example" and not in_reference:
-            fail(errors, f"{rel(path)} has status: example outside reference trees")
+            fail(errors, "has status: example outside reference trees", path, 1)
         if in_reference and status != "example":
-            fail(errors, f"{rel(path)} is in a reference tree but is not status: example")
+            fail(errors, "is in a reference tree but is not status: example", path, 1)
 
 
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+\.md)(?:#[^)]+)?\)")
 
 
-def strip_markdown_code(text: str) -> str:
-    text = re.sub(r"```.*?```", "", text, flags=re.DOTALL)
+def mask_markdown_code(text: str) -> str:
+    text = re.sub(r"```.*?```", lambda match: "\n" * match.group(0).count("\n"), text, flags=re.DOTALL)
     text = re.sub(r"`[^`\n]+`", "", text)
     return text
 
 
-def check_links(errors: list[str]) -> None:
+def check_links(errors: list[ValidationError]) -> None:
     for path in sorted((ROOT / "wiki").rglob("*.md")):
-        text = strip_markdown_code(path.read_text(encoding="utf-8"))
+        text = mask_markdown_code(path.read_text(encoding="utf-8"))
         for match in LINK_RE.finditer(text):
             target = match.group(1)
+            line = line_number_for_offset(text, match.start(1))
             if re.match(r"^[a-z]+://", target) or target.startswith("#"):
                 continue
             if target.startswith("/"):
-                fail(errors, f"{rel(path)} uses absolute markdown link: {target}")
+                fail(errors, f"uses absolute markdown link: {target}", path, line)
                 continue
             resolved = (path.parent / target).resolve()
             try:
                 resolved.relative_to(ROOT)
             except ValueError:
-                fail(errors, f"{rel(path)} link escapes repo: {target}")
+                fail(errors, f"link escapes repo: {target}", path, line)
                 continue
             if not resolved.exists():
-                fail(errors, f"{rel(path)} has broken markdown link: {target}")
+                fail(errors, f"has broken markdown link: {target}", path, line)
 
 
-def check_raw_manifests(errors: list[str]) -> None:
+def check_raw_manifests(errors: list[ValidationError]) -> None:
     required = {"storage", "provider", "bucket", "key", "sha256", "bytes", "media_type"}
     for path in sorted((ROOT / "raw").rglob("*.manifest.yml")):
         data = parse_simple_yaml_scalars(path)
         missing = sorted(required - data.keys())
         if missing:
-            fail(errors, f"{rel(path)} missing required raw manifest keys: {', '.join(missing)}")
+            fail(errors, f"missing required raw manifest keys: {', '.join(missing)}", path)
         sha = data.get("sha256", "")
         if sha and not re.match(r"^[A-Fa-f0-9]{64}$", sha):
-            fail(errors, f"{rel(path)} sha256 must be 64 hex characters")
+            fail(errors, "sha256 must be 64 hex characters", path)
         bytes_value = data.get("bytes", "")
         if bytes_value and not bytes_value.isdigit():
-            fail(errors, f"{rel(path)} bytes must be a non-negative integer")
+            fail(errors, "bytes must be a non-negative integer", path)
 
 
-def check_ignored_paths(errors: list[str]) -> None:
+def check_ignored_paths(errors: list[ValidationError]) -> None:
     samples = [
         "AGENTS.local.md",
         "AGENTS.overlay.md",
@@ -211,24 +253,24 @@ def check_ignored_paths(errors: list[str]) -> None:
             fail(errors, f"{sample} should be ignored by .gitignore")
 
 
-def check_skill_mirrors(errors: list[str]) -> None:
+def check_skill_mirrors(errors: list[ValidationError]) -> None:
     pairs = [
         (ROOT / ".agents/skills/lint/SKILL.md", ROOT / ".claude/skills/lint/SKILL.md"),
         (ROOT / ".agents/skills/sync-scaffold/SKILL.md", ROOT / ".claude/skills/sync-scaffold/SKILL.md"),
     ]
     for canonical, mirror in pairs:
         if not canonical.exists():
-            fail(errors, f"canonical skill missing: {rel(canonical)}")
+            fail(errors, "canonical skill missing", canonical)
             continue
         if not mirror.exists():
-            fail(errors, f"Claude compatibility skill missing: {rel(mirror)}")
+            fail(errors, "Claude compatibility skill missing", mirror)
             continue
         if canonical.read_text(encoding="utf-8") != mirror.read_text(encoding="utf-8"):
-            fail(errors, f"{rel(mirror)} must mirror {rel(canonical)}")
+            fail(errors, f"must mirror {rel(canonical)}", mirror)
 
 
 def main() -> int:
-    errors: list[str] = []
+    errors: list[ValidationError] = []
     check_json_schemas(errors)
     check_manifest(errors)
     check_frontmatter(errors)
@@ -239,7 +281,9 @@ def main() -> int:
     if errors:
         print("Scaffold validation failed:", file=sys.stderr)
         for error in errors:
-            print(f"- {error}", file=sys.stderr)
+            if os.environ.get("GITHUB_ACTIONS") == "true":
+                emit_github_annotation(error)
+            print(f"- {format_error(error)}", file=sys.stderr)
         return 1
     print("Scaffold validation passed.")
     return 0

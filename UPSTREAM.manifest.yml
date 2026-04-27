@@ -45,6 +45,7 @@ upstream_tracked:
     - schema/frontmatter.schema.json
     - schema/raw-manifest.schema.json
     - schema/scaffold-manifest.schema.json
+    - scripts/local_ci.sh
     - scripts/validate_scaffold.py
   globs:
     - wiki/children/_template/**
